@@ -1,0 +1,28 @@
+{
+  "name": "main",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "studio": "remotion studio remotion/src/index.ts",
+    "render": "remotion render remotion/src/index.ts Hello out/hello.mp4 --browser-executable=/opt/pw-browsers/chromium"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vizulex/main.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vizulex/main/issues"
+  },
+  "homepage": "https://github.com/vizulex/main#readme",
+  "dependencies": {
+    "@remotion/cli": "^4.0.543",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.543"
+  }
+}
