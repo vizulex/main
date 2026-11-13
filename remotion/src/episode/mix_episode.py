@@ -93,11 +93,12 @@ def main(voice_p, intro_p, data_p, out_p):
         if g["kind"] in ("compare",): place(sfx, SFX.scribble(0.3), g["bt"], 0.05)
     mix = v + music + sfx
     i0 = int(D["intro_out"] * SR); mix[i0:i0 + len(intro)] += intro[:N - i0]
-    mix *= 10 ** ((-14 - meter.integrated_loudness(mix)) / 20)
+    # моно → два одинаковых канала даёт +3 LU, поэтому моно ведём к −17, стерео выйдет −14
+    mix *= 10 ** ((-17 - meter.integrated_loudness(mix)) / 20)
     peak = np.max(np.abs(mix))
     if peak > 0.89: mix = np.tanh(mix / 0.89) * 0.89  # мягкий лимитер
     sf.write(out_p, np.stack([mix, mix], 1).astype(np.float32), SR)
-    print("ok", out_p, round(meter.integrated_loudness(mix), 1), "LUFS")
+    print("ok", out_p, round(meter.integrated_loudness(np.stack([mix, mix], 1)), 1), "LUFS stereo")
 
 if __name__ == "__main__":
     main(*sys.argv[1:5])
