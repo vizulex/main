@@ -160,6 +160,54 @@ ul.list{margin:10px 0 0;padding-left:20px;display:flex;flex-direction:column;gap
 .eyes{animation:blink 3.6s infinite;transform-box:fill-box;transform-origin:center}
 .bob{animation:bob 2.4s infinite ease-in-out}
 .spin{animation:spin 8s infinite linear;transform-box:fill-box;transform-origin:center}
+.grp{margin:30px 0 12px;font-size:16px}
+[data-st] svg,[data-me] svg{width:100%;height:auto;display:block;overflow:visible}
+@keyframes type{0%,8%{max-width:0}55%,90%{max-width:11em}100%{max-width:0}}
+@keyframes caret{50%{border-color:transparent}}
+.a-type{display:inline-block;overflow:hidden;white-space:nowrap;max-width:11em;border-right:3px solid var(--ink);padding-right:2px;font-family:var(--f-display);font-weight:800;font-size:17px;animation:type 3.2s infinite steps(14),caret .5s infinite steps(1)}
+@keyframes mark{0%,15%{background-size:0% 45%}45%,90%{background-size:100% 45%}100%{background-size:0% 45%}}
+.a-mark{white-space:nowrap;font-family:var(--f-display);font-weight:800;font-size:18px;padding:0 4px;background:linear-gradient(var(--lemon),var(--lemon)) no-repeat 0 85%/100% 45%;animation:mark 2.6s infinite cubic-bezier(.6,0,.3,1)}
+@keyframes draw{0%,10%{stroke-dashoffset:var(--len)}45%,90%{stroke-dashoffset:0}100%{stroke-dashoffset:var(--len)}}
+.a-draw{stroke-dasharray:var(--len);animation:draw 2.8s infinite ease-in-out}
+.a-strike{position:relative;font-family:var(--f-display);font-weight:800;font-size:20px}
+.a-strike::after{content:"";position:absolute;left:-4px;right:-4px;top:52%;height:4px;background:var(--bubble);border-radius:2px;transform-origin:left;animation:strike 3s infinite}
+@keyframes strike{0%,15%{transform:scaleX(0)}30%,90%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+.a-replace{display:inline-block;font-family:var(--f-hand);font-weight:700;font-size:36px;line-height:1;color:var(--bubble);animation:replace 3s infinite cubic-bezier(.3,1.4,.5,1)}
+@keyframes replace{0%,38%{transform:scale(0) rotate(-10deg)}50%{transform:scale(1.15) rotate(-4deg)}58%,90%{transform:scale(1) rotate(-4deg)}100%{transform:scale(0)}}
+@keyframes boil{0%{transform:translate(0,0) rotate(0)}25%{transform:translate(1.5px,-1px) rotate(-1.5deg)}50%{transform:translate(-1px,1.5px) rotate(1deg)}75%{transform:translate(1px,1px) rotate(-.5deg)}}
+.a-boil{animation:boil .5s infinite steps(1)}
+@keyframes glitch{0%,72%{text-shadow:-3px 0 var(--bubble),3px 0 var(--sky),6px 7px 0 var(--ink);transform:none}76%{text-shadow:-9px 0 var(--bubble),9px 0 var(--sky),6px 7px 0 var(--ink);transform:translateX(3px) skewX(-6deg)}80%{text-shadow:5px 0 var(--bubble),-7px 0 var(--sky),6px 7px 0 var(--ink);transform:translateX(-2px)}84%,100%{text-shadow:-3px 0 var(--bubble),3px 0 var(--sky),6px 7px 0 var(--ink);transform:none}}
+.a-glitch{animation:glitch 2s infinite steps(1)}
+@keyframes flip{0%,30%{transform:perspective(300px) rotateY(0)}70%,100%{transform:perspective(300px) rotateY(360deg)}}
+.a-flip{animation:flip 2.4s infinite cubic-bezier(.5,0,.3,1)}
+@keyframes twinkle{0%,100%{transform:scale(.6);opacity:.45}50%{transform:scale(1.1);opacity:1}}
+.a-twinkle{animation:twinkle 1.4s infinite ease-in-out}
+.burst{position:absolute;left:50%;top:50%;width:0;height:0}
+.burst i{position:absolute;left:-7px;top:-7px;width:14px;height:14px;clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);transform:translate(var(--dx),var(--dy));animation:burst 1.8s infinite cubic-bezier(.2,.8,.3,1)}
+@keyframes burst{0%{transform:translate(0,0) scale(0);opacity:1}55%{transform:translate(var(--dx),var(--dy)) scale(1);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(.3);opacity:0}}
+@keyframes wobble{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg) scale(1.04)}}
+.a-wobble{animation:wobble 1.2s infinite ease-in-out;transform-origin:50% 90%}
+.a-wipe{position:absolute;inset:0;background:var(--lilac);display:flex;align-items:center;justify-content:center;transform:translateX(-101%);animation:wipe 2.6s infinite cubic-bezier(.7,0,.3,1)}
+@keyframes wipe{0%,15%{transform:translateX(-101%)}40%,85%{transform:translateX(0)}100%{transform:translateX(101%)}}
+.a-iris{position:absolute;inset:0;background:var(--bubble);display:flex;align-items:center;justify-content:center;clip-path:circle(0% at 50% 50%);animation:iris 2.6s infinite cubic-bezier(.6,0,.3,1)}
+@keyframes iris{0%,15%{clip-path:circle(0% at 50% 50%)}50%,85%{clip-path:circle(80% at 50% 50%)}100%{clip-path:circle(0% at 50% 50%)}}
+@keyframes zoomthru{0%,25%{transform:scale(1);opacity:1}62%{transform:scale(12);opacity:1}66%{transform:scale(12);opacity:0}67%{transform:scale(0);opacity:0}80%{transform:scale(0);opacity:1}100%{transform:scale(1)}}
+.a-zoomthru{animation:zoomthru 2.8s infinite cubic-bezier(.7,0,.3,1)}
+@keyframes slideL{0%,8%{opacity:0;transform:translateX(-40px)}22%,85%{opacity:1;transform:none}100%{opacity:0}}
+.a-slide{animation:slideL 2.8s infinite cubic-bezier(.2,.9,.3,1.2) both}
+@keyframes bouncein{0%,10%{transform:translateY(110%)}30%{transform:translateY(-12%)}38%{transform:translateY(4%)}45%,85%{transform:none}100%{transform:translateY(110%)}}
+.a-bounce{animation:bouncein 2.6s infinite}
+@keyframes shake{0%,50%,100%{transform:translateX(0)}55%{transform:translateX(-6px) rotate(-3deg)}60%{transform:translateX(6px) rotate(3deg)}65%{transform:translateX(-4px)}70%{transform:translateX(4px)}75%{transform:translateX(0)}}
+.a-shake{animation:shake 1.6s infinite}
+.bar{height:18px;border:3px solid var(--ink);border-radius:99px;overflow:hidden;background:#fff}
+.bar i{display:block;height:100%;width:34%;background:var(--mint);animation:prog 2.8s infinite cubic-bezier(.3,.9,.3,1)}
+@keyframes prog{0%,10%{width:0}55%,90%{width:34%}100%{width:0}}
+.chk{display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:15px}
+.chk div{display:flex;gap:8px;align-items:center}
+.chk .box{width:22px;height:22px;border:2.5px solid var(--ink);border-radius:6px;background:#fff;display:flex}
+.chk svg{width:100%;height:100%}
+.tick{fill:none;stroke:var(--mint);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:20;animation:tick 2.8s infinite}
+@keyframes tick{0%,15%{stroke-dashoffset:20}30%,90%{stroke-dashoffset:0}100%{stroke-dashoffset:20}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 footer{padding-block:32px;background:var(--ink);color:var(--milk);font-size:13px}
 </style>
@@ -313,7 +361,7 @@ footer{padding-block:32px;background:var(--ink);color:var(--milk);font-size:13px
   <div class="wrap">
     <div class="head"><span class="eyebrow">Наклейки и 2D-мультик</span><h2>Наклейки и мини-я</h2><p>Два слоя графики. <b>Наклейки</b> — как в референсах: белая высечка, мягкая тень, текстура строчки. <b>Мультик</b> — мини-я и предметы с контуром Чернилами: ими анимируем ситуации, которые не сняты на камеру.</p></div>
 
-    <h3 style="margin-bottom:14px">Наклейки</h3>
+    <h3 style="margin-bottom:14px">Наклейки · 33 шт.</h3>
     <div class="stickers-grid" id="stickers"></div>
 
     <h3 style="margin:32px 0 14px">Мини-я: 5 эмоций</h3>
@@ -405,11 +453,49 @@ footer{padding-block:32px;background:var(--ink);color:var(--milk);font-size:13px
 <!-- ============ MOTION ============ -->
 <section class="band-paper">
   <div class="wrap">
-    <div class="head"><span class="eyebrow">Анимация</span><h2>Как всё двигается</h2><p>Текст — быстро и упруго. Наклейки — «шлёп» с поворотом. Видео-рамки — плавно. Тайминги в кадрах при 30 fps.</p></div>
-    <div class="grid g3">
-      <div class="fcap"><div class="demo"><div class="a-pop" id="dPop"></div></div><h3>Шлёп наклейки</h3><p>Из 160% в 92% → 100% за 8 кадров, с поворотом. Звук pop.</p></div>
+    <div class="head"><span class="eyebrow">Анимация</span><h2>Библиотека анимаций: 23 движения</h2><p>Текст — быстро и упруго. Наклейки — «шлёп» с поворотом. Переходы — резко в начале, мягко в конце. Тайминги в кадрах при 30 fps.</p></div>
+
+    <h3 class="grp" style="margin-top:0">Текст</h3>
+    <div class="grid g4">
+      <div class="fcap"><div class="demo"><span class="a-type">дедлайн завтра</span></div><h3>Печать по буквам</h3><p>1 буква = 1 кадр, мигающий курсор. Для заметок, сообщений и планов. Звук клавиатуры.</p></div>
+      <div class="fcap"><div class="demo"><span class="a-mark">самое главное</span></div><h3>Маркер</h3><p>Лимон проезжает под словом за 8 кадров.</p></div>
+      <div class="fcap"><div class="demo"><div style="position:relative;font-family:var(--f-display);font-weight:800;font-size:24px">1000<svg viewBox="0 0 140 70" style="position:absolute;left:-36px;top:-22px;width:150px;height:76px;overflow:visible" aria-hidden="true"><path class="a-draw" style="--len:330" d="M18 40 C14 14 70 6 112 16 C140 24 132 58 82 62 C40 66 10 56 20 30" fill="none" stroke="var(--bubble)" stroke-width="4" stroke-linecap="round"/></svg></div></div><h3>Обводка от руки</h3><p>Каракуля рисуется вокруг слова или цифры за 12 кадров.</p></div>
+      <div class="fcap"><div class="demo"><div style="display:flex;flex-direction:column;align-items:center;gap:0"><span class="a-strike">отдыхаю</span><span class="a-replace">работаю</span></div></div><h3>Зачеркнуть и заменить</h3><p>Линия Бабла за 6 кадров, новое слово шлёпается рукописным. Для иронии и «ожидание / реальность».</p></div>
+      <div class="fcap"><div class="demo"><span class="a-boil" style="font-family:var(--f-display);font-weight:800;font-size:28px;display:inline-block">ой-ой</span></div><h3>Дрожащий текст</h3><p>Сдвиг 1–2 px каждые 2 кадра, как в рисованном мультике. Для эмоций.</p></div>
+      <div class="fcap"><div class="demo"><div class="bignum a-glitch" style="font-size:26px;white-space:nowrap">4 000 000</div></div><h3>Глитч цифры</h3><p>Цветные тени дёргаются на 3–4 кадра раз в 2 секунды.</p></div>
+      <div class="fcap"><div class="demo"><div class="bignum" id="dCount" style="font-size:44px">327</div></div><h3>Счётчик</h3><p>Цифра набегает от 0 за 12 кадров, в конце punch-zoom и звук ding.</p></div>
+    </div>
+
+    <h3 class="grp">Наклейки</h3>
+    <div class="grid g4">
+      <div class="fcap"><div class="demo"><div class="a-pop" id="dPop"></div></div><h3>Шлёп</h3><p>Из 160% в 92% → 100% за 8 кадров, с поворотом. Звук pop.</p></div>
+      <div class="fcap"><div class="demo"><div class="a-flip" data-st="star" style="width:76px"></div></div><h3>Переворот</h3><p>Поворот на 360° по вертикальной оси за 14 кадров. Для смены темы.</p></div>
+      <div class="fcap"><div class="demo"><div style="display:flex;gap:10px;align-items:center"><div class="a-twinkle" data-st="sparkle" style="width:34px"></div><div class="a-twinkle" data-st="star" style="width:58px;animation-delay:.45s"></div><div class="a-twinkle" data-st="sparkle" style="width:26px;animation-delay:.9s"></div></div></div><h3>Мерцание</h3><p>Масштаб 60–110% и прозрачность, у каждой наклейки свой сдвиг по времени.</p></div>
+      <div class="fcap"><div class="demo"><div style="position:relative;width:70px;height:70px"><div class="burst" id="dBurst"></div><div data-st="button" style="position:absolute;inset:0"></div></div></div><h3>Разлёт искр</h3><p>8 искр разлетаются от наклейки за 10 кадров. Для «получилось» и хороших новостей.</p></div>
+      <div class="fcap"><div class="demo"><div class="a-wobble" data-st="daisy" style="width:76px"></div></div><h3>Покачивание</h3><p>±8° за 1,2 с. Для наклеек, которые висят в кадре дольше 2 секунд.</p></div>
+    </div>
+
+    <h3 class="grp">Переходы</h3>
+    <div class="grid g4">
+      <div class="fcap"><div class="demo"><span class="hand" style="font-size:28px">сцена 1</span><div class="a-wipe"><span class="hand" style="font-size:28px;color:var(--milk)">сцена 2</span></div></div><h3>Шторка</h3><p>Плашка Сирени проезжает через кадр за 10–12 кадров. Звук whoosh.</p></div>
+      <div class="fcap"><div class="demo"><span class="hand" style="font-size:28px">сцена 1</span><div class="a-iris"><span class="hand" style="font-size:28px">сцена 2</span></div></div><h3>Круг</h3><p>Новая сцена раскрывается кругом из центра или из наклейки за 12 кадров.</p></div>
+      <div class="fcap"><div class="demo" style="background:var(--lilac-50)"><div class="a-zoomthru" data-st="button" style="width:60px"></div></div><h3>Зум сквозь наклейку</h3><p>Наклейка растёт до размера кадра за 10 кадров и открывает следующую сцену своим цветом.</p></div>
+      <div class="fcap"><div class="demo"><div style="display:flex;flex-direction:column;gap:6px;align-items:flex-start"><span class="lbl a-slide" style="border:1.5px solid var(--ink)">пары 9:30</span><span class="lbl a-slide" style="border:1.5px solid var(--ink);animation-delay:.2s">2 урока</span><span class="lbl a-slide" style="border:1.5px solid var(--ink);animation-delay:.4s">рилс</span></div></div><h3>Плашки сбоку</h3><p>Выезжают слева по одной с шагом 4 кадра. Для списков и планов.</p></div>
+    </div>
+
+    <h3 class="grp">Мини-я</h3>
+    <div class="grid g4">
+      <div class="fcap"><div class="demo" id="dIdle"></div><h3>Idle</h3><p>Покачивание ±3° за 1,8 с, моргание каждые 3–4 с. Персонаж никогда не замирает.</p></div>
+      <div class="fcap"><div class="demo" style="align-items:flex-end"><div class="a-bounce" data-me="love" style="width:84px"></div></div><h3>Выпрыгивает</h3><p>Снизу с перелётом 12% за 10 кадров. Так мини-я появляется в кадре.</p></div>
+      <div class="fcap"><div class="demo"><div class="a-shake" data-me="panic" style="width:84px"></div></div><h3>Паника</h3><p>Тряска ±6 px, 8 кадров. Для дедлайнов и «всё горит».</p></div>
+      <div class="fcap"><div class="demo"><div style="position:relative;width:120px;height:110px"><div data-me="think" style="width:80px;position:absolute;left:0;bottom:-4px"></div><div class="a-pop" data-st="bubble" style="width:50px;position:absolute;right:0;top:0"></div></div></div><h3>Мысль</h3><p>Облачко шлёпается рядом с головой через 6 кадров после реплики.</p></div>
+    </div>
+
+    <h3 class="grp">Инфографика</h3>
+    <div class="grid g4">
       <div class="fcap"><div class="demo"><div class="a-punch bignum" style="font-size:40px">−50%</div></div><h3>Punch-zoom</h3><p>100 → 112% за 3 кадра на ключевом слове. Не чаще раза в 5 секунд.</p></div>
-      <div class="fcap"><div class="demo" id="dIdle"></div><h3>Idle мини-я</h3><p>Покачивание ±3° за 1,8 с, моргание каждые 3–4 с. Звёзды медленно вращаются.</p></div>
+      <div class="fcap"><div class="demo"><div style="width:78%;display:flex;flex-direction:column;gap:8px"><span style="font-family:var(--f-display);font-weight:800;font-size:15px">2 из 6 учеников</span><div class="bar"><i></i></div></div></div><h3>Прогресс-бар</h3><p>Мята заполняется за 15 кадров с мягким замедлением. Для целей и челленджей.</p></div>
+      <div class="fcap"><div class="demo"><div class="chk"><div><span class="box"><svg viewBox="0 0 16 16" aria-hidden="true"><path class="tick" d="M3 8 L7 12 L13 4"/></svg></span>пары</div><div><span class="box"><svg viewBox="0 0 16 16" aria-hidden="true"><path class="tick" style="animation-delay:.35s" d="M3 8 L7 12 L13 4"/></svg></span>урок</div><div><span class="box"><svg viewBox="0 0 16 16" aria-hidden="true"><path class="tick" style="animation-delay:.7s" d="M3 8 L7 12 L13 4"/></svg></span>рилс</div></div></div><h3>Чек-лист</h3><p>Галочки рисуются по одной с шагом 10 кадров, на каждую звук ding.</p></div>
     </div>
     <h3 style="margin:32px 0 14px">Параметры для кода</h3>
     <div class="tbl-wrap"><table>
@@ -421,6 +507,12 @@ footer{padding-block:32px;background:var(--ink);color:var(--milk);font-size:13px
         <tr><td>Веер кадров</td><td>10</td><td><code>spring({damping:12, stiffness:160})</code>, задержка 2 кадра между фото</td><td><code>cubic-bezier(.3,1.3,.5,1)</code></td></tr>
         <tr><td>Счётчик цифры</td><td>12</td><td><code>interpolate(frame,[0,12],[0,N])</code>, Easing.out(Easing.quad)</td><td>JS-счётчик, 400 мс</td></tr>
         <tr><td>Подсветка субтитра</td><td>2</td><td>по таймкодам Whisper (<code>word_timestamps</code>)</td><td>переход фона 120 мс</td></tr>
+        <tr><td>Печать по буквам</td><td>1 на букву</td><td><code>text.slice(0, Math.floor(frame))</code></td><td><code>steps(N)</code> по ширине</td></tr>
+        <tr><td>Маркер / обводка</td><td>8 / 12</td><td><code>interpolate</code> ширины фона / <code>strokeDashoffset</code></td><td><code>background-size</code> / <code>stroke-dashoffset</code></td></tr>
+        <tr><td>Дрожащий текст</td><td>каждые 2</td><td><code>random(Math.floor(frame/2))</code> → сдвиг ±1,5 px</td><td><code>steps(1)</code>, 500 мс</td></tr>
+        <tr><td>Шторка / круг</td><td>11 / 12</td><td><code>translateX</code> / <code>clipPath: circle()</code> + Easing.inOut(Easing.cubic)</td><td><code>cubic-bezier(.7,0,.3,1)</code></td></tr>
+        <tr><td>Зум сквозь наклейку</td><td>10</td><td>scale 1 → 12, на последнем кадре смена сцены</td><td><code>cubic-bezier(.7,0,.3,1)</code></td></tr>
+        <tr><td>Мини-я выпрыгивает</td><td>10</td><td><code>spring({damping:9, stiffness:170})</code>, translateY 110% → 0</td><td>keyframes с перелётом −12%</td></tr>
       </tbody>
     </table></div>
   </div>
@@ -463,7 +555,7 @@ footer{padding-block:32px;background:var(--ink);color:var(--milk);font-size:13px
   </div>
 </section>
 
-<footer><div class="wrap">Видеостиль Влады · v2 · ноябрь 2026. Токены для кода: <code style="background:#3a3366;color:var(--milk)">brand/tokens.json</code>.</div></footer>
+<footer><div class="wrap">Видеостиль Влады · v3 · ноябрь 2026. Токены для кода: <code style="background:#3a3366;color:var(--milk)">brand/tokens.json</code>.</div></footer>
 
 <script>
 const C={ink:"#221C46",milk:"#FFFAF2",paper:"#F4F2F7",mandarin:"#FF7A2F",lilac:"#9C7BFF",mint:"#4FE0B0",lemon:"#FFE04A",bubble:"#FF8AC5",sky:"#8FD3FF",skin:"#F6CDB3",hair:"#4B2E2A"};
@@ -491,8 +583,27 @@ const ST={
  clock:`<g ${SH}><circle cx="32" cy="34" r="24" fill="${C.lemon}" stroke="#fff" stroke-width="6"/><circle cx="32" cy="34" r="24" fill="none" stroke="${C.ink}" stroke-width="2.5"/><path d="M32 22 V34 L41 40" stroke="${C.ink}" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M50 12 q4 6 -2 10 M56 18 q2 6 -4 8" stroke="${C.mandarin}" stroke-width="3" fill="none" stroke-linecap="round"/></g>`,
  mic:`<g ${SH}><rect x="22" y="6" width="20" height="34" rx="10" fill="${C.ink}" stroke="#fff" stroke-width="5"/><path d="M16 30 Q16 46 32 46 Q48 46 48 30" fill="none" stroke="${C.ink}" stroke-width="3.5" stroke-linecap="round"/><path d="M32 46 V58 M22 58 H42" stroke="${C.ink}" stroke-width="3.5" stroke-linecap="round"/><path d="M26 14 h12 M26 20 h12 M26 26 h12" stroke="#5D5682" stroke-width="2"/></g>`,
  laptop:`<g ${SH}><rect x="10" y="12" width="44" height="30" rx="4" fill="${C.sky}" stroke="#fff" stroke-width="5"/><rect x="10" y="12" width="44" height="30" rx="4" fill="none" stroke="${C.ink}" stroke-width="2.5"/><path d="M4 48 H60 L56 54 H8Z" fill="${C.milk}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/><path d="M18 22 h14 M18 28 h22 M18 34 h10" stroke="${C.ink}" stroke-width="2.5" stroke-linecap="round"/></g>`,
+ cloud:`<g ${SH}><path d="M16 48 a11 11 0 0 1 1-22 a15 15 0 0 1 29-5 a12 12 0 0 1 3 27z" fill="#fff" stroke="#fff" stroke-width="6" stroke-linejoin="round"/><path d="M16 48 a11 11 0 0 1 1-22 a15 15 0 0 1 29-5 a12 12 0 0 1 3 27z" fill="${C.sky}" opacity=".4"/><circle cx="26" cy="38" r="2.2" fill="${C.ink}"/><circle cx="38" cy="38" r="2.2" fill="${C.ink}"/><path d="M29 42 q3 3 6 0" stroke="${C.ink}" stroke-width="2" fill="none" stroke-linecap="round"/></g>`,
+ rainbow:`<g ${SH}><path d="M19 48 A13 13 0 0 1 45 48" fill="none" stroke="#fff" stroke-width="30" stroke-linecap="round"/><path d="M12 48 A20 20 0 0 1 52 48" fill="none" stroke="${C.bubble}" stroke-width="6"/><path d="M19 48 A13 13 0 0 1 45 48" fill="none" stroke="${C.lemon}" stroke-width="6"/><path d="M26 48 A6 6 0 0 1 38 48" fill="none" stroke="${C.sky}" stroke-width="6"/></g>`,
+ bow:`<g ${SH}><path d="M32 30 C20 14 6 18 8 30 C10 42 22 40 32 30Z M32 30 C44 14 58 18 56 30 C54 42 42 40 32 30Z M30 32 L20 56 L27 53 L31 58 Z M34 32 L44 56 L37 53 L33 58Z" fill="${C.bubble}" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><path d="M32 30 C20 14 6 18 8 30 C10 42 22 40 32 30Z M32 30 C44 14 58 18 56 30 C54 42 42 40 32 30Z" fill="none" stroke="#E0609F" stroke-width="1.6" stroke-dasharray="3 3"/><circle cx="32" cy="31" r="6" fill="#E0609F" stroke="#fff" stroke-width="2"/></g>`,
+ cherries:`<g ${SH}><path d="M22 42 Q26 22 42 10 M42 42 Q40 24 42 10" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/><path d="M22 42 Q26 22 42 10 M42 42 Q40 24 42 10" fill="none" stroke="#3E8E5B" stroke-width="3" stroke-linecap="round"/><path d="M42 10 Q52 4 56 12 Q48 18 42 10Z" fill="${C.mint}" stroke="#3E8E5B" stroke-width="2"/><circle cx="21" cy="46" r="11" fill="#FF4F6D" stroke="#fff" stroke-width="5"/><circle cx="43" cy="46" r="11" fill="#FF4F6D" stroke="#fff" stroke-width="5"/><path d="M15 42 q2-4 6-4 M37 42 q2-4 6-4" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/></g>`,
+ strawberry:`<g ${SH}><path d="M32 60 C14 52 8 32 16 22 C22 15 42 15 48 22 C56 32 50 52 32 60Z" fill="#FF5A6E" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><path d="M20 20 L26 24 L32 14 L38 24 L44 20 L40 28 H24Z" fill="${C.mint}" stroke="#3E8E5B" stroke-width="2" stroke-linejoin="round"/>${[[24,34],[36,32],[30,42],[42,42],[22,46],[34,52]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="1.6" ry="2.4" fill="${C.lemon}"/>`).join("")}</g>`,
+ bulb:`<g ${SH}><path d="M32 6 C18 6 12 18 14 28 C16 36 24 38 24 46 H40 C40 38 48 36 50 28 C52 18 46 6 32 6Z" fill="${C.lemon}" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><rect x="24" y="46" width="16" height="10" rx="3" fill="#C9C3D9" stroke="#fff" stroke-width="3"/><path d="M28 36 V28 L32 32 L36 28 V36" fill="none" stroke="#E4A81C" stroke-width="2.5" stroke-linejoin="round"/><path d="M22 16 Q26 11 31 11" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></g>`,
+ fire:`<g ${SH}><path d="M32 60 C16 56 10 42 18 28 C20 36 24 38 27 36 C23 24 30 12 38 4 C38 18 52 24 52 40 C52 52 44 60 32 60Z" fill="${C.mandarin}" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><path d="M32 56 C24 54 22 46 26 40 C28 44 30 44 32 42 C31 36 34 32 38 30 C38 38 44 40 44 46 C44 52 38 56 32 56Z" fill="${C.lemon}"/></g>`,
+ crown:`<g ${SH}><path d="M10 48 L12 18 L23 30 L32 12 L41 30 L52 18 L54 48Z" fill="${C.lemon}" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><rect x="11" y="43" width="42" height="7" rx="2" fill="#E4BE1C"/><circle cx="22" cy="37" r="3" fill="${C.bubble}"/><circle cx="32" cy="35" r="3.5" fill="${C.sky}"/><circle cx="42" cy="37" r="3" fill="${C.mint}"/></g>`,
+ envelope:`<g ${SH}><rect x="6" y="16" width="52" height="36" rx="5" fill="${C.milk}" stroke="#fff" stroke-width="5"/><rect x="6" y="16" width="52" height="36" rx="5" fill="none" stroke="${C.ink}" stroke-width="2"/><path d="M8 19 L32 38 L56 19" fill="none" stroke="${C.ink}" stroke-width="2" stroke-linejoin="round"/><path d="M32 48 l-7-7 a4.5 4.5 0 0 1 7-5 a4.5 4.5 0 0 1 7 5z" fill="${C.bubble}" stroke="#fff" stroke-width="1.5"/></g>`,
+ rocket:`<g ${SH}><path d="M32 4 C44 14 46 32 40 46 H24 C18 32 20 14 32 4Z" fill="${C.milk}" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><path d="M32 4 C44 14 46 32 40 46 H24 C18 32 20 14 32 4Z" fill="none" stroke="${C.ink}" stroke-width="2"/><circle cx="32" cy="24" r="6" fill="${C.sky}" stroke="${C.ink}" stroke-width="2"/><path d="M22 34 L12 46 L23 44Z M42 34 L52 46 L41 44Z" fill="${C.mandarin}" stroke="${C.ink}" stroke-width="2" stroke-linejoin="round"/><path d="M26 47 Q32 64 38 47Z" fill="${C.lemon}" stroke="${C.mandarin}" stroke-width="2"/></g>`,
+ check:`<g ${SH}><circle cx="32" cy="32" r="25" fill="${C.mint}" stroke="#fff" stroke-width="6"/><path d="M20 33 L28 41 L45 23" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></g>`,
+ tulip:`<g ${SH}><path d="M32 30 V58" stroke="#fff" stroke-width="8" stroke-linecap="round"/><path d="M32 30 V58" stroke="#3E8E5B" stroke-width="3" stroke-linecap="round"/><path d="M32 50 Q20 44 18 34 Q28 36 32 46" fill="${C.mint}" stroke="#3E8E5B" stroke-width="2"/><path d="M18 10 L24 18 L32 8 L40 18 L46 10 C48 26 42 34 32 34 C22 34 16 26 18 10Z" fill="${C.bubble}" stroke="#fff" stroke-width="5" stroke-linejoin="round"/></g>`,
+ planet:`<g ${SH}><circle cx="32" cy="32" r="17" fill="${C.lilac}" stroke="#fff" stroke-width="5"/><ellipse cx="32" cy="34" rx="29" ry="8" fill="none" stroke="#fff" stroke-width="8" transform="rotate(-18 32 34)"/><ellipse cx="32" cy="34" rx="29" ry="8" fill="none" stroke="${C.lemon}" stroke-width="4" transform="rotate(-18 32 34)"/><circle cx="26" cy="25" r="3" fill="#B9A3FF"/></g>`,
+ bolt:`<g ${SH}><path d="M38 4 L14 36 H30 L24 60 L50 26 H34Z" fill="${C.lemon}" stroke="#fff" stroke-width="5" stroke-linejoin="round"/></g>`,
+ bandaid:`<g ${SH}><g transform="rotate(-30 32 32)"><rect x="4" y="22" width="56" height="20" rx="10" fill="#F3C9A5" stroke="#fff" stroke-width="4"/><rect x="22" y="24" width="20" height="16" rx="3" fill="#E9B08C"/>${[[11,28],[11,36],[16,32],[48,32],[53,28],[53,36]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1.3" fill="#C98A68"/>`).join("")}</g></g>`,
+ tape:`<g transform="rotate(-14 32 32)"><path d="M4 22 l3 3 -3 3 3 3 -3 3 3 3 -3 3 H60 l-3-3 3-3 -3-3 3-3 -3-3 3-3Z" fill="${C.lilac}" opacity=".55"/><path d="M12 26 h40 M12 32 h40 M12 38 h40" stroke="#fff" stroke-width="1.5" opacity=".6"/></g>`,
+ polaroid:`<g ${SH}><g transform="rotate(6 32 32)"><rect x="10" y="6" width="44" height="52" rx="2" fill="#fff"/><rect x="15" y="11" width="34" height="32" fill="${C.sky}"/><path d="M15 43 L26 30 L34 38 L40 32 L49 43Z" fill="${C.mint}"/><circle cx="40" cy="20" r="4" fill="${C.lemon}"/></g></g>`,
+ day1:`<g ${SH}><g transform="rotate(-6 32 32)"><rect x="4" y="20" width="56" height="24" rx="8" fill="${C.lemon}" stroke="#fff" stroke-width="5"/><text x="32" y="37" text-anchor="middle" font-family="Unbounded, sans-serif" font-weight="800" font-size="11" fill="${C.ink}">ДЕНЬ 1</text></g></g>`,
+ aplus:`<g ${SH}><circle cx="32" cy="32" r="24" fill="${C.bubble}" stroke="#fff" stroke-width="6"/><text x="32" y="40" text-anchor="middle" font-family="Unbounded, sans-serif" font-weight="800" font-size="20" fill="#fff">A+</text></g>`,
 };
-const stNames=[["star","Звезда"],["dotstar","Звезда в горошек"],["flower","Цветок-нашивка"],["daisy","Ромашка-нашивка"],["button","Сердце-пуговица"],["sparkle","Искра"],["smile","Смайл"],["bubble","Облачко «ого!»"],["arrow","Стрелка-каракуля"],["coffee","Кофе"],["book","Универ"],["clock","Дедлайн"],["mic","Микрофон"],["laptop","Ноутбук"]];
+const stNames=[["star","Звезда"],["dotstar","Звезда в горошек"],["flower","Цветок-нашивка"],["daisy","Ромашка-нашивка"],["button","Сердце-пуговица"],["sparkle","Искра"],["smile","Смайл"],["bubble","Облачко «ого!»"],["arrow","Стрелка-каракуля"],["coffee","Кофе"],["book","Универ"],["clock","Дедлайн"],["mic","Микрофон"],["laptop","Ноутбук"],["cloud","Облачко"],["rainbow","Радуга"],["bow","Бантик"],["cherries","Вишенки"],["strawberry","Клубника"],["bulb","Идея"],["fire","Огонь"],["crown","Корона"],["envelope","Письмо"],["rocket","Ракета"],["check","Готово"],["tulip","Тюльпан"],["planet","Планета"],["bolt","Молния"],["bandaid","Пластырь"],["tape","Скотч"],["polaroid","Полароид"],["day1","Ярлык «день 1»"],["aplus","A+ (английский)"]];
 const stSvg=(k,attrs="")=>`<svg viewBox="0 0 64 64" ${attrs} aria-hidden="true">${defs}${ST[k]}</svg>`;
 $("stickers").innerHTML=stNames.map(([k,n])=>`<div class="st">${stSvg(k)}${n}</div>`).join("");
 
@@ -501,6 +612,12 @@ const heroSt=[["star","4%","0%","-12deg"],["dotstar","80%","6%","10deg"],["flowe
 $("heroKin").insertAdjacentHTML("beforeend",heroSt.map(([k,l,t,r],i)=>`<div class="stk" style="left:${l};top:${t};--rot:${r};animation-delay:${1.05+i*.12}s">${stSvg(k)}</div>`).join(""));
 
 /* ---------- Мини-я ---------- */
+/* кудри: волнистый контур + завитки */
+function scallop(cx,cy,rx,ry,n,k){let d="";for(let i=0;i<=n;i++){const a=2*Math.PI*i/n-Math.PI/2,x=cx+rx*Math.cos(a),y=cy+ry*Math.sin(a);if(!i){d+=`M${x.toFixed(1)} ${y.toFixed(1)}`;continue}const am=a-Math.PI/n;d+=`Q${(cx+rx*k*Math.cos(am)).toFixed(1)} ${(cy+ry*k*Math.sin(am)).toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)}`}return d+"Z"}
+const HAIR2="#7A4B42";
+const curl=(x,y)=>`<path d="M${x} ${y} a5 5 0 1 1 6 5" fill="none" stroke="${HAIR2}" stroke-width="2.5" stroke-linecap="round"/>`;
+const curlyBack=`<path d="${scallop(60,70,44,48,18,1.22)}" fill="${C.hair}" stroke="${C.ink}" stroke-width="4" stroke-linejoin="round"/>`+[[20,56],[16,80],[22,102],[96,56],[100,80],[94,102]].map(([x,y])=>curl(x,y)).join("");
+const curlyBangs=[[34,56,8],[38,44,9],[49,36,9.5],[61,33,10],[73,36,9.5],[83,44,9],[87,56,8]].map(([x,y,r])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${C.hair}" stroke="${C.ink}" stroke-width="3.5"/>`).join("")+[[45,34],[58,30],[70,34],[34,44],[80,44]].map(([x,y])=>curl(x,y)).join("");
 function me(o={}){
   const ink=C.ink, mood=o.mood||"happy", top=o.top||C.lilac;
   const eyes=(r=5,dy=0)=>`<g class="eyes"><circle cx="49" cy="${66+dy}" r="${r}" fill="${ink}"/><circle cx="71" cy="${66+dy}" r="${r}" fill="${ink}"/><circle cx="50.5" cy="${64.5+dy}" r="1.7" fill="#fff"/><circle cx="72.5" cy="${64.5+dy}" r="1.7" fill="#fff"/></g>`;
@@ -510,14 +627,14 @@ function me(o={}){
   if(mood==="think"){face=eyes(4.5,-3)+`<path d="M54 81 L66 79" stroke="${ink}" stroke-width="4" stroke-linecap="round"/>`;extra=`<circle cx="100" cy="30" r="4" fill="${ink}"/><circle cx="108" cy="20" r="3" fill="${ink}"/>`;}
   if(mood==="panic"){face=eyes(3.5)+`<path d="M42 56 L54 59 M78 56 L66 59" stroke="${ink}" stroke-width="3.5" stroke-linecap="round"/><path d="M50 82 q2.5 -4 5 0 t5 0 t5 0 t5 0" fill="none" stroke="${ink}" stroke-width="3.5" stroke-linecap="round"/>`;extra=`<path d="M94 40 Q100 50 94 56 Q88 50 94 40Z" fill="${C.sky}" stroke="${ink}" stroke-width="2.5"/>`;}
   if(mood==="love")face=`<path d="M49 72 l-6-6 a4 4 0 0 1 6-4.5 a4 4 0 0 1 6 4.5z M71 72 l-6-6 a4 4 0 0 1 6-4.5 a4 4 0 0 1 6 4.5z" fill="${C.bubble}" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/><path d="M53 79 Q60 86 67 79" fill="none" stroke="${ink}" stroke-width="4" stroke-linecap="round"/>`;
-  return `<svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" ${o.cls?`class="${o.cls}"`:""} role="img" aria-label="Мини-я">
-   <path d="M24 66 Q20 22 60 20 Q100 22 96 66 L100 118 Q60 128 20 118 Z" fill="${C.hair}" stroke="${ink}" stroke-width="4" stroke-linejoin="round"/>
+  return `<svg viewBox="-8 -8 136 158" xmlns="http://www.w3.org/2000/svg" ${o.cls?`class="${o.cls}"`:""} role="img" aria-label="Мини-я с кудрявыми волосами">
+   ${curlyBack}
    <path d="M22 150 Q24 112 60 110 Q96 112 98 150 Z" fill="${top}" stroke="${ink}" stroke-width="4" stroke-linejoin="round"/>
    <path d="M50 100 V114 Q60 120 70 114 V100" fill="${C.skin}" stroke="${ink}" stroke-width="4" stroke-linejoin="round"/>
    <ellipse cx="60" cy="70" rx="29" ry="31" fill="${C.skin}" stroke="${ink}" stroke-width="4"/>
-   <path d="M31 62 Q32 32 60 32 Q88 32 89 62 Q80 46 66 48 Q62 42 56 48 Q42 46 31 62Z" fill="${C.hair}" stroke="${ink}" stroke-width="4" stroke-linejoin="round"/>
+   ${curlyBangs}
    <circle cx="31" cy="80" r="3.5" fill="none" stroke="${C.lemon}" stroke-width="2.5"/><circle cx="89" cy="80" r="3.5" fill="none" stroke="${C.lemon}" stroke-width="2.5"/>
-   <path d="${starPath(82,40,9,4)}" fill="${C.lemon}" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
+   <path d="${starPath(92,34,9,4)}" fill="${C.lemon}" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
    <ellipse cx="42" cy="80" rx="6" ry="3.8" fill="${C.bubble}" opacity=".8"/><ellipse cx="78" cy="80" rx="6" ry="3.8" fill="${C.bubble}" opacity=".8"/>
    ${face}${extra}
   </svg>`;
@@ -594,4 +711,11 @@ const tplH=[
   `<div class="frame h">${vid("inset:0")}<div class="ft bignum" style="left:5%;top:24%;font-size:46px">1 500 ₽</div><div style="position:absolute;left:6%;top:50%"><span class="lbl" style="font-size:12px">за урок</span></div>${sk("book",68,18,12,10)}<div class="ft" style="left:68%;top:52%;font-family:var(--f-body);font-weight:700;color:var(--milk);font-size:16px">английский<br>через сериалы</div></div>`],
 ];
 $("tplH").innerHTML=tplH.map(([t,d,f])=>`<div class="fcap">${f}<h3>${t}</h3><p>${d}</p></div>`).join("");
+
+/* ---------- демо анимаций ---------- */
+document.querySelectorAll("[data-st]").forEach(el=>{el.innerHTML=stSvg(el.dataset.st)});
+document.querySelectorAll("[data-me]").forEach(el=>{el.innerHTML=me({mood:el.dataset.me,top:{love:C.lilac,panic:C.bubble,think:C.mint}[el.dataset.me]||C.lilac})});
+const bc=[C.lemon,C.bubble,C.sky,C.lilac,C.mint,C.lemon,C.bubble,C.sky];
+$("dBurst").innerHTML=bc.map((c,i)=>{const a=Math.PI*2*i/8;return `<i style="background:${c};--dx:${(Math.cos(a)*50).toFixed(0)}px;--dy:${(Math.sin(a)*50).toFixed(0)}px"></i>`}).join("");
+if(!matchMedia("(prefers-reduced-motion: reduce)").matches){let t=0;const el=$("dCount");setInterval(()=>{t=(t+1)%40;el.textContent=t<12?Math.round(327*(1-Math.pow(1-t/12,2))):327},70);}
 </script>
