@@ -1,6 +1,6 @@
 {
   "fps": 30,
-  "music": {"file": "public/intro/music.aac", "start": 0.0, "duration": 15.0, "gain_db": -8, "fade_in": 0.05, "fade_out": 1.4},
+  "music": {"file": "public/intro/music.aac", "start": 0.0, "duration": 15.0, "gain_db": -1, "fade_in": 0.05, "fade_out": 1.4},
   "events": [
     {"f": 1, "type": "whoosh", "gain": 0.7},
     {"f": 17, "type": "thud", "gain": 0.9},

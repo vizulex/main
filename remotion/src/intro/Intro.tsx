@@ -211,10 +211,10 @@ const SpreadContent: React.FC<{f: number; photo: string}> = ({f, photo}) => (
     <Pop f={f} at={119} x={100} y={120} rot={-4} mode="slap" z={3}>
       <div style={{width: 320, padding: "16px 16px 70px", background: "#fff", boxShadow: "0 14px 30px rgba(34,28,70,.3)", position: "relative"}}>
         <div style={{width: 288, height: 330, background: C.lilac50, overflow: "hidden", position: "relative"}}>
-          <Img src={staticFile(photo)} style={{width: "100%", height: "100%", objectFit: "cover"}} />
+          <Img src={staticFile(photo)} style={{width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 25%"}} />
         </div>
         <div style={{position: "absolute", left: 0, right: 0, bottom: 10, textAlign: "center", fontFamily: CV, fontWeight: 700, fontSize: 46, color: C.ink}}>это я</div>
-        <div style={{position: "absolute", left: 90, top: -30, transform: "rotate(-4deg)"}}><St k="tape" w={150} /></div>
+        <div style={{position: "absolute", left: 160, top: -62, transform: "rotate(-4deg)"}}><St k="tape" w={130} /></div>
       </div>
     </Pop>
     <Pop f={f} at={191} x={16} y={520} rot={-3}><Img src={staticFile("intro/img/neurons_cut.png")} style={{width: 150, mixBlendMode: "multiply", opacity: 0.85}} /></Pop>
@@ -233,7 +233,7 @@ const SpreadContent: React.FC<{f: number; photo: string}> = ({f, photo}) => (
     <Draw f={f} at={190} dur={10} w={220} h={20} color={C.lemon} sw={10} d="M4 12 C60 4 140 16 214 8" style={{left: 585, top: 545}} />
     <Pop f={f} at={235} x={900} y={430} mode="slap" rot={-8} float={4}><St k="bulb" w={110} /></Pop>
     <Typed f={f} at={207} cpf={1} text={"гипотеза №1: скроллинг ≠ отдых"} style={{left: 590, top: 612, fontFamily: G, fontWeight: 500, fontSize: 25, color: C.ink}} />
-    <Pop f={f} at={240} x={950} y={596} mode="slap"><St k="check" w={56} /></Pop>
+    <Pop f={f} at={240} x={985} y={560} mode="slap"><St k="check" w={56} /></Pop>
     {f >= 249 && <><Cross x={830} y={190} /><Cross x={1000} y={360} c={C.bubble} /></>}
   </div>
 );
@@ -310,7 +310,7 @@ const TitleScene: React.FC<{f: number; episode: number; photo: string}> = ({f, e
         <Pop f={f} at={366} x={10} y={700} rot={-4} float={5} exitAt={ex} dx={-600} dy={300}><Img src={staticFile("intro/img/brain_cut.png")} style={{width: 290, filter: "drop-shadow(0 8px 12px rgba(34,28,70,.25))"}} /></Pop>
         <Pop f={f} at={373} x={1640} y={380} rot={7} float={4} exitAt={ex} dx={600} dy={0}>
           <div style={{width: 210, padding: "10px 10px 40px", background: "#fff", boxShadow: "0 10px 22px rgba(34,28,70,.3)"}}>
-            <div style={{width: 190, height: 210, background: C.lilac50, overflow: "hidden"}}><Img src={staticFile(photo)} style={{width: "100%", height: "100%", objectFit: "cover"}} /></div>
+            <div style={{width: 190, height: 210, background: C.lilac50, overflow: "hidden"}}><Img src={staticFile(photo)} style={{width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 25%"}} /></div>
           </div>
         </Pop>
         <Pop f={f} at={380} x={40} y={380} rot={4} float={4} exitAt={ex} dx={-600} dy={0}><Circle src="intro/img/lovelace.jpg" size={160} bg={C.bubble} pos="center 20%" /></Pop>

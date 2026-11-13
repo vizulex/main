@@ -196,7 +196,7 @@ def main(out):
     for e in cfg["events"]:
         g = GEN[e["type"]]
         s = g(e["dur"]) if "dur" in e else g()
-        s = s * e.get("gain", 1.0) * BASE.get(e["type"], 0.8) * 1.0
+        s = s * e.get("gain", 1.0) * BASE.get(e["type"], 0.8) * 0.4
         i = int(e["f"] / fps * SR)
         if i >= total:
             continue
