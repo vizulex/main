@@ -266,7 +266,7 @@ footer{padding-block:32px;background:var(--ink);color:var(--milk);font-size:13px
       <div class="card"><h3>Событие каждые 2–3 секунды</h3><p>Новое слово, наклейка, рамка, зум или смена плана. Кадр без движения дольше 3 секунд не оставляем.</p></div>
       <div class="card"><h3>Сказала — показали</h3><p>Ключевое слово фразы становится картинкой: дедлайн — часы, универ — книжка, идея — лампочка или скетч.</p></div>
       <div class="card"><h3>Много воздуха</h3><p>Фон светлый и спокойный: Бумага, Молоко или светлые тинты. Яркий цвет только в акцентах — слово, наклейка, цифра.</p></div>
-      <div class="card"><h3>Понятно без звука</h3><p>Текст на экране есть всегда: либо кинетические слова, либо субтитры. Не оба сразу в одном кадре.</p></div>
+      <div class="card"><h3>Текст по формату</h3><p>Вертикаль: субтитры всегда, их смотрят без звука. Горизонталь (YouTube): только акцентные слова на смысловых пиках, полные субтитры отдельным файлом.</p></div>
       <div class="card"><h3>Петля</h3><p>Последний кадр повторяет фон и раскладку первого, чтобы ролик пересматривали по кругу.</p></div>
     </div>
   </div>
@@ -393,12 +393,30 @@ footer{padding-block:32px;background:var(--ink);color:var(--milk);font-size:13px
 <!-- ============ CAPTIONS ============ -->
 <section>
   <div class="wrap">
-    <div class="head"><span class="eyebrow">Субтитры</span><h2>Два режима текста</h2><p>Для монолога в камеру — субтитры. Для хука и смысловых пиков — кинетические слова. В одном кадре только один режим.</p></div>
+    <div class="head"><span class="eyebrow">Субтитры</span><h2>Текст на экране</h2><p>Вертикаль: субтитры на весь монолог, кинетические слова на хуке и пиках. Горизонталь: постоянных субтитров нет, только акценты. В одном кадре только один режим.</p></div>
+    <h3 style="margin-bottom:14px">Вертикаль 9:16: субтитры</h3>
     <div class="grid g2">
       <div class="fcap"><div class="cap-stage" style="background:linear-gradient(160deg,#CFC8C2,#9E948E)"><div class="cap-line" id="karaoke"></div></div><h3>А. Плашка с подсветкой</h3><p>Golos Text 800, Молоко на Чернилах, скругление 18 px. Активное слово в Лимоне. Расшифровка Whisper, пословно.</p></div>
       <div class="fcap"><div class="cap-stage" style="background:linear-gradient(160deg,#CFC8C2,#9E948E)"><div class="cap-float"><div style="font-family:var(--f-body);font-weight:500;font-size:40px;color:var(--milk);text-shadow:0 2px 12px rgba(34,28,70,.35)">и успеваю</div><div style="font-family:var(--f-body);font-weight:500;font-size:40px;color:var(--bubble);text-align:right;text-shadow:0 2px 12px rgba(34,28,70,.25)">всё</div></div></div><h3>Б. Свободные слова</h3><p>Golos Text 500, крупно, без плашки, раскиданы по кадру. Ключевое слово Баблом. Как у leyla.films.</p></div>
     </div>
-    <div class="note" style="margin-top:18px"><b>Где стоят субтитры.</b> 9:16 — центр строки на высоте 1150–1250 px, выше подписи и кнопок. 16:9 — нижняя треть, низ строки на 960 px.</div>
+    <div class="note" style="margin-top:18px"><b>Где стоят субтитры в вертикали.</b> Центр строки на высоте 1150–1250 px, выше подписи и кнопок.</div>
+
+    <h3 style="margin:32px 0 14px">Горизонталь 16:9: только акцентные слова</h3>
+    <div class="grid g2">
+      <div class="fcap"><div class="frame h" id="accA"></div><h3>Акцент сбоку от лица</h3><p>2–4 слова в свободной половине кадра: жирное + рукописное в Бабле. Влетают по одному под голос.</p></div>
+      <div class="fcap"><div class="frame h" id="accB"></div><h3>Цифра или факт</h3><p>Большая цифра с плашками и наклейкой по теме. Держим 2–3 секунды, потом убираем.</p></div>
+    </div>
+    <div class="tbl-wrap" style="margin-top:18px"><table>
+      <thead><tr><th>Что становится акцентом</th><th>Пример</th><th>Как выглядит</th></tr></thead>
+      <tbody>
+        <tr><td>Цифры, деньги, сроки</td><td>«1000 пользователей к Новому году»</td><td>Большая цифра + 2 плашки</td></tr>
+        <tr><td>Главная мысль блока</td><td>«офлайн важнее онлайна»</td><td>Жирное + рукописное слово сбоку от лица</td></tr>
+        <tr><td>Панчлайн или шутка</td><td>«спойлер: не успела»</td><td>Зачеркнуть и заменить, дрожащий текст</td></tr>
+        <tr><td>Названия и термины</td><td>«ВШМ», «акселератор Сбера»</td><td>Плашка + наклейка или иконка</td></tr>
+        <tr><td>Вопрос к зрителю</td><td>«а вы как успеваете?»</td><td>Облачко «ого!» или мини-я «думает»</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note" style="margin-top:18px"><b>Ритм для 20-минутного подкаста:</b> один акцент раз в 20–40 секунд, на экране 2–3 секунды, 2–5 слов. Акцент всегда в безопасной зоне 16:9 и не закрывает лицо. Полные субтитры — файлом .srt в YouTube, не в кадре.</div>
   </div>
 </section>
 
@@ -711,6 +729,14 @@ const tplH=[
   `<div class="frame h">${vid("inset:0")}<div class="ft bignum" style="left:5%;top:24%;font-size:46px">1 500 ₽</div><div style="position:absolute;left:6%;top:50%"><span class="lbl" style="font-size:12px">за урок</span></div>${sk("book",68,18,12,10)}<div class="ft" style="left:68%;top:52%;font-family:var(--f-body);font-weight:700;color:var(--milk);font-size:16px">английский<br>через сериалы</div></div>`],
 ];
 $("tplH").innerHTML=tplH.map(([t,d,f])=>`<div class="fcap">${f}<h3>${t}</h3><p>${d}</p></div>`).join("");
+
+/* ---------- акценты 16:9 ---------- */
+$("accA").innerHTML=`<div class="video" style="inset:0"><span class="rec">ВИДЕО</span><svg viewBox="0 0 120 130" style="left:66%;width:44%" aria-hidden="true">${inner(silhouette)}</svg></div>
+ <div style="position:absolute;left:7%;top:24%;line-height:.95"><div style="font-family:var(--f-display);font-weight:800;font-size:clamp(20px,3vw,30px);color:var(--milk);text-shadow:0 2px 12px rgba(34,28,70,.35)">офлайн</div><div style="font-family:var(--f-body);font-size:clamp(14px,2vw,20px);color:var(--milk);text-shadow:0 2px 12px rgba(34,28,70,.35)">теперь</div><div class="hand" style="font-size:clamp(32px,5vw,50px);color:var(--bubble);line-height:.9">важнее</div></div>
+ ${sk("sparkle",36,16,7,0)}`;
+$("accB").innerHTML=`<div class="video" style="inset:0"><span class="rec">ВИДЕО</span><svg viewBox="0 0 120 130" style="left:68%;width:44%" aria-hidden="true">${inner(silhouette)}</svg></div>
+ <div style="position:absolute;left:6%;top:22%"><span class="lbl" style="font-size:12px">цель</span><div class="bignum" style="font-size:clamp(28px,4.5vw,46px);margin:6px 0">1000</div><span class="lbl" style="font-size:12px">пользователей к НГ</span></div>
+ ${sk("rocket",36,20,9,10)}`;
 
 /* ---------- демо анимаций ---------- */
 document.querySelectorAll("[data-st]").forEach(el=>{el.innerHTML=stSvg(el.dataset.st)});
