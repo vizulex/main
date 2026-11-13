@@ -273,7 +273,7 @@ const TitleScene: React.FC<{f: number; episode: number; photo: string}> = ({f, e
 
         {/* штамп «АНТИ» */}
         {f >= 293 && (
-          <div style={{position: "absolute", left: 250, top: 206, transform: `scale(${interpolate(stampS, [0, 1], [2.4, 1])}) rotate(-7deg)`, opacity: Math.min(1, (f - 293) / 2), zIndex: 3}}>
+          <div style={{position: "absolute", left: 240, top: 150, transform: `scale(${interpolate(stampS, [0, 1], [2.4, 1])}) rotate(-7deg)`, opacity: Math.min(1, (f - 293) / 2), zIndex: 3}}>
             <div style={{background: C.bubble, color: C.milk, fontFamily: U, fontWeight: 800, fontSize: 96, padding: "6px 30px 14px", borderRadius: 22, border: `5px solid ${C.ink}`, boxShadow: `8px 8px 0 ${C.ink}`, letterSpacing: "0.02em"}}>АНТИ</div>
           </div>
         )}
