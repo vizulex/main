@@ -1,0 +1,503 @@
+<title>Видеостиль Сходки</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Golos+Text:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap">
+<style>
+/* Layout: стикербук — цветные полосы-разделы, внутри сетка карточек-кадров 9:16 и 16:9.
+   Страница сознательно в одной светлой теме: это палитра бренда, а не интерфейс. */
+:root{
+  color-scheme: light;
+  --ink:#221C46; --milk:#FFFAF2;
+  --mandarin:#FF7A2F; --lilac:#9C7BFF; --mint:#4FE0B0; --lemon:#FFE04A; --bubble:#FF8AC5; --sky:#8FD3FF;
+  --lilac-50:#EFE9FF; --mint-50:#DDFBF0; --lemon-50:#FFF7CC; --sky-50:#E3F4FF; --bubble-50:#FFE6F3; --mandarin-50:#FFEADD;
+  --muted:#5D5682;
+  --f-display:"Unbounded", "Arial Black", system-ui, sans-serif;
+  --f-body:"Golos Text", "Segoe UI", system-ui, sans-serif;
+  --f-hand:"Caveat", "Comic Sans MS", cursive;
+  --r:22px;
+}
+*{box-sizing:border-box}
+body{background:var(--milk);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+section{padding-block:56px}
+section.band-lilac{background:var(--lilac-50)}
+section.band-mint{background:var(--mint-50)}
+section.band-lemon{background:var(--lemon-50)}
+section.band-sky{background:var(--sky-50)}
+section.band-bubble{background:var(--bubble-50)}
+h1,h2,h3{font-family:var(--f-display);line-height:1.1;text-wrap:balance;margin:0}
+h2{font-size:clamp(26px,4vw,40px);font-weight:800}
+h3{font-size:18px;font-weight:700}
+p{margin:0;max-width:65ch}
+.eyebrow{font-family:var(--f-body);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.head{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.hand{font-family:var(--f-hand);font-weight:700}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr))}
+.card{background:#fff;border:3px solid var(--ink);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0;box-shadow:5px 5px 0 var(--ink)}
+.chip{display:inline-block;font-weight:700;font-size:12px;padding:3px 10px;border:2px solid var(--ink);border-radius:99px;background:var(--lemon)}
+.tbl-wrap{overflow-x:auto;border:3px solid var(--ink);border-radius:var(--r);background:#fff}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:14px}
+th,td{text-align:left;padding:10px 14px;border-bottom:2px solid var(--lilac-50);vertical-align:top}
+th{font-family:var(--f-display);font-size:12px;font-weight:700;background:var(--ink);color:var(--milk);letter-spacing:.04em}
+tr:last-child td{border-bottom:0}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;background:var(--lilac-50);padding:1px 6px;border-radius:6px}
+
+/* HERO */
+.hero{padding-block:48px 40px;background:var(--lilac)}
+.hero-in{display:grid;grid-template-columns:1.2fr 1fr;gap:24px;align-items:center}
+.hero h1{font-size:clamp(38px,7vw,82px);font-weight:800;color:var(--ink)}
+.hero h1 .hl{background:var(--lemon);padding:0 .15em;border-radius:12px;border:3px solid var(--ink);display:inline-block;transform:rotate(-2deg)}
+.hero p{font-size:18px;margin-top:16px;color:var(--ink)}
+.hero .stickers{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.hero .stickers .chip{font-size:13px}
+.hero-art{display:flex;justify-content:center;align-items:flex-end;gap:0;min-width:0}
+.hero-art svg{width:min(42%,170px);height:auto}
+@media (max-width:760px){.hero-in{grid-template-columns:1fr}}
+
+/* PRINCIPLES */
+.rule{font-family:var(--f-display);font-size:34px;font-weight:800;color:var(--mandarin);-webkit-text-stroke:2px var(--ink)}
+
+/* SWATCHES */
+.sw{border:3px solid var(--ink);border-radius:var(--r);overflow:hidden;background:#fff;display:flex;flex-direction:column;min-width:0}
+.sw .c{height:96px;display:flex;align-items:flex-end;padding:10px;font-family:var(--f-display);font-weight:700;font-size:13px}
+.sw .t{padding:12px;display:flex;flex-direction:column;gap:4px;font-size:13px}
+.sw .t b{font-size:15px}
+.hex{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--muted)}
+.combo{border:3px solid var(--ink);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:8px;min-height:150px;justify-content:space-between}
+.combo .big{font-family:var(--f-display);font-weight:800;font-size:24px;line-height:1.05}
+.combo .tag{align-self:flex-start;font-weight:700;font-size:13px;padding:4px 10px;border-radius:10px;border:2px solid var(--ink)}
+
+/* TYPE */
+.type-row{display:grid;grid-template-columns:200px 1fr;gap:16px;align-items:center;padding:16px 0;border-bottom:2px dashed color-mix(in srgb,var(--ink) 25%,transparent)}
+.type-row:last-child{border-bottom:0}
+@media (max-width:640px){.type-row{grid-template-columns:1fr}}
+.spec{font-size:13px;color:var(--muted)}
+
+/* FRAMES */
+.frame{position:relative;border:3px solid var(--ink);border-radius:18px;overflow:hidden;width:100%;max-width:100%}
+.v{aspect-ratio:9/16}
+.h{aspect-ratio:16/9}
+.frames-v{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr))}
+.frames-h{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))}
+.fcap{display:flex;flex-direction:column;gap:6px;min-width:0}
+.fcap h3{font-size:15px}
+.fcap p{font-size:13px;color:var(--muted)}
+.ft{position:absolute;font-family:var(--f-display);font-weight:800;line-height:1.05;color:var(--ink)}
+.plate{background:var(--ink);color:var(--milk);border-radius:8px;padding:3px 7px;font-family:var(--f-body);font-weight:800;font-size:11px;display:inline-block}
+.plate i{font-style:normal;background:var(--lemon);color:var(--ink);border-radius:4px;padding:0 3px}
+.person{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:62%}
+.safe{position:absolute;border:2px dashed var(--mandarin);border-radius:6px;pointer-events:none}
+.zone{position:absolute;background:repeating-linear-gradient(45deg,color-mix(in srgb,var(--mandarin) 22%,transparent) 0 6px,transparent 6px 12px)}
+.zlabel{position:absolute;font-size:10px;font-weight:700;background:var(--milk);border:1.5px solid var(--ink);border-radius:6px;padding:1px 5px;line-height:1.3}
+
+/* CAPTIONS demo */
+.cap-stage{background:var(--sky);border:3px solid var(--ink);border-radius:var(--r);padding:28px 16px;display:flex;flex-direction:column;align-items:center;gap:14px;min-height:170px;justify-content:center}
+.cap-line{font-family:var(--f-body);font-weight:800;font-size:clamp(22px,4vw,34px);text-align:center;line-height:1.2;color:var(--milk);background:var(--ink);padding:8px 16px;border-radius:14px}
+.cap-line span{padding:0 4px;border-radius:8px;transition:background .12s,color .12s}
+.cap-line span.on{background:var(--lemon);color:var(--ink)}
+.cap-alt{font-family:var(--f-display);font-weight:800;font-size:clamp(22px,4vw,34px);color:var(--milk);-webkit-text-stroke:6px var(--ink);paint-order:stroke fill;text-align:center}
+.cap-alt em{font-style:normal;color:var(--lemon)}
+
+/* MOTION demos */
+.demo{height:120px;border:3px solid var(--ink);border-radius:16px;background:var(--milk);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.demo .blob{width:54px;height:54px;border-radius:16px;border:3px solid var(--ink);background:var(--mandarin)}
+@keyframes pop{0%,15%{transform:scale(0)}28%{transform:scale(1.15)}36%{transform:scale(.95)}44%,85%{transform:scale(1)}100%{transform:scale(0)}}
+@keyframes punch{0%,40%{transform:scale(1)}46%,80%{transform:scale(1.12)}90%,100%{transform:scale(1)}}
+@keyframes wipe{0%,10%{transform:translateX(-110%)}40%,60%{transform:translateX(0)}90%,100%{transform:translateX(110%)}}
+@keyframes sway{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+@keyframes shake{0%,50%,100%{transform:translateX(0)}55%{transform:translateX(-6px) rotate(-3deg)}60%{transform:translateX(6px) rotate(3deg)}65%{transform:translateX(-4px)}70%{transform:translateX(4px)}75%{transform:translateX(0)}}
+@keyframes draw{0%{stroke-dashoffset:300}50%,90%{stroke-dashoffset:0}100%{stroke-dashoffset:300}}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.a-pop{animation:pop 2.2s infinite cubic-bezier(.3,1.4,.5,1)}
+.a-punch{animation:punch 2.2s infinite}
+.a-wipe{position:absolute;inset:0;background:var(--lilac);border-left:3px solid var(--ink);border-right:3px solid var(--ink);animation:wipe 2.4s infinite cubic-bezier(.7,0,.3,1)}
+.a-sway{animation:sway 1.6s infinite ease-in-out;transform-origin:50% 100%}
+.a-shake{animation:shake 2s infinite}
+.a-draw path{stroke-dasharray:300;animation:draw 3s infinite ease-in-out}
+.eyes{animation:blink 3.4s infinite;transform-box:fill-box;transform-origin:center}
+.bob{animation:bob 2.4s infinite ease-in-out}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* MASCOT sheet */
+.moods{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr))}
+.mood{background:#fff;border:3px solid var(--ink);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.mood svg{width:100px;height:auto}
+.mood b{font-family:var(--f-display);font-size:14px}
+.mood span{font-size:12px;color:var(--muted)}
+.props{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,110px),1fr))}
+.prop{background:#fff;border:3px solid var(--ink);border-radius:18px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;font-weight:600}
+.prop svg{width:64px;height:64px}
+.scene{border:3px solid var(--ink);border-radius:var(--r);overflow:hidden;background:var(--sky)}
+.scene svg{display:block;width:100%;height:auto}
+.dodont{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.do,.dont{border:3px solid var(--ink);border-radius:var(--r);padding:18px;background:#fff}
+.do h3::before{content:"Да";background:var(--mint);}
+.dont h3::before{content:"Нет";background:var(--bubble);}
+.do h3::before,.dont h3::before{display:inline-block;font-size:12px;border:2px solid var(--ink);border-radius:99px;padding:2px 10px;margin-right:8px;vertical-align:middle}
+ul.list{margin:10px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:14px}
+.check li{list-style:none;position:relative;padding-left:4px}
+.check{padding-left:22px}
+.check li::before{content:"";position:absolute;left:-22px;top:4px;width:14px;height:14px;border:2.5px solid var(--ink);border-radius:4px;background:#fff}
+.note{border:3px dashed var(--ink);border-radius:var(--r);padding:16px 18px;background:#fff;font-size:14px}
+footer{padding-block:32px;background:var(--ink);color:var(--milk);font-size:13px}
+</style>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap hero-in">
+    <div>
+      <div class="eyebrow" style="color:var(--ink)">Брендбук монтажа · вертикаль 9:16 и горизонталь 16:9</div>
+      <h1 style="margin-top:12px">Видеостиль <span class="hl">Сходки</span></h1>
+      <p>Как выглядят, двигаются и звучат все ролики: личный блог Влады и аккаунт Сходки. Живое видео и милый 2D-мультик в одном кадре: всё, о чём говорим, тут же рисуем.</p>
+      <div class="stickers">
+        <span class="chip">Reels / TikTok 1080×1920</span>
+        <span class="chip" style="background:var(--mint)">YouTube / VK 1920×1080</span>
+        <span class="chip" style="background:var(--bubble)">30 fps</span>
+        <span class="chip" style="background:var(--sky)">Remotion + HyperFrames</span>
+      </div>
+    </div>
+    <div class="hero-art" id="heroArt" aria-label="Маскот Пинчик в трёх цветах"></div>
+  </div>
+</header>
+
+<!-- ============ PRINCIPLES ============ -->
+<section>
+  <div class="wrap">
+    <div class="head"><span class="eyebrow">Основа</span><h2>5 правил монтажа</h2></div>
+    <div class="grid g3">
+      <div class="card"><div class="rule">1,5 с</div><h3>Хук до первого вдоха</h3><p>Первый кадр уже движется: крупный текст-хук и персонаж или предмет, влетающий в кадр. Без «привет, меня зовут».</p></div>
+      <div class="card"><div class="rule">2–3 с</div><h3>Ритм визуальных событий</h3><p>Каждые 2–3 секунды что-то меняется: стикер, зум, смена плана, анимация. Длинный кадр без движения — нельзя.</p></div>
+      <div class="card"><div class="rule">1 = 1</div><h3>Сказала — нарисовали</h3><p>Каждое существительное в хуке и ключевых фразах получает картинку: теннис — ракетка, дедлайн — горящие часы, команда — 5 Пинчиков.</p></div>
+      <div class="card"><div class="rule">3 цвета</div><h3>Не больше трёх в кадре</h3><p>Чернила + Молоко + один-два акцента. Палитра яркая, но не радуга в каждом кадре.</p></div>
+      <div class="card"><div class="rule">0 звука</div><h3>Понятно без звука</h3><p>Субтитры всегда. 80% смотрят без звука: сюжет должен читаться по тексту и рисункам.</p></div>
+      <div class="card"><div class="rule">∞</div><h3>Петля в конце</h3><p>Последний кадр визуально ведёт в первый (тот же цвет фона, тот же Пинчик), чтобы ролик пересматривали.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COLOR ============ -->
+<section class="band-lilac">
+  <div class="wrap">
+    <div class="head"><span class="eyebrow">Цвет</span><h2>Палитра «стикерпак»</h2><p>Тёмный индиго вместо чёрного для текста и контуров, тёплый молочный вместо белого. Акценты насыщенные, как у наклеек.</p></div>
+    <div class="grid g4">
+      <div class="sw"><div class="c" style="background:var(--ink);color:var(--milk)">Чернила</div><div class="t"><b>Чернила</b><span class="hex">#221C46</span><span>Текст, контуры, плашки субтитров</span></div></div>
+      <div class="sw"><div class="c" style="background:var(--milk)">Молоко</div><div class="t"><b>Молоко</b><span class="hex">#FFFAF2</span><span>Светлый фон, текст на Чернилах</span></div></div>
+      <div class="sw"><div class="c" style="background:var(--mandarin)">Мандарин</div><div class="t"><b>Мандарин</b><span class="hex">#FF7A2F</span><span>Главный цвет Сходки, Пинчик, CTA</span></div></div>
+      <div class="sw"><div class="c" style="background:var(--lilac)">Сирень</div><div class="t"><b>Сирень</b><span class="hex">#9C7BFF</span><span>Главный цвет личного блога</span></div></div>
+      <div class="sw"><div class="c" style="background:var(--mint)">Мята</div><div class="t"><b>Мята</b><span class="hex">#4FE0B0</span><span>Офлайн, природа, «да», рост</span></div></div>
+      <div class="sw"><div class="c" style="background:var(--lemon)">Лимон</div><div class="t"><b>Лимон</b><span class="hex">#FFE04A</span><span>Выделение слов, цифры, маркер</span></div></div>
+      <div class="sw"><div class="c" style="background:var(--bubble)">Бабл</div><div class="t"><b>Бабл</b><span class="hex">#FF8AC5</span><span>Эмоции, румянец, «нет», ошибки</span></div></div>
+      <div class="sw"><div class="c" style="background:var(--sky)">Небо</div><div class="t"><b>Небо</b><span class="hex">#8FD3FF</span><span>Небо в сценах, спокойные фоны</span></div></div>
+    </div>
+
+    <h3 style="margin:32px 0 14px">Проверенные пары для фона</h3>
+    <div class="grid g3">
+      <div class="combo" style="background:var(--lilac)"><div class="big">Мой день<br>фаундера</div><span class="tag" style="background:var(--lemon)">Сирень + Лимон + Чернила</span></div>
+      <div class="combo" style="background:var(--mandarin)"><div class="big">Где поиграть<br>в теннис?</div><span class="tag" style="background:var(--milk)">Мандарин + Молоко + Чернила</span></div>
+      <div class="combo" style="background:var(--ink);color:var(--milk)"><div class="big">1000 юзеров<br>к <span style="color:var(--lemon)">Новому году</span></div><span class="tag" style="background:var(--mint);color:var(--ink)">Чернила + Лимон + Мята</span></div>
+      <div class="combo" style="background:var(--mint)"><div class="big">Офлайн &gt;<br>онлайн</div><span class="tag" style="background:var(--bubble)">Мята + Бабл + Чернила</span></div>
+      <div class="combo" style="background:var(--lemon)"><div class="big">Дедлайн<br>завтра</div><span class="tag" style="background:var(--bubble)">Лимон + Бабл + Чернила</span></div>
+      <div class="combo" style="background:var(--sky)"><div class="big">Пикник<br>в 18:00</div><span class="tag" style="background:var(--mandarin)">Небо + Мандарин + Чернила</span></div>
+    </div>
+    <div class="note" style="margin-top:18px"><b>Правило контраста.</b> Текст на цветном фоне всегда Чернилами. Молочный текст только на Чернилах. Белый текст на Мандарине, Мяте и Лимоне не читается на телефоне.</div>
+
+    <h3 style="margin:32px 0 14px">Два аккаунта, одна система</h3>
+    <div class="grid g2">
+      <div class="card" style="background:var(--lilac-50)"><span class="chip" style="background:var(--lilac)">Личный блог Влады</span><p><b>Ведущий цвет — Сирень</b>, акцент Бабл. Больше живого видео: 60% лицо и съёмка дня, 40% рисунки. Рукописные подписи Caveat.</p></div>
+      <div class="card" style="background:var(--mandarin-50)"><span class="chip" style="background:var(--mandarin)">Аккаунт Сходки</span><p><b>Ведущий цвет — Мандарин</b>, акцент Мята. Больше мультика: 70% анимации с Пинчиком, 30% живых кадров встреч и экранов приложения.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TYPE ============ -->
+<section>
+  <div class="wrap">
+    <div class="head"><span class="eyebrow">Шрифты</span><h2>Три голоса</h2><p>Все три бесплатные (Google Fonts) и поддерживают кириллицу.</p></div>
+    <div class="card">
+      <div class="type-row"><div><b>Unbounded</b><div class="spec">Хуки, заголовки, цифры · 700–800</div></div><div style="font-family:var(--f-display);font-weight:800;font-size:clamp(28px,5vw,46px);line-height:1.05">Нашла 5 человек на теннис за 10 минут</div></div>
+      <div class="type-row"><div><b>Golos Text</b><div class="spec">Субтитры, плашки, списки · 600–800</div></div><div style="font-family:var(--f-body);font-weight:700;font-size:clamp(20px,3vw,28px)">а потом мы просто пошли пить кофе всей кучей</div></div>
+      <div class="type-row"><div><b>Caveat</b><div class="spec">Рукописные пометки, стрелки, «мысли вслух» · 700</div></div><div class="hand" style="font-size:clamp(30px,5vw,44px);color:var(--mandarin)">← это я в 3 ночи</div></div>
+    </div>
+
+    <h3 style="margin:28px 0 14px">Размеры в кадре (px при полном разрешении)</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Элемент</th><th>Шрифт</th><th>9:16 (1080×1920)</th><th>16:9 (1920×1080)</th><th>Максимум</th></tr></thead>
+      <tbody>
+        <tr><td>Хук</td><td>Unbounded 800</td><td>110–130</td><td>110–120</td><td>6 слов, 3 строки</td></tr>
+        <tr><td>Заголовок сцены</td><td>Unbounded 700</td><td>80</td><td>84</td><td>4 слова</td></tr>
+        <tr><td>Большая цифра</td><td>Unbounded 800</td><td>220–300</td><td>240</td><td>1 число + подпись</td></tr>
+        <tr><td>Субтитры</td><td>Golos Text 800</td><td>62–68</td><td>54–58</td><td>3–4 слова в строке, 2 строки</td></tr>
+        <tr><td>Плашка / список</td><td>Golos Text 700</td><td>44–48</td><td>40</td><td>5 пунктов</td></tr>
+        <tr><td>Рукописная пометка</td><td>Caveat 700</td><td>70–80</td><td>64</td><td>5 слов</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============ MASCOT / CARTOON ============ -->
+<section class="band-mint">
+  <div class="wrap">
+    <div class="head"><span class="eyebrow">2D-мультик</span><h2>Пинчик и мир Сходки</h2><p>Маскот — живая метка на карте: «активность рядом» превращается в персонажа. Он узнаваемый герой скетчей (как у Cluely) и появляется в каждом ролике Сходки.</p></div>
+    <div class="moods" id="moods"></div>
+
+    <h3 style="margin:32px 0 14px">Пример сцены: «пикник в 18:00»</h3>
+    <div class="scene" id="scene"></div>
+
+    <h3 style="margin:32px 0 14px">Библиотека предметов</h3>
+    <div class="props" id="props"></div>
+
+    <h3 style="margin:32px 0 14px">Правила рисунка</h3>
+    <div class="dodont">
+      <div class="do"><h3>Так рисуем</h3><ul class="list">
+        <li>Контур Чернилами, 4–5 px (на 1080), скруглённые концы</li>
+        <li>Заливки плоские, без градиентов, одна тень-смещение тоже Чернилами</li>
+        <li>Простые формы: круги, капли, скруглённые прямоугольники</li>
+        <li>У людей и Пинчиков румянец Баблом, глаза-точки с бликом</li>
+        <li>Всё чуть живое: покачивание, моргание, подпрыгивание в паузах</li>
+      </ul></div>
+      <div class="dont"><h3>Так не делаем</h3><ul class="list">
+        <li>Фотореализм, 3D, нейросетевые картинки в одном кадре с SVG</li>
+        <li>Тонкие линии 1–2 px: на телефоне исчезают</li>
+        <li>Больше 3 персонажей в одном кадре вертикали</li>
+        <li>Чёрный #000 и белый #FFF: только Чернила и Молоко</li>
+        <li>Статичный рисунок дольше 1,5 секунд</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CAPTIONS ============ -->
+<section>
+  <div class="wrap">
+    <div class="head"><span class="eyebrow">Субтитры</span><h2>Два стиля субтитров</h2><p>Расшифровка через Whisper, пословная подсветка. Главное слово фразы выделяется Лимоном.</p></div>
+    <div class="grid g2">
+      <div class="fcap"><div class="cap-stage"><div class="cap-line" id="karaoke"></div></div><h3>А. «Плашка» — основной</h3><p>Golos Text 800, Молоко на Чернилах, скругление 18 px. Активное слово — плашка Лимона. Для говорящей головы и влогов.</p></div>
+      <div class="fcap"><div class="cap-stage" style="background:var(--mandarin)"><div class="cap-alt">собрали <em>12 человек</em><br>за один вечер</div></div><h3>Б. «Обводка» — для хуков</h3><p>Unbounded 800, Молоко с обводкой Чернилами 10 px. Ключевые слова Лимоном. Для первых 3 секунд и мультсцен.</p></div>
+    </div>
+    <div class="note" style="margin-top:18px"><b>Где стоят субтитры.</b> 9:16: центр текста на высоте 1150–1250 px, выше подписи и кнопок соцсети. 16:9: нижняя треть, низ строки на 960 px. Если в кадре лицо — субтитры не закрывают рот и глаза.</div>
+  </div>
+</section>
+
+<!-- ============ FORMATS / SAFE ZONES ============ -->
+<section class="band-sky">
+  <div class="wrap">
+    <div class="head"><span class="eyebrow">Форматы</span><h2>Безопасные зоны</h2><p>Штриховка — место, которое закрывают кнопки и подписи соцсетей. Текст и важные рисунки только внутри пунктира.</p></div>
+    <div class="grid g2" style="align-items:start">
+      <div class="fcap">
+        <div class="frame v" style="background:var(--milk);max-width:300px">
+          <div class="zone" style="left:0;right:0;top:0;height:13%"></div>
+          <div class="zone" style="left:0;right:0;bottom:0;height:25%"></div>
+          <div class="zone" style="right:0;top:13%;bottom:25%;width:14%"></div>
+          <div class="safe" style="left:5.5%;right:14%;top:13%;bottom:25%"></div>
+          <span class="zlabel" style="left:6%;top:4%">верх 250 px</span>
+          <span class="zlabel" style="left:6%;bottom:10%">низ 480 px: подпись, ник</span>
+          <span class="zlabel" style="right:2%;top:46%;writing-mode:vertical-rl">кнопки 150 px</span>
+          <span class="zlabel" style="left:12%;top:40%;background:var(--lemon)">безопасно<br>900 × 1190</span>
+        </div>
+        <h3>9:16 · Reels, TikTok, Shorts, клипы VK</h3>
+        <p>1080×1920, 30 fps. Поля: сверху 250, снизу 480, справа 150, слева 60 px. Обложка: главное в центральном квадрате 1080×1080.</p>
+      </div>
+      <div class="fcap">
+        <div class="frame h" style="background:var(--milk)">
+          <div class="zone" style="left:0;right:0;top:0;height:5%"></div>
+          <div class="zone" style="left:0;right:0;bottom:0;height:5%"></div>
+          <div class="zone" style="left:0;top:5%;bottom:5%;width:5%"></div>
+          <div class="zone" style="right:0;top:5%;bottom:5%;width:5%"></div>
+          <div class="safe" style="left:5%;right:5%;top:5%;bottom:5%"></div>
+          <div class="safe" style="left:5%;right:5%;top:72%;bottom:5%;border-color:var(--lilac)"></div>
+          <span class="zlabel" style="left:7%;top:9%">поля 96 × 54 px</span>
+          <span class="zlabel" style="left:7%;top:76%;background:var(--lilac-50)">нижняя треть: субтитры и плашки</span>
+        </div>
+        <h3>16:9 · YouTube, VK Видео, превью в Telegram</h3>
+        <p>1920×1080, 30 fps. Поля 5%. Говорящая голова слева, иллюстрации справа. Субтитры в нижней трети.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TEMPLATES ============ -->
+<section>
+  <div class="wrap">
+    <div class="head"><span class="eyebrow">Шаблоны кадров</span><h2>7 сцен, из которых собирается любой ролик</h2></div>
+    <div class="frames-v" id="tplV"></div>
+    <h3 style="margin:32px 0 14px">Горизонтальные версии</h3>
+    <div class="frames-h" id="tplH"></div>
+  </div>
+</section>
+
+<!-- ============ MOTION ============ -->
+<section class="band-lemon">
+  <div class="wrap">
+    <div class="head"><span class="eyebrow">Анимация</span><h2>Как всё двигается</h2><p>Движения упругие, с небольшим перелётом, как у резинового мячика. Тайминги в кадрах при 30 fps.</p></div>
+    <div class="grid g3">
+      <div class="fcap"><div class="demo"><div class="blob a-pop"></div></div><h3>Pop-in стикера</h3><p>0 → 115% → 95% → 100% за 8–10 кадров. Всё, что появляется: рисунки, плашки, эмодзи.</p></div>
+      <div class="fcap"><div class="demo"><div class="blob a-punch" style="background:var(--lilac)"></div></div><h3>Punch-zoom</h3><p>Резкий зум 100 → 112% за 3 кадра на ключевом слове. Не чаще раза в 5 секунд.</p></div>
+      <div class="fcap"><div class="demo"><span class="hand" style="font-size:28px">сцена 1 → 2</span><div class="a-wipe"></div></div><h3>Шторка-переход</h3><p>Цветная плашка на весь кадр проезжает за 10–12 кадров. Цвет — ведущий цвет аккаунта.</p></div>
+      <div class="fcap"><div class="demo" id="demoSway"></div><h3>Idle персонажа</h3><p>Покачивание ±4° за 1,6 с, моргание каждые 3–4 с. Персонаж никогда не стоит замороженным.</p></div>
+      <div class="fcap"><div class="demo"><div class="blob a-shake" style="background:var(--bubble)"></div></div><h3>Тряска «паника»</h3><p>±6 px, 8 кадров. Для дедлайнов, ошибок, «всё сломалось».</p></div>
+      <div class="fcap"><div class="demo"><svg class="a-draw" viewBox="0 0 200 80" width="200" height="80"><path d="M10 60 C 50 10, 90 10, 120 40 S 170 70, 185 25" fill="none" stroke="var(--ink)" stroke-width="5" stroke-linecap="round"/><path d="M172 22 L186 24 L182 38" fill="none" stroke="var(--ink)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3>Рисующаяся стрелка</h3><p>Линия «прорисовывается» за 12–15 кадров. Для указаний на объект в кадре.</p></div>
+    </div>
+    <h3 style="margin:32px 0 14px">Параметры для кода</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Движение</th><th>Remotion</th><th>HyperFrames / CSS</th></tr></thead>
+      <tbody>
+        <tr><td>Pop-in</td><td><code>spring({frame, fps, config:{damping:12, stiffness:180}})</code></td><td><code>cubic-bezier(.3,1.4,.5,1)</code>, 300 мс</td></tr>
+        <tr><td>Выезд текста</td><td><code>spring({damping:16, stiffness:140})</code>, сдвиг 60 px</td><td><code>cubic-bezier(.2,.9,.3,1)</code>, 350 мс</td></tr>
+        <tr><td>Шторка</td><td><code>interpolate(frame,[0,11],[-1080,0])</code> + Easing.inOut(Easing.cubic)</td><td><code>cubic-bezier(.7,0,.3,1)</code>, 400 мс</td></tr>
+        <tr><td>Слово субтитров</td><td>появление за 2 кадра, подсветка по таймкодам Whisper</td><td>переход фона 120 мс</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============ SOUND ============ -->
+<section>
+  <div class="wrap">
+    <div class="head"><span class="eyebrow">Звук</span><h2>Звук под картинку</h2></div>
+    <div class="grid g4">
+      <div class="card"><span class="chip">pop</span><p>Каждый pop-in стикера. Короткий, мультяшный.</p></div>
+      <div class="card"><span class="chip" style="background:var(--lilac)">whoosh</span><p>Шторка и смена сцены.</p></div>
+      <div class="card"><span class="chip" style="background:var(--mint)">ding</span><p>Цифры, выполненный пункт чек-листа, «получилось».</p></div>
+      <div class="card"><span class="chip" style="background:var(--bubble)">boing / record scratch</span><p>Неудача, «ожидание / реальность».</p></div>
+    </div>
+    <div class="note" style="margin-top:18px">Голос −14 LUFS. Музыка на 18–22 дБ тише голоса, без слов. Под влог — лёгкий lo-fi / инди-поп, под скетчи Сходки — бодрый укулеле-поп. SFX не громче голоса.</div>
+  </div>
+</section>
+
+<!-- ============ CHECKLIST ============ -->
+<section class="band-bubble">
+  <div class="wrap">
+    <div class="head"><span class="eyebrow">Перед публикацией</span><h2>Чек-лист ролика</h2></div>
+    <div class="grid g2">
+      <div class="card"><h3>Картинка</h3><ul class="list check">
+        <li>Первый кадр движется, хук читается за 1,5 с</li>
+        <li>Визуальное событие каждые 2–3 с</li>
+        <li>Текст внутри безопасной зоны</li>
+        <li>В кадре не больше 3 цветов палитры</li>
+        <li>Последний кадр зацикливается в первый</li>
+      </ul></div>
+      <div class="card"><h3>Текст и звук</h3><ul class="list check">
+        <li>Субтитры есть, ошибки проверены</li>
+        <li>Ключевые слова подсвечены Лимоном</li>
+        <li>Голос −14 LUFS, музыка тише на 18+ дБ</li>
+        <li>SFX на каждом pop-in и переходе</li>
+        <li>Обложка: хук в центральном квадрате</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap">Видеостиль Сходки · v1 · ноябрь 2026. Токены для кода: <code style="background:#3a3366;color:var(--milk)">brand/tokens.json</code>, маскот: <code style="background:#3a3366;color:var(--milk)">brand/pinchik.svg</code>.</div></footer>
+
+<script>
+const C={ink:"#221C46",milk:"#FFFAF2",mandarin:"#FF7A2F",lilac:"#9C7BFF",mint:"#4FE0B0",lemon:"#FFE04A",bubble:"#FF8AC5",sky:"#8FD3FF"};
+
+/* Пинчик: метка-на-карте с ножками. mood: happy | wow | think | panic | love */
+function pin(o={}){
+  const c=o.c||C.mandarin, mood=o.mood||"happy", ink=C.ink;
+  const armsDown=`<path d="M16 64 Q2 78 10 92" fill="none" stroke="${ink}" stroke-width="5" stroke-linecap="round"/><path d="M104 64 Q118 78 110 92" fill="none" stroke="${ink}" stroke-width="5" stroke-linecap="round"/>`;
+  const armWave=`<path d="M16 64 Q2 78 10 92" fill="none" stroke="${ink}" stroke-width="5" stroke-linecap="round"/><path d="M104 60 Q120 46 114 28" fill="none" stroke="${ink}" stroke-width="5" stroke-linecap="round"/>`;
+  const armsUp=`<path d="M16 60 Q0 44 8 26" fill="none" stroke="${ink}" stroke-width="5" stroke-linecap="round"/><path d="M104 60 Q120 44 112 26" fill="none" stroke="${ink}" stroke-width="5" stroke-linecap="round"/>`;
+  const armChin=`<path d="M16 64 Q2 78 10 92" fill="none" stroke="${ink}" stroke-width="5" stroke-linecap="round"/><path d="M104 70 Q96 92 70 86" fill="none" stroke="${ink}" stroke-width="5" stroke-linecap="round"/>`;
+  const dotEyes=(r=6,dy=0)=>`<g class="eyes"><circle cx="46" cy="${54+dy}" r="${r}" fill="${ink}"/><circle cx="74" cy="${54+dy}" r="${r}" fill="${ink}"/><circle cx="${48}" cy="${52+dy}" r="2" fill="#fff"/><circle cx="76" cy="${52+dy}" r="2" fill="#fff"/></g>`;
+  const blush=`<ellipse cx="34" cy="68" rx="7" ry="4.5" fill="${C.bubble}" opacity=".85"/><ellipse cx="86" cy="68" rx="7" ry="4.5" fill="${C.bubble}" opacity=".85"/>`;
+  let face="", arms=armsDown, extra="";
+  if(mood==="happy"){face=`<path d="M39 56 Q46 47 53 56" fill="none" stroke="${ink}" stroke-width="4.5" stroke-linecap="round"/><path d="M67 56 Q74 47 81 56" fill="none" stroke="${ink}" stroke-width="4.5" stroke-linecap="round"/><path d="M48 68 Q60 84 72 68 Z" fill="${ink}"/><path d="M54 75 Q60 80 66 75 Q60 72 54 75Z" fill="${C.bubble}"/>`;arms=armWave;}
+  if(mood==="wow"){face=dotEyes(7.5)+`<ellipse cx="60" cy="76" rx="6" ry="8" fill="${ink}"/>`;arms=armsUp;}
+  if(mood==="think"){face=dotEyes(5,-4)+`<path d="M52 74 L68 71" stroke="${ink}" stroke-width="4.5" stroke-linecap="round"/>`;arms=armChin;extra=`<circle cx="104" cy="20" r="4" fill="${ink}"/><circle cx="114" cy="10" r="3" fill="${ink}"/>`;}
+  if(mood==="panic"){face=dotEyes(4)+`<path d="M38 42 L52 46 M82 42 L68 46" stroke="${ink}" stroke-width="4" stroke-linecap="round"/><path d="M46 76 q3.5 -5 7 0 t7 0 t7 0 t7 0" fill="none" stroke="${ink}" stroke-width="4" stroke-linecap="round"/>`;arms=armsUp;extra=`<path d="M96 22 Q102 32 96 38 Q90 32 96 22Z" fill="${C.sky}" stroke="${ink}" stroke-width="3"/>`;}
+  if(mood==="love"){face=`<path d="M46 62 l-7-7 a4.5 4.5 0 0 1 7-5 a4.5 4.5 0 0 1 7 5z" fill="${C.bubble}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/><path d="M74 62 l-7-7 a4.5 4.5 0 0 1 7-5 a4.5 4.5 0 0 1 7 5z" fill="${C.bubble}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/><path d="M50 70 Q60 80 70 70" fill="none" stroke="${ink}" stroke-width="4.5" stroke-linecap="round"/>`;arms=armWave;}
+  return `<svg viewBox="-4 -4 128 156" xmlns="http://www.w3.org/2000/svg" ${o.cls?`class="${o.cls}"`:""} role="img" aria-label="Пинчик">
+    <ellipse cx="60" cy="144" rx="30" ry="5" fill="${ink}" opacity=".15"/>
+    <path d="M48 110 L45 136" stroke="${ink}" stroke-width="5" stroke-linecap="round"/><path d="M72 110 L75 136" stroke="${ink}" stroke-width="5" stroke-linecap="round"/>
+    <ellipse cx="41" cy="138" rx="8" ry="4.5" fill="${ink}"/><ellipse cx="79" cy="138" rx="8" ry="4.5" fill="${ink}"/>
+    ${arms}
+    <path d="M60 8 C30 8 12 30 12 56 C12 84 40 102 60 122 C80 102 108 84 108 56 C108 30 90 8 60 8 Z" fill="${c}" stroke="${ink}" stroke-width="4.5" stroke-linejoin="round"/>
+    <path d="M30 34 Q40 20 54 18" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".55"/>
+    ${blush}${face}${extra}
+  </svg>`;
+}
+const $=id=>document.getElementById(id);
+
+/* hero */
+$("heroArt").innerHTML=pin({c:C.lilac,mood:"love",cls:"bob"})+pin({c:C.mandarin,mood:"happy",cls:"a-sway"})+pin({c:C.mint,mood:"wow",cls:"bob"});
+
+/* moods */
+const moods=[["happy","Радость","привет, получилось, позвали"],["wow","Вау","инсайт, цифры, сюрприз"],["think","Думает","вопрос, выбор, планы"],["panic","Паника","дедлайн, баг, всё сломалось"],["love","Влюблён","встреча, люди, офлайн"]];
+$("moods").innerHTML=moods.map(([m,t,d],i)=>`<div class="mood">${pin({mood:m,c:[C.mandarin,C.lemon,C.lilac,C.bubble,C.mint][i]})}<b>${t}</b><span>${d}</span></div>`).join("")+
+ `<div class="mood" style="background:var(--lemon-50)"><b>Цвет = кто</b><span>Мандарин — Сходка (главный). Сирень — Влада. Мята, Лимон, Бабл — команда и пользователи.</span></div>`;
+
+/* scene */
+function mini(x,y,s,c,mood,flip){return `<g transform="translate(${x} ${y}) scale(${flip?-s:s} ${s})">${pin({c,mood}).replace(/^<svg[^>]*>/,"").replace(/<\/svg>$/,"")}</g>`}
+$("scene").innerHTML=`<svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Три Пинчика на пикнике под солнцем">
+ <defs><pattern id="chk" width="24" height="24" patternUnits="userSpaceOnUse"><rect width="24" height="24" fill="${C.milk}"/><rect width="12" height="12" fill="${C.bubble}"/><rect x="12" y="12" width="12" height="12" fill="${C.bubble}"/></pattern></defs>
+ <rect width="640" height="300" fill="${C.sky}"/>
+ <circle cx="560" cy="62" r="34" fill="${C.lemon}" stroke="${C.ink}" stroke-width="4"/>
+ <g stroke="${C.ink}" stroke-width="4" stroke-linecap="round"><path d="M560 14v-10M608 62h10M594 28l7-7M594 96l7 7M512 62h-10M526 28l-7-7"/></g>
+ <path d="M70 70 q12 -18 30 -8 q14 -14 30 2 q16 2 12 18 h-78 q-8 -8 6 -12z" fill="#fff" stroke="${C.ink}" stroke-width="4" stroke-linejoin="round"/>
+ <path d="M-10 230 Q160 170 340 210 T660 200 V310 H-10Z" fill="${C.mint}" stroke="${C.ink}" stroke-width="4"/>
+ <path d="M150 262 L470 262 L430 220 L190 220 Z" fill="url(#chk)" stroke="${C.ink}" stroke-width="4" stroke-linejoin="round"/>
+ <g transform="translate(300 190)"><rect x="0" y="0" width="34" height="30" rx="6" fill="${C.milk}" stroke="${C.ink}" stroke-width="4"/><path d="M34 8 q14 2 0 16" fill="none" stroke="${C.ink}" stroke-width="4"/><path d="M10 -6 q4 -6 0 -12 M22 -6 q4 -6 0 -12" stroke="${C.ink}" stroke-width="3" fill="none" stroke-linecap="round"/></g>
+ ${mini(170,110,.85,C.lilac,"love")}${mini(370,100,.95,C.mandarin,"happy")}${mini(560,120,.8,C.lemon,"wow",true)}
+ <g><rect x="410" y="40" width="130" height="50" rx="16" fill="#fff" stroke="${C.ink}" stroke-width="4"/><path d="M440 88 L432 104 L456 88" fill="#fff" stroke="${C.ink}" stroke-width="4" stroke-linejoin="round"/><text x="475" y="72" text-anchor="middle" font-family="Caveat, cursive" font-weight="700" font-size="26" fill="${C.ink}">го в 18:00?</text></g>
+</svg>`;
+
+/* props */
+const S=`stroke="${C.ink}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"`;
+const props=[
+ ["Ракетка",`<ellipse cx="26" cy="24" rx="16" ry="19" fill="${C.mint}" ${S}/><path d="M16 14 L36 34 M14 24 H38 M26 7 V41" stroke="${C.ink}" stroke-width="2" opacity=".5"/><path d="M34 40 L52 58" ${S} fill="none" stroke-width="7"/><circle cx="50" cy="16" r="7" fill="${C.lemon}" ${S}/>`],
+ ["Кофе",`<path d="M14 24 H46 L42 54 H18 Z" fill="${C.milk}" ${S}/><path d="M46 30 q12 2 0 14" fill="none" ${S}/><rect x="12" y="18" width="36" height="8" rx="3" fill="${C.mandarin}" ${S}/><path d="M24 12 q3 -4 0 -8 M34 12 q3 -4 0 -8" fill="none" ${S} stroke-width="3"/>`],
+ ["Телефон",`<rect x="18" y="6" width="28" height="52" rx="7" fill="${C.lilac}" ${S}/><rect x="23" y="13" width="18" height="32" rx="3" fill="${C.milk}" stroke="${C.ink}" stroke-width="3"/><circle cx="32" cy="51" r="2.5" fill="${C.ink}"/><path d="M32 22 c-4 0 -6 3 -6 6 c0 4 6 9 6 9 s6 -5 6 -9 c0 -3 -2 -6 -6 -6z" fill="${C.mandarin}" stroke="${C.ink}" stroke-width="2"/>`],
+ ["Календарь",`<rect x="8" y="12" width="48" height="44" rx="8" fill="${C.milk}" ${S}/><path d="M8 26 H56" ${S}/><rect x="8" y="12" width="48" height="14" rx="6" fill="${C.bubble}" ${S}/><path d="M20 6 V16 M44 6 V16" ${S}/><text x="32" y="50" text-anchor="middle" font-family="Unbounded, sans-serif" font-weight="800" font-size="17" fill="${C.ink}">15</text>`],
+ ["Дедлайн",`<circle cx="32" cy="36" r="20" fill="${C.lemon}" ${S}/><path d="M32 24 V36 L40 42" ${S} fill="none"/><path d="M14 18 L22 10 M50 18 L42 10" ${S}/><path d="M48 54 q6 -6 2 -12 q8 4 6 12z" fill="${C.mandarin}" stroke="${C.ink}" stroke-width="3"/>`],
+ ["Пикник",`<path d="M8 40 L56 40 L50 56 L14 56Z" fill="${C.mandarin}" ${S}/><path d="M18 40 q14 -28 28 0" fill="none" ${S}/><circle cx="22" cy="34" r="6" fill="${C.bubble}" ${S}/><circle cx="40" cy="34" r="6" fill="${C.mint}" ${S}/>`],
+ ["Мяч",`<circle cx="32" cy="32" r="22" fill="${C.lemon}" ${S}/><path d="M14 20 q14 12 0 26 M50 20 q-14 12 0 26" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>`],
+ ["Ноутбук",`<rect x="12" y="12" width="40" height="28" rx="4" fill="${C.sky}" ${S}/><path d="M4 48 H60 L56 54 H8Z" fill="${C.milk}" ${S}/><path d="M22 26 h8 M22 32 h18" stroke="${C.ink}" stroke-width="3" stroke-linecap="round"/>`],
+ ["Деньги",`<rect x="6" y="18" width="52" height="30" rx="5" fill="${C.mint}" ${S}/><circle cx="32" cy="33" r="8" fill="${C.milk}" stroke="${C.ink}" stroke-width="3"/><text x="32" y="38" text-anchor="middle" font-family="Golos Text, sans-serif" font-weight="800" font-size="12" fill="${C.ink}">₽</text>`],
+ ["Сердце",`<path d="M32 54 L12 34 a11 11 0 0 1 20 -14 a11 11 0 0 1 20 14z" fill="${C.bubble}" ${S}/><path d="M20 28 q2 -6 8 -6" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>`],
+];
+$("props").innerHTML=props.map(([n,s])=>`<div class="prop"><svg viewBox="0 0 64 64" aria-hidden="true">${s}</svg>${n}</div>`).join("");
+
+/* idle demo */
+$("demoSway").innerHTML=pin({c:C.mint,mood:"happy",cls:"a-sway"}).replace("<svg ","<svg width=\"80\" height=\"100\" ");
+
+/* karaoke captions */
+const words=["я","нашла","людей","на","теннис","за","10","минут"];
+const kar=$("karaoke");kar.innerHTML=words.map(w=>`<span>${w}</span>`).join(" ");
+const spans=[...kar.children];let k=0;spans[0].classList.add("on");
+if(!matchMedia("(prefers-reduced-motion: reduce)").matches){setInterval(()=>{spans[k].classList.remove("on");k=(k+1)%spans.length;spans[k].classList.add("on")},420);}
+
+/* templates — vertical */
+const person=c=>`<svg class="person" viewBox="0 0 120 130" aria-hidden="true"><path d="M10 130 Q14 88 60 86 Q106 88 110 130Z" fill="${c}" stroke="${C.ink}" stroke-width="3"/><circle cx="60" cy="52" r="30" fill="#F2C6A8" stroke="${C.ink}" stroke-width="3"/><path d="M28 54 Q26 18 60 18 Q96 18 92 54 Q88 34 60 32 Q36 34 28 54Z" fill="#5A3B2E" stroke="${C.ink}" stroke-width="3"/><circle cx="50" cy="56" r="3" fill="${C.ink}"/><circle cx="70" cy="56" r="3" fill="${C.ink}"/><path d="M52 68 Q60 74 68 68" fill="none" stroke="${C.ink}" stroke-width="3" stroke-linecap="round"/></svg>`;
+const sm=(x,y,w,c,m,cls="")=>`<div style="position:absolute;left:${x}%;top:${y}%;width:${w}%">${pin({c,mood:m,cls})}</div>`;
+const tplV=[
+ ["1 · Хук-карта","Первые 1,5 с. Крупный хук на цветном фоне, Пинчик влетает снизу.",
+  `<div class="frame v" style="background:${C.mandarin}"><div class="ft" style="left:8%;top:16%;right:16%;font-size:clamp(18px,2.4vw,24px)">Нашла <span style="background:${C.lemon};padding:0 4px;border-radius:6px">5 человек</span> на теннис за 10 минут</div>${sm(26,52,48,C.mandarin,"wow","bob")}</div>`],
+ ["2 · Голова + стикер","Говорящая голова, сверху всплывает рисунок того, о чём речь.",
+  `<div class="frame v" style="background:#EFE9FF">${person(C.lilac)}<div class="prop" style="position:absolute;left:12%;top:16%;padding:6px;transform:rotate(-8deg)"><svg viewBox="0 0 64 64" width="48" height="48">${props[4][1]}</svg></div><div class="hand" style="position:absolute;left:46%;top:18%;font-size:20px;color:${C.mandarin}">← дедлайн</div><div style="position:absolute;left:8%;right:14%;top:60%;text-align:center"><span class="plate">завтра <i>питч</i> у инвестора</span></div></div>`],
+ ["3 · Ожидание / реальность","Сплит экрана пополам. Сверху мультик-мечта, снизу живой кадр или паника.",
+  `<div class="frame v" style="background:${C.milk}"><div style="position:absolute;inset:0 0 50% 0;background:${C.mint};border-bottom:3px solid ${C.ink}"></div><span class="plate" style="position:absolute;left:8%;top:14%">ожидание</span>${sm(32,20,36,C.mint,"love")}<span class="plate" style="position:absolute;left:8%;top:55%;background:${C.bubble};color:${C.ink}">реальность</span>${sm(32,60,36,C.bubble,"panic","a-shake")}</div>`],
+ ["4 · Большая цифра","Метрика или результат. Цифра 250+ px, прогресс-бар рисуется.",
+  `<div class="frame v" style="background:${C.ink}"><div class="ft" style="left:8%;top:22%;color:${C.lemon};font-size:clamp(44px,6vw,60px)">327</div><div class="ft" style="left:8%;top:38%;color:${C.milk};font-family:var(--f-body);font-size:14px">из 1000 юзеров<br>к Новому году</div><div style="position:absolute;left:8%;right:16%;top:52%;height:16px;border:3px solid ${C.milk};border-radius:99px"><div style="width:33%;height:100%;background:${C.mint};border-radius:99px"></div></div>${sm(56,58,30,C.mandarin,"happy","bob")}</div>`],
+ ["5 · Карта рядом","Как работает Сходка: карта района, Пинчики-активности выпрыгивают по очереди.",
+  `<div class="frame v" style="background:#E7F7EE"><svg viewBox="0 0 90 160" style="position:absolute;inset:0;width:100%;height:100%" preserveAspectRatio="none" aria-hidden="true"><path d="M0 60 H90 M0 110 H90 M30 0 V160 M64 0 V160" stroke="#fff" stroke-width="6"/><path d="M-5 130 Q40 120 95 140" stroke="${C.sky}" stroke-width="10" fill="none"/></svg>${sm(10,24,22,C.mandarin,"happy","bob")}${sm(52,34,22,C.lilac,"love","bob")}${sm(26,52,22,C.mint,"wow","bob")}<span class="plate" style="position:absolute;left:44%;top:22%">теннис 19:00</span><span class="plate" style="position:absolute;left:8%;top:47%">пикник</span></div>`],
+ ["6 · Список / чек-лист","Пункты выпрыгивают по одному, галочки ставятся с ding.",
+  `<div class="frame v" style="background:${C.lemon}"><div class="ft" style="left:8%;top:15%;font-size:16px">Мой день<br>фаундера</div><div style="position:absolute;left:8%;right:16%;top:32%;display:flex;flex-direction:column;gap:6px">${["пары 9:30","созвон с командой","3 рилса","урок английского"].map((t,i)=>`<span class="plate" style="background:${i<2?C.ink:C.milk};color:${i<2?C.milk:C.ink};border:2px solid ${C.ink}">${i<2?"✓ ":"○ "}${t}</span>`).join("")}</div>${sm(56,64,28,C.lilac,"think")}</div>`],
+ ["7 · Финал / CTA","Призыв и петля: тот же фон, что в хуке.",
+  `<div class="frame v" style="background:${C.mandarin}">${sm(30,18,40,C.mandarin,"happy","a-sway")}<div class="ft" style="left:8%;right:16%;top:50%;text-align:center;font-size:clamp(16px,2vw,20px)">Сходка<br><span style="font-family:var(--f-body);font-size:13px;font-weight:700">ссылка в профиле</span></div><div style="position:absolute;left:20%;right:26%;top:64%;text-align:center"><span class="plate" style="background:${C.milk};color:${C.ink};border:2px solid ${C.ink}">подпишись на закулисье</span></div></div>`],
+];
+$("tplV").innerHTML=tplV.map(([t,d,f])=>`<div class="fcap">${f}<h3>${t}</h3><p>${d}</p></div>`).join("");
+
+/* templates — horizontal */
+const tplH=[
+ ["Голова слева, мультик справа","Основной горизонтальный кадр: человек на 40% ширины, справа сцена или схема.",
+  `<div class="frame h" style="background:#EFE9FF"><div style="position:absolute;left:0;top:0;bottom:0;width:42%;background:${C.lilac};border-right:3px solid ${C.ink}"><svg viewBox="0 0 120 130" style="position:absolute;bottom:0;left:10%;width:80%" aria-hidden="true">${person(C.mandarin).replace(/^<svg[^>]*>/,"").replace(/<\/svg>$/,"")}</svg></div>${sm(52,20,15,C.mandarin,"happy","bob")}${sm(72,26,15,C.mint,"love","bob")}<div class="ft" style="left:48%;top:70%;font-size:clamp(13px,1.6vw,17px)">5 незнакомцев → <span style="background:${C.lemon};padding:0 4px;border-radius:6px">одна компания</span></div></div>`],
+ ["Схема / объяснение","Полноэкранная мультсхема: стрелки рисуются, блоки выпрыгивают.",
+  `<div class="frame h" style="background:${C.milk}"><div style="position:absolute;inset:16% 6%;display:flex;align-items:center;justify-content:space-between;gap:4%">${[["создал",C.mandarin,"happy"],["нашёл",C.lilac,"think"],["встретились",C.mint,"love"]].map(([t,c,m],i)=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:70%">${pin({c,mood:m})}</div><span class="plate">${t}</span></div>${i<2?`<svg viewBox="0 0 40 20" style="width:10%" aria-hidden="true"><path d="M2 10 H34 M26 3 L35 10 L26 17" fill="none" stroke="${C.ink}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>`:""}`).join("")}</div></div>`],
+];
+$("tplH").innerHTML=tplH.map(([t,d,f])=>`<div class="fcap">${f}<h3>${t}</h3><p>${d}</p></div>`).join("");
+</script>
