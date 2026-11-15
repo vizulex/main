@@ -1,10 +1,10 @@
-"""Звук рилсов: голос из смонтированного эпизода + ритмичная подложка + эффекты под анимации.
+"""Звук рилсов: голос из смонтированного эпизода + эффекты под анимации (без фоновой музыки).
 python3 remotion/src/reels/mix_reels.py <voice.wav> <reels.json> <out_dir>
-Голос всегда громче всего: подложка ≈ на 16 дБ тише, эффекты короткие и тихие. Итог −14 LUFS (стерео)."""
+Голос всегда громче всего, эффекты короткие и тихие. Итог −14 LUFS (стерео)."""
 import json, os, sys, numpy as np, soundfile as sf, pyloudnorm as pyln
 sys.path.insert(0, "remotion/src/intro"); sys.path.insert(0, "remotion/src/episode")
 import mix_audio as SFX
-from mix_episode import make_bed, place
+from mix_episode import place
 
 SR = 48000
 F = 1 / 30
@@ -19,10 +19,10 @@ def voice_track(v, r, N):
 
 def sfx_track(r, N):
     o = np.zeros(N); P = lambda x, t, g: place(o, x, t, g)
-    P(SFX.whoosh(0.4), 0.0, 0.10); P(SFX.thud(0.35), 2 * F, 0.30); P(SFX.pop(), 10 * F, 0.06)
+    P(SFX.whoosh(0.4), 0.0, 0.04); P(SFX.thud(0.35), 2 * F, 0.12); P(SFX.pop(), 10 * F, 0.04)
     he = r["hook_end"]; P(SFX.whoosh(0.35), he - 0.25, 0.08); P(SFX.thud(0.25), he, 0.10)
     if r["timer"]:
-        for s in range(1, int(r["dur"]) + 1): P(SFX.click(), s, 0.035)
+        for s in range(1, 48): P(SFX.click(), s * r["speed"], 0.035)
     for g in r["gfx"]:
         k, s, e = g["kind"], g["s"], g["e"]
         if k in ("planreal", "dablin", "tradeoff", "attn", "hellyes", "checklist", "loops", "plan"):
@@ -63,10 +63,7 @@ def main(voice_p, data_p, out_dir):
     for r in json.load(open(data_p)):
         N = int(np.ceil(r["dur"] * 30) / 30 * SR)
         vo = voice_track(v, r, N); vo *= 10 ** ((-17 - meter.integrated_loudness(vo)) / 20)
-        bed = make_bed(r["dur"] + 2, bpm=96)[:N]
-        bed *= 10 ** ((-33 - meter.integrated_loudness(bed)) / 20)
-        env = np.minimum(1, np.arange(N) / (0.25 * SR)) * np.minimum(1, (N - np.arange(N)) / (1.0 * SR))
-        mix = vo + bed * env + sfx_track(r, N)
+        mix = vo + sfx_track(r, N)  # без фоновой музыки: только голос и эффекты
         mix *= 10 ** ((-17 - meter.integrated_loudness(mix)) / 20)
         pk = np.max(np.abs(mix))
         if pk > 0.89: mix = np.tanh(mix / 0.89) * 0.89

@@ -1,20 +1,38 @@
 """Сборка таймлайна рилсов из смонтированного эпизода.
-python3 remotion/src/reels/build_reels.py <qa_words.jsonl> > remotion/src/reels/data/reels.json
+python3 remotion/src/reels/build_reels.py <qa_words.jsonl> <voice.wav> > remotion/src/reels/data/reels.json
 Времена фрагментов — в таймлайне смонтированного голоса (voice.wav, с паузой под интро).
 Графика привязывается к словам: at("фраза") → время начала первого слова фразы в рилсе."""
 import json, re, sys
 
 W = [json.loads(l) for l in open(sys.argv[1])]
+import numpy as np, soundfile as sf
+V, VSR = sf.read(sys.argv[2], dtype="float32")  # смонтированный голос: по нему ищем настоящую тишину вокруг фразы
+def _db(t, w=0.02):
+    a = V[max(0, int(t * VSR)):int((t + w) * VSR)]
+    return 20 * np.log10(np.sqrt(np.mean(a ** 2)) + 1e-9) if len(a) else -120
+def widen(s, e):
+    """Режем в самой тихой точке паузы: между концом предыдущего слова и началом фразы (и так же в конце).
+    Распознавание ставит начало слова с опозданием, поэтому без этого первый слог обрезается."""
+    prev = max([w["e"] for w in W if w["e"] <= s + 0.05] or [s - 0.4])
+    nxt = min([w["s"] for w in W if w["s"] >= e - 0.05] or [e + 0.4])
+    def quiet(a, b):
+        ts = np.arange(a, max(a + 0.011, b), 0.01)
+        return float(ts[int(np.argmin([_db(t) for t in ts]))])
+    s0 = quiet(max(prev - 0.06, s - 0.45), s - 0.02)
+    e0 = quiet(e + 0.02, min(nxt + 0.06, e + 0.4))
+    return round(s0, 3), round(e0, 3)
+
 norm = lambda s: re.sub(r"[^\w%]+", "", s.lower().replace("ё", "е"))
 FIX = {"Даблин.": "«да… блин».", "Баумастер": "Баумайстер", "Масикампа.": "Масикампо.", "Северс": "Сиверс",
        "задачи,": None, "приоритетацию,": "приоритизацию,"}
 
 def build(cfg):
-    segs, words, at0 = [], [], 0.0
-    for s, e in cfg["segs"]:
+    LEAD = 0.4  # первые 0,4 с — стоп-кадр без голоса: плееры съедают начало звука, а первое слово должно быть слышно целиком
+    segs, words, at0 = [], [], LEAD
+    for s, e in [widen(a, b) for a, b in cfg["segs"]]:
         segs.append({"s": s, "e": e, "at": round(at0, 3)})
         for w in W:
-            if w["s"] >= s - 0.02 and w["e"] <= e + 0.06:
+            if w["s"] >= s - 0.02 and w["e"] <= e + 0.06 and w["s"] < e:
                 txt = w["w"].strip()
                 words.append({"w": txt, "s": round(w["s"] - s + at0, 3), "e": round(min(w["e"], e) - s + at0, 3), "src": w["s"]})
         at0 += e - s
@@ -28,7 +46,7 @@ def build(cfg):
     for a in starts:  # заглавная буква в начале фрагмента
         w = next((x for x in words if x["s"] >= a - 0.05), None)
         if w: w["w"] = w["w"][:1].upper() + w["w"][1:]
-    dur = max(at0, cfg.get("min_dur", 0))
+    dur = at0
     for fx in cfg.get("fix", []):  # точечные замены текста субтитров: (исходное, новое)
         for w in words:
             if w["w"] == fx[0]: w["w"] = fx[1]
@@ -60,7 +78,8 @@ def build(cfg):
     # зум: смена на каждой склейке + толчок на ключевых моментах
     zoom = [[sg["at"], 1.22 if i % 2 == 0 else 1.4] for i, sg in enumerate(segs)]
     punch = sorted({round(g["s"], 3) for g in gfx if g["kind"] in ("bignum", "stamp")})
-    return {"id": cfg["id"], "dur": round(dur, 3), "hook_end": cfg["hook_end"], "title": cfg["title"], "hook": cfg["hook"],
+    speed = round(dur / cfg["fit_to"], 4) if cfg.get("fit_to") else 1.0  # рилс «47 секунд» потом ускоряется ровно до 47 с
+    return {"id": cfg["id"], "dur": round(dur, 3), "lead": LEAD, "speed": speed, "hook_end": cfg["hook_end"], "title": cfg["title"], "hook": cfg["hook"],
             "cta": cfg["cta"], "timer": cfg.get("timer", False), "segs": segs, "caps": caps, "gfx": gfx, "zoom": zoom, "punch": punch}
 
 YT = ["Полный выпуск", "на YouTube"]
@@ -90,7 +109,7 @@ R2 = dict(id="r2", title="Эффект\n«да… блин»", hook_end=2.5,
     {"kind": "sticker", "s": at("чаша"), "e": at("переполниться", end=True) + 0.4, "k": "bolt", "x": 760, "y": 380, "w": 200, "rot": 12},
   ])
 
-R3 = dict(id="r3", title="Твоё внимание:\n47 секунд", hook_end=2.4, timer=True, min_dur=47.0,
+R3 = dict(id="r3", title="Твоё внимание:\n47 секунд", hook_end=2.4, timer=True, fit_to=47.0,
   hook={"small": "Столько ты держишь внимание на одном экране", "big": "47 секунд", "st": "sparkle"},
   cta=["Досмотрела до конца?", "Ты уже лучше среднего"],
   segs=[[654.88, 676.98], [680.00, 686.50], [699.52, 703.68], [703.78, 709.26], [712.74, 721.20]],

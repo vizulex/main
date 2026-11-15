@@ -1,5 +1,5 @@
 import React from "react";
-import {AbsoluteFill, OffthreadVideo, Sequence, staticFile, useCurrentFrame, Easing, interpolate} from "remotion";
+import {AbsoluteFill, OffthreadVideo, Sequence, Freeze, staticFile, useCurrentFrame, Easing, interpolate} from "remotion";
 import {C, U, G, CV, L, SP, fr, St, Appear, gridPaper, Grain, bignumStyle, jitter} from "../episode/kit";
 import reels from "./data/reels.json";
 
@@ -38,6 +38,9 @@ const Video: React.FC<{r: R; f: number}> = ({r, f}) => {
   const sh = shake(f, 6, 18, 12);
   return (
     <div style={{position: "absolute", left: ANCHOR.x - FACE.x * S + sh.x, top: ANCHOR.y - FACE.y * S + sh.y, width: 1920, height: 1080, transform: `scale(${S})`, transformOrigin: "0 0", filter: "contrast(1.06) saturate(1.12) brightness(1.03)"}}>
+      <Sequence durationInFrames={fr(r.segs[0].at)} layout="none">
+        <Freeze frame={0}><OffthreadVideo src={staticFile("ep1/aroll.mp4")} startFrom={fr(r.segs[0].s - INTRO_LEN)} muted style={{width: 1920, height: 1080}} /></Freeze>
+      </Sequence>
       {r.segs.map((sg, i) => (
         <Sequence key={i} from={fr(sg.at)} durationInFrames={Math.max(1, fr(sg.e - sg.s))} layout="none">
           <OffthreadVideo src={staticFile("ep1/aroll.mp4")} startFrom={fr(sg.s - INTRO_LEN)} muted style={{width: 1920, height: 1080}} />
@@ -87,7 +90,7 @@ const Title: React.FC<{r: R; f: number}> = ({r, f}) => {
 
 const Timer: React.FC<{r: R; f: number}> = ({r, f}) => {
   if (!r.timer) return null;
-  const t = f / 30, sec = Math.min(47, Math.floor(t)), p = Math.min(1, t / 47);
+  const t = f / 30 / r.speed, sec = Math.min(47, Math.floor(t)), p = Math.min(1, t / 47);  // после ускорения — реальные секунды
   const pulse = 1 + 0.08 * Math.max(0, 1 - (t % 1) * 6);
   const R0 = 70, circ = 2 * Math.PI * R0;
   return (
