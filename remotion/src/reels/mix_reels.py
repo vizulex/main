@@ -19,8 +19,7 @@ def voice_track(v, r, N):
 
 def sfx_track(r, N):
     o = np.zeros(N); P = lambda x, t, g: place(o, x, t, g)
-    P(SFX.whoosh(0.4), 0.0, 0.04); P(SFX.thud(0.35), 2 * F, 0.12); P(SFX.pop(), 10 * F, 0.04)
-    he = r["hook_end"]; P(SFX.whoosh(0.35), he - 0.25, 0.08); P(SFX.thud(0.25), he, 0.10)
+    P(SFX.whoosh(0.5), 0.0, 0.035)
     if r["timer"]:
         for s in range(1, 48): P(SFX.click(), s * r["speed"], 0.035)
     for g in r["gfx"]:
@@ -35,6 +34,7 @@ def sfx_track(r, N):
                 if ln.get("strikeAt"): P(SFX.scribble(0.3), ln["strikeAt"], 0.06)
         if k == "bignum": P(SFX.pop(), s, 0.08); P(SFX.ticker(0.33), g["at"], 0.05); P(SFX.ding(), g["at"] + 0.45, 0.05)
         if k == "stamp": P(SFX.stamp(), s + 0.08, 0.20)
+        if k == "bt": P(SFX.whoosh(0.5), s - 0.1, 0.04)
         if k == "sticker": P(SFX.pop(), s, 0.07)
         if k == "list":
             for it in g["items"]: P(SFX.pop(), it["t"], 0.08)
