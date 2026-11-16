@@ -254,7 +254,7 @@ export const Reel: React.FC<{id: string}> = ({id}) => {
   const active = gfx.filter((g) => !g.mode && g.kind !== "bt" && t >= Math.max(g.s - 0.4, r.hook_end) && t <= g.e + 0.4);
   const btOn = bts.some((b) => t >= b.s - 0.1 && t <= b.e + 0.1);
   const leftTitle = r.timer || (sc?.g.mode === "circle" && p > 0.5);
-  const capY = sc?.g.mode === "circle" && p > 0.5 ? 1330 : 1330;
+  const capY = 1330 + (sc?.g.mode === "split" ? 400 * p : 0);  // на половине экрана — ниже лица
   return (
     <AbsoluteFill style={{background: C.ink, overflow: "hidden"}}>
       {/* фон под графикой */}
