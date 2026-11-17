@@ -425,7 +425,7 @@ function renderBoardDetail(v) {
   v.append(h("button", {class: "back", onclick: () => openBoard(null)}, "← Все раскадровки"));
   if (!b) { v.append(h("div", {class: "empty"}, h("b", {}, "Раскадровка не найдена"))); return; }
   v.append(h("h2", {style: "font-family:var(--display);font-weight:600;font-size:20px;margin:0 0 4px"}, b.title || "", b.example ? h("span", {class: "example"}, "пример") : null),
-    b.brief ? h("p", {style: "color:var(--muted);margin:0 0 14px;max-width:70ch"}, b.brief) : null,
+    b.brief ? h("p", {style: "color:var(--muted);margin:0 0 14px;max-width:80ch;white-space:pre-line"}, b.brief) : null,
     h("div", {class: "summary", id: "board-sum"}),
     h("div", {class: "shots", id: "shots"}));
   patchShots();

@@ -70,19 +70,24 @@ export const Ransom: React.FC<{f: number; s: number; e: number; text: string; x:
     if (f < s || f > e) return null;
     const out = L(f, e - 7, e, 1, 0);
     const fonts = RANSOM_FONTS();
+    let k = 0;
     return (
-      <div style={{position: "absolute", left: x, top: y, transform: `translate(-50%,-50%) rotate(${rot}deg)`, display: "flex", flexWrap: "wrap", justifyContent: "center", gap: size * 0.06, opacity: out, maxWidth: 1700}}>
-        {[...text].map((ch, i) => {
-          if (ch === " ") return <div key={i} style={{width: size * 0.35}} />;
-          const r = random(text + i), r2 = random(text + "b" + i);
-          const bg = RANSOM_BG[Math.floor(r * RANSOM_BG.length)];
-          const dark = bg === P.ink;
-          const sp = SP(f, s + i * stagger, 9, 240);
-          return (
-            <div key={i} style={{fontFamily: fonts[Math.floor(r2 * fonts.length)], fontSize: size * (0.85 + r * 0.3), lineHeight: 1, background: bg, color: dark ? "#fff" : r > 0.7 ? P.red : P.ink,
-              padding: `${size * 0.06}px ${size * 0.1}px`, transform: `rotate(${(r - 0.5) * 14}deg) translateY(${(r2 - 0.5) * size * 0.15}px) scale(${sp})`, filter: shadow, fontStyle: r2 > 0.8 ? "italic" : "normal", textTransform: r > 0.5 ? "uppercase" : "none"}}>{ch}</div>
-          );
-        })}
+      <div style={{position: "absolute", left: x, top: y, transform: `translate(-50%,-50%) rotate(${rot}deg)`, display: "flex", flexWrap: "wrap", justifyContent: "center", columnGap: size * 0.35, rowGap: size * 0.12, opacity: out, width: "max-content", maxWidth: 1500}}>
+        {text.split(" ").map((word, wi) => (
+          <div key={wi} style={{display: "flex", gap: size * 0.06, whiteSpace: "nowrap"}}>
+            {[...word].map((ch) => {
+              const i = k++;
+              const r = random(text + i), r2 = random(text + "b" + i);
+              const bg = RANSOM_BG[Math.floor(r * RANSOM_BG.length)];
+              const dark = bg === P.ink;
+              const sp = SP(f, s + i * stagger, 9, 240);
+              return (
+                <div key={i} style={{fontFamily: fonts[Math.floor(r2 * fonts.length)], fontSize: size * (0.85 + r * 0.3), lineHeight: 1, background: bg, color: dark ? "#fff" : r > 0.7 ? P.red : P.ink,
+                  padding: `${size * 0.06}px ${size * 0.1}px`, transform: `rotate(${(r - 0.5) * 14}deg) translateY(${(r2 - 0.5) * size * 0.15}px) scale(${sp})`, filter: shadow, fontStyle: r2 > 0.8 ? "italic" : "normal", textTransform: r > 0.5 ? "uppercase" : "none"}}>{ch}</div>
+              );
+            })}
+          </div>
+        ))}
       </div>
     );
   };
