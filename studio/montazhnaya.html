@@ -1,0 +1,519 @@
+<title>Монтажная Влады</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Golos+Text:wght@400;500;600;700&display=swap">
+<style>
+/* Раскладка: верхняя панель с тремя разделами; внутри раздела — список карточек или открытая карточка (разбор / раскадровка). */
+:root{
+  --bg:#F6F4FA; --surface:#FFFFFF; --ink:#221C46; --muted:#6B6590; --line:#E4DFF1; --soft:#EFEBFA;
+  --accent:#7B5CF0; --accent-ink:#FFFFFF; --lemon:#FFE04A; --ok:#1FA97A; --ok-bg:#DDFBF0; --fix:#E8641E; --fix-bg:#FFEADC; --no:#D9365B; --no-bg:#FFE3EA;
+  --display:"Unbounded","Golos Text",system-ui,sans-serif; --body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:16px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#15122B; --surface:#1F1B3A; --ink:#F2EFFF; --muted:#A39DC8; --line:#332D58; --soft:#2A2550;
+  --accent:#A58BFF; --accent-ink:#15122B; --lemon:#FFE04A; --ok:#4FE0B0; --ok-bg:#163B33; --fix:#FF9A5C; --fix-bg:#40281C; --no:#FF7B98; --no-bg:#40202C; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#15122B; --surface:#1F1B3A; --ink:#F2EFFF; --muted:#A39DC8; --line:#332D58; --soft:#2A2550;
+  --accent:#A58BFF; --accent-ink:#15122B; --lemon:#FFE04A; --ok:#4FE0B0; --ok-bg:#163B33; --fix:#FF9A5C; --fix-bg:#40281C; --no:#FF7B98; --no-bg:#40202C; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1180px;margin:0 auto}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:18px 12px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.brand h1{font-family:var(--display);font-weight:800;font-size:26px;letter-spacing:-.01em;margin:0}
+.brand h1 i{font-style:normal;background:var(--lemon);color:#221C46;padding:0 8px;border-radius:8px}
+.brand p{margin:0;color:var(--muted)}
+.tabs{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 16px;font-weight:600;display:flex;gap:8px;align-items:center}
+.tab .n{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:500}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tab[aria-selected="true"] .n{color:inherit;opacity:.7}
+.status{color:var(--muted);font-size:13px;min-height:20px;margin-top:6px}
+.status.err{color:var(--no)}
+section{padding-top:22px}
+.intro{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;flex-wrap:wrap;margin-bottom:16px}
+.intro h2{font-family:var(--display);font-weight:600;font-size:20px;margin:0 0 4px}
+.intro p{margin:0;color:var(--muted);max-width:62ch}
+.btn{border:0;border-radius:12px;padding:10px 16px;font-weight:600;background:var(--accent);color:var(--accent-ink);display:inline-flex;gap:8px;align-items:center}
+.btn.ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.btn.small{padding:6px 12px;font-size:13px;border-radius:10px}
+.btn.danger{background:var(--no-bg);color:var(--no)}
+.btn[disabled]{opacity:.5;cursor:default}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600}
+.chip[aria-pressed="true"]{background:var(--soft);border-color:var(--accent);color:var(--accent)}
+.search{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:8px 12px;min-width:0;width:220px;max-width:100%}
+.drop{border:2px dashed var(--line);border-radius:var(--r);padding:16px;text-align:center;color:var(--muted);margin-bottom:16px}
+.drop.on{border-color:var(--accent);background:var(--soft);color:var(--ink)}
+.empty{border:1px dashed var(--line);border-radius:var(--r);padding:28px;text-align:center;color:var(--muted)}
+.empty b{display:block;color:var(--ink);font-family:var(--display);font-weight:600;font-size:16px;margin-bottom:4px}
+/* библиотека: колонки как в коллаже */
+.masonry{columns:4 220px;column-gap:14px}
+.tile{break-inside:avoid;margin-bottom:14px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:block;width:100%;padding:0;text-align:left}
+.tile img{display:block;width:100%;height:auto;background:repeating-conic-gradient(var(--soft) 0 25%,transparent 0 50%) 0 0/16px 16px}
+.tile .meta{padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.tile .name{font-weight:600;overflow-wrap:anywhere}
+.tags{display:flex;gap:4px;flex-wrap:wrap}
+.tag{font-size:12px;color:var(--muted);background:var(--soft);border-radius:6px;padding:1px 7px}
+.pill{font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;display:inline-block;width:max-content}
+.pill.collage{background:#FFE6F3;color:#9C2B67}.pill.fx{background:#E3F4FF;color:#1C5E8A}.pill.bg{background:#FFF7CC;color:#7A6200}.pill.mine{background:#DDFBF0;color:#16725A}
+/* карточки списков */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;text-align:left;padding:0}
+.card .cover{aspect-ratio:16/10;background:var(--soft);display:flex;align-items:center;justify-content:center;color:var(--muted);overflow:hidden}
+.card .cover img{width:100%;height:100%;object-fit:cover}
+.card .body{padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.card h3{margin:0;font-size:16px;font-weight:700}
+.card .sub{color:var(--muted);font-size:13px;overflow-wrap:anywhere}
+.bar{display:flex;height:8px;border-radius:4px;overflow:hidden;background:var(--soft)}
+.bar span{display:block;height:100%}
+/* открытая карточка */
+.back{background:none;border:0;color:var(--accent);font-weight:600;padding:0;margin-bottom:12px}
+.head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-bottom:18px}
+@media (max-width:760px){.head{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label,.lbl{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.field input,.field textarea,.field select,.note{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 12px;width:100%}
+textarea{resize:vertical;min-height:64px}
+.title-input{font-family:var(--display);font-weight:600;font-size:20px;border:1px solid transparent;background:transparent;border-radius:10px;padding:4px 8px;margin-left:-8px;width:100%}
+.title-input:hover,.title-input:focus{border-color:var(--line);background:var(--surface)}
+.claude{background:var(--soft);border-radius:var(--r);padding:14px 16px;white-space:pre-line}
+.claude .lbl{display:block;margin-bottom:6px;color:var(--accent)}
+.frames{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.frame{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column}
+.frame.like{border-color:var(--ok);box-shadow:0 0 0 2px var(--ok-bg)}
+.frame.nope{opacity:.72}
+.frame .pic{position:relative;background:#000}
+.frame .pic img{display:block;width:100%;max-height:420px;object-fit:contain}
+.frame .tc{position:absolute;left:8px;top:8px;background:rgba(0,0,0,.6);color:#fff;border:0;border-radius:8px;padding:2px 8px;font-size:12px;font-variant-numeric:tabular-nums;width:72px}
+.frame .ctl{padding:10px;display:flex;flex-direction:column;gap:8px}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{flex:1;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:6px 8px;font-size:13px;font-weight:600;white-space:nowrap}
+.seg button[aria-pressed="true"].ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
+.seg button[aria-pressed="true"].fix{background:var(--fix-bg);border-color:var(--fix);color:var(--fix)}
+.seg button[aria-pressed="true"].no{background:var(--no-bg);border-color:var(--no);color:var(--no)}
+/* раскадровка */
+.shots{display:flex;flex-direction:column;gap:14px}
+.shot{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--line);border-radius:var(--r);display:grid;grid-template-columns:240px minmax(0,1fr) minmax(0,300px);gap:16px;padding:14px}
+.shot.ok{border-left-color:var(--ok)}.shot.fix{border-left-color:var(--fix)}.shot.no{border-left-color:var(--no)}
+@media (max-width:900px){.shot{grid-template-columns:160px minmax(0,1fr)}.shot .ctl{grid-column:1/-1}}
+@media (max-width:520px){.shot{grid-template-columns:1fr}}
+.shot .pic img{width:100%;border-radius:10px;display:block;background:#000}
+.shot .tcs{font-variant-numeric:tabular-nums;font-weight:700;margin-top:6px}
+.shot .plan{white-space:pre-line}
+.shot .num{font-family:var(--display);font-weight:600;color:var(--muted);font-size:13px}
+.repl{display:flex;gap:10px;align-items:center}
+.repl img{width:64px;height:64px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
+.summary{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.summary .bar{flex:1;min-width:160px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+dialog{border:0;border-radius:20px;padding:0;background:var(--surface);color:var(--ink);width:min(720px,calc(100vw - 32px));max-height:calc(100vh - 48px)}
+dialog::backdrop{background:rgba(21,18,43,.55)}
+.dlg{padding:18px;display:flex;flex-direction:column;gap:12px;overflow:auto;max-height:calc(100vh - 48px)}
+.dlg .pv{max-height:46vh;object-fit:contain;width:100%;border-radius:12px;background:repeating-conic-gradient(var(--soft) 0 25%,transparent 0 50%) 0 0/16px 16px}
+.pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.pick button{padding:0;border:2px solid transparent;border-radius:12px;overflow:hidden;background:var(--soft);aspect-ratio:1}
+.pick button img{width:100%;height:100%;object-fit:cover}
+.pick button:hover{border-color:var(--accent)}
+.confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;color:var(--no);font-weight:600}
+.example{font-size:12px;font-weight:700;background:var(--lemon);color:#221C46;border-radius:6px;padding:1px 7px;margin-left:6px;vertical-align:2px}
+.ro .edit-only{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap" id="app">
+  <header class="top">
+    <div class="brand"><h1>Монтажная <i>Влады</i></h1><p>Анти брейнрот: материалы, разборы и раскадровки до монтажа</p></div>
+    <nav class="tabs" role="tablist" aria-label="Разделы">
+      <button class="tab" role="tab" id="tab-library" data-tab="library">Библиотека <span class="n" id="n-library">·</span></button>
+      <button class="tab" role="tab" id="tab-refs" data-tab="refs">Разборы <span class="n" id="n-refs">·</span></button>
+      <button class="tab" role="tab" id="tab-board" data-tab="board">Раскадровки <span class="n" id="n-board">·</span></button>
+    </nav>
+    <div class="status" id="status" role="status" aria-live="polite">Подключаю базу…</div>
+  </header>
+
+  <section id="sec-library" hidden>
+    <div class="intro">
+      <div><h2>Библиотека материалов</h2><p>Картинки для коллажа и спецэффектов. Я беру отсюда, когда монтирую: смотрю на категорию, теги и заметку «куда использовать».</p></div>
+      <div class="row edit-only">
+        <select id="up-cat" class="search" style="width:auto" aria-label="Категория для загрузки">
+          <option value="collage">В коллаж</option><option value="fx">Для спецэффектов</option><option value="bg">Фоны и текстуры</option><option value="mine">Мои рисунки</option>
+        </select>
+        <label class="btn" for="up-lib">Загрузить картинки</label>
+        <input id="up-lib" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml" multiple hidden>
+      </div>
+    </div>
+    <div class="row" style="justify-content:space-between;margin-bottom:14px">
+      <div class="chips" id="lib-filter" role="group" aria-label="Фильтр по категории"></div>
+      <input class="search" id="lib-q" type="search" placeholder="Поиск по тегам и названию" aria-label="Поиск по библиотеке">
+    </div>
+    <div class="drop edit-only" id="lib-drop">Перетащи картинки сюда — они попадут в выбранную категорию</div>
+    <div id="lib-list"></div>
+  </section>
+
+  <section id="sec-refs" hidden>
+    <div id="refs-view"></div>
+  </section>
+
+  <section id="sec-board" hidden>
+    <div id="board-view"></div>
+  </section>
+</div>
+
+<dialog id="dlg-item"><div class="dlg" id="dlg-item-body"></div></dialog>
+<dialog id="dlg-pick"><div class="dlg">
+  <div class="row" style="justify-content:space-between"><b>Выбери картинку из библиотеки</b><button class="btn ghost small" id="pick-close">Закрыть</button></div>
+  <div class="pick" id="pick-grid"></div>
+</div></dialog>
+
+<script>
+(() => {
+const CATS = {collage: "Коллаж", fx: "Спецэффекты", bg: "Фоны и текстуры", mine: "Мои рисунки"};
+const STAT = {new: "Ждёт ответа", ok: "Нравится", fix: "Поправить", no: "Не надо"};
+const S = {db: null, assets: null, editable: true, lib: [], refs: [], boards: [], frames: [], shots: [],
+  tab: "library", refId: null, boardId: null, filter: "all", q: "", loaded: {lib: false, refs: false, boards: false}};
+const $ = (s) => document.querySelector(s);
+const blob = (id) => id ? "/_blob/" + id : "";
+function h(tag, attrs, ...kids) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (v == null || v === false) continue;
+    if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
+    else if (k === "text") el.textContent = v;
+    else if (k === "value") el.value = v;
+    else el.setAttribute(k, v === true ? "" : v);
+  }
+  for (const c of kids.flat()) if (c != null && c !== false) el.append(c.nodeType ? c : document.createTextNode(c));
+  return el;
+}
+let stT;
+function status(msg, err) { const el = $("#status"); el.textContent = msg || ""; el.className = "status" + (err ? " err" : ""); clearTimeout(stT); if (msg && !err) stT = setTimeout(() => (el.textContent = ""), 4000); }
+
+/* ---------- запись: одна за раз на документ ---------- */
+const queue = new Map();
+function write(path, data, mode = "update") {
+  if (!S.db) return Promise.resolve();
+  const prev = queue.get(path) || Promise.resolve();
+  const p = prev.then(() => (mode === "set" ? S.db.doc(path).set(data) : mode === "delete" ? S.db.doc(path).delete() : S.db.doc(path).update(data)))
+    .catch((e) => { status(e && e.code === "invalid_argument" ? "Нет прав на изменение — страница только для просмотра" : "Не сохранилось: " + (e && e.message || "ошибка"), true); if (e && e.code === "invalid_argument") setReadOnly(); });
+  queue.set(path, p); return p;
+}
+function saver(path, field) { // сохраняет поле после паузы в наборе
+  let t; return (ev) => { clearTimeout(t); const v = ev.target.value; t = setTimeout(() => write(path, {[field]: v}), ev.type === "change" ? 0 : 700); };
+}
+function setReadOnly() { S.editable = false; document.body.classList.add("ro"); render(); }
+async function uploadFiles(files) {
+  if (!S.assets) { status("Загрузка доступна только тебе как владельцу страницы", true); return []; }
+  const out = [];
+  let i = 0;
+  for (const f of files) {
+    i++; status(`Загружаю ${i} из ${files.length}…`);
+    try { out.push({file: f, res: await S.assets.upload(f)}); }
+    catch (e) {
+      const m = {too_large: "больше 20 МБ", unsupported_type: "этот формат не поддерживается", quota_or_state: "закончилось место"}[e && e.code] || (e && e.message) || "ошибка";
+      status(`«${f.name}» не загрузился: ${m}`, true);
+    }
+  }
+  if (out.length) status(`Загружено: ${out.length}`);
+  return out;
+}
+const baseName = (n) => n.replace(/\.[^.]+$/, "").replace(/[_-]+/g, " ").trim();
+const now = () => new Date().toISOString();
+
+/* ---------- вкладки ---------- */
+function setTab(t, push = true) {
+  S.tab = ["library", "refs", "board"].includes(t) ? t : "library";
+  for (const b of document.querySelectorAll(".tab")) b.setAttribute("aria-selected", String(b.dataset.tab === S.tab));
+  for (const id of ["library", "refs", "board"]) $("#sec-" + id).hidden = id !== S.tab;
+  if (push && location.hash !== "#" + S.tab) history.replaceState(null, "", "#" + S.tab);
+}
+document.querySelectorAll(".tab").forEach((b) => b.addEventListener("click", () => setTab(b.dataset.tab)));
+window.addEventListener("hashchange", () => setTab(location.hash.slice(1), false));
+
+/* ---------- библиотека ---------- */
+function renderFilter() {
+  const box = $("#lib-filter"); box.textContent = "";
+  for (const [k, v] of [["all", "Все"], ...Object.entries(CATS)]) {
+    const n = k === "all" ? S.lib.length : S.lib.filter((x) => x.cat === k).length;
+    box.append(h("button", {class: "chip", "aria-pressed": String(S.filter === k), onclick: () => { S.filter = k; renderLibrary(); }}, `${v} · ${n}`));
+  }
+}
+function renderLibrary() {
+  renderFilter();
+  const list = $("#lib-list"); list.textContent = "";
+  if (!S.loaded.lib) { list.append(h("div", {class: "empty"}, h("b", {}, "Загружаю библиотеку…"), "Если долго не появляется, база может быть недоступна.")); return; }
+  const q = S.q.trim().toLowerCase();
+  const items = S.lib.filter((x) => (S.filter === "all" || x.cat === S.filter) &&
+    (!q || (x.name || "").toLowerCase().includes(q) || (x.tags || []).some((t) => t.toLowerCase().includes(q)) || (x.note || "").toLowerCase().includes(q)));
+  if (!items.length) {
+    list.append(h("div", {class: "empty"}, h("b", {}, S.lib.length ? "Ничего не нашлось" : "Здесь пока пусто"),
+      S.lib.length ? "Попробуй другой тег или категорию." : "Загрузи картинки кнопкой сверху или перетащи их сюда. Можно сразу пачкой."));
+    return;
+  }
+  const m = h("div", {class: "masonry"});
+  for (const x of items) {
+    m.append(h("button", {class: "tile", onclick: () => openItem(x.id)},
+      h("img", {src: blob(x.asset), alt: x.name || "", loading: "lazy", onerror: (e) => (e.target.style.minHeight = "120px")}),
+      h("div", {class: "meta"}, h("span", {class: "pill " + (x.cat || "collage")}, CATS[x.cat] || "Коллаж"), h("span", {class: "name"}, x.name || "Без названия"),
+        (x.tags || []).length ? h("div", {class: "tags"}, x.tags.map((t) => h("span", {class: "tag"}, "#" + t))) : null)));
+  }
+  list.append(m);
+}
+function openItem(id) {
+  const x = S.lib.find((y) => y.id === id); if (!x) return;
+  const p = "library/" + id, body = $("#dlg-item-body"); body.textContent = "";
+  const confirmBox = h("div", {class: "row"});
+  const askDelete = () => {
+    confirmBox.textContent = "";
+    confirmBox.append(h("span", {class: "confirm"}, "Удалить картинку навсегда?"),
+      h("button", {class: "btn danger small", onclick: async () => {
+        await write(p, null, "delete"); if (S.assets) { try { await S.assets.delete(x.asset); } catch (e) {} }
+        $("#dlg-item").close(); status("Удалено");
+      }}, "Да, удалить"), h("button", {class: "btn ghost small", onclick: () => { confirmBox.textContent = ""; confirmBox.append(delBtn); }}, "Отмена"));
+  };
+  const delBtn = h("button", {class: "btn danger small edit-only", onclick: askDelete}, "Удалить");
+  confirmBox.append(delBtn);
+  const ro = !S.editable;
+  body.append(
+    h("img", {class: "pv", src: blob(x.asset), alt: x.name || ""}),
+    h("div", {class: "field"}, h("label", {for: "it-name"}, "Название"), h("input", {id: "it-name", value: x.name || "", disabled: ro, oninput: saver(p, "name"), onchange: saver(p, "name")})),
+    h("div", {class: "field"}, h("label", {for: "it-cat"}, "Категория"),
+      (() => { const s = h("select", {id: "it-cat", disabled: ro, onchange: (e) => write(p, {cat: e.target.value})}, Object.entries(CATS).map(([k, v]) => h("option", {value: k}, v))); s.value = x.cat || "collage"; return s; })()),
+    h("div", {class: "field"}, h("label", {for: "it-tags"}, "Теги через запятую"), h("input", {id: "it-tags", value: (x.tags || []).join(", "), disabled: ro, placeholder: "мозг, наука, винтаж",
+      onchange: (e) => write(p, {tags: e.target.value.split(",").map((t) => t.trim().replace(/^#/, "")).filter(Boolean)})})),
+    h("div", {class: "field"}, h("label", {for: "it-note"}, "Куда использовать"), h("textarea", {id: "it-note", value: x.note || "", disabled: ro, placeholder: "Например: под слова про мозг, вырезать и поставить сбоку", oninput: saver(p, "note"), onchange: saver(p, "note")})),
+    h("div", {class: "row", style: "justify-content:space-between"}, confirmBox, h("button", {class: "btn", onclick: () => $("#dlg-item").close()}, "Готово")));
+  $("#dlg-item").showModal();
+}
+async function addToLibrary(files) {
+  const cat = $("#up-cat").value;
+  const done = await uploadFiles(files);
+  for (const {file, res} of done) await S.db.collection("library").add({asset: res.id, name: baseName(file.name), cat, tags: [], note: "", created: now()}).catch(() => status("Картинка загрузилась, но не записалась в библиотеку", true));
+}
+$("#up-lib").addEventListener("change", (e) => { const f = [...e.target.files]; e.target.value = ""; if (f.length) addToLibrary(f); });
+$("#lib-q").addEventListener("input", (e) => { S.q = e.target.value; renderLibrary(); });
+const drop = $("#lib-drop");
+["dragenter", "dragover"].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.add("on"); }));
+["dragleave", "drop"].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.remove("on"); }));
+drop.addEventListener("drop", (e) => { const f = [...e.dataTransfer.files].filter((x) => x.type.startsWith("image/")); if (f.length) addToLibrary(f); });
+
+/* ---------- разборы ---------- */
+let unFrames = null, unShots = null;
+function openRef(id) {
+  S.refId = id; S.frames = []; if (unFrames) unFrames(); unFrames = null;
+  if (id && S.db) unFrames = S.db.collection(`refs/${id}/frames`).orderBy("order").onSnapshot((s) => { S.frames = s.docs.map((d) => ({id: d.id, ...d.data()})); patchFrames(); }, () => status("Кадры не загрузились", true));
+  renderRefs(); window.scrollTo(0, 0);
+}
+function renderRefs() {
+  const v = $("#refs-view"); v.textContent = "";
+  if (S.refId) return renderRefDetail(v);
+  v.append(h("div", {class: "intro"},
+    h("div", {}, h("h2", {}, "Разборы видео по кадрам"), h("p", {}, "Загружай скриншоты из чужих видео и отмечай, что нравится. Длинное видео можно прислать в чат — я сама нарежу кадры и добавлю сюда. Перед монтажом я читаю твои отметки.")),
+    h("button", {class: "btn edit-only", onclick: newRef}, "Новый разбор")));
+  if (!S.loaded.refs) { v.append(h("div", {class: "empty"}, h("b", {}, "Загружаю разборы…"))); return; }
+  if (!S.refs.length) { v.append(h("div", {class: "empty"}, h("b", {}, "Разборов пока нет"), "Нажми «Новый разбор», дай название и загрузи кадры.")); return; }
+  const g = h("div", {class: "grid"});
+  for (const r of S.refs) g.append(h("button", {class: "card", onclick: () => openRef(r.id)},
+    h("div", {class: "cover"}, r.cover ? h("img", {src: blob(r.cover), alt: "", loading: "lazy"}) : "Нет кадров"),
+    h("div", {class: "body"}, h("h3", {}, r.title || "Без названия"), r.source ? h("div", {class: "sub"}, r.source) : null,
+      h("div", {class: "sub"}, r.takeaways ? "Есть выводы для стиля" : "Ждёт твоих отметок"))));
+  v.append(g);
+}
+async function newRef() {
+  if (!S.db) return;
+  const ref = await S.db.collection("refs").add({title: "Новый разбор", source: "", overall: "", takeaways: "", cover: "", created: now()}).catch(() => null);
+  if (ref) openRef(ref.id);
+}
+function renderRefDetail(v) {
+  const r = S.refs.find((x) => x.id === S.refId);
+  v.append(h("button", {class: "back", onclick: () => openRef(null)}, "← Все разборы"));
+  if (!r) { v.append(h("div", {class: "empty"}, h("b", {}, "Разбор не найден"), "Возможно, его удалили.")); return; }
+  const p = "refs/" + r.id, ro = !S.editable;
+  const delBox = h("div", {class: "row edit-only"});
+  const resetDel = () => { delBox.textContent = ""; delBox.append(h("button", {class: "btn danger small", onclick: () => {
+    delBox.textContent = ""; delBox.append(h("span", {class: "confirm"}, "Удалить разбор вместе с отметками?"),
+      h("button", {class: "btn danger small", onclick: async () => { for (const f of S.frames) await write(`${p}/frames/${f.id}`, null, "delete"); await write(p, null, "delete"); openRef(null); }}, "Удалить"),
+      h("button", {class: "btn ghost small", onclick: resetDel}, "Отмена")); }}, "Удалить разбор")); };
+  resetDel();
+  v.append(
+    h("input", {class: "title-input", value: r.title || "", "aria-label": "Название разбора", disabled: ro, oninput: saver(p, "title"), onchange: saver(p, "title")}),
+    h("div", {class: "head"},
+      h("div", {class: "field"}, h("label", {for: "rf-src"}, "Откуда видео"), h("input", {id: "rf-src", value: r.source || "", disabled: ro, placeholder: "Ссылка или автор", oninput: saver(p, "source"), onchange: saver(p, "source")}),
+        h("label", {for: "rf-all"}, "Что нравится в целом"), h("textarea", {id: "rf-all", value: r.overall || "", disabled: ro, placeholder: "Темп, шрифты, переходы, цвет…", oninput: saver(p, "overall"), onchange: saver(p, "overall")})),
+      h("div", {class: "claude"}, h("span", {class: "lbl"}, "Что я забираю в твой стиль"), r.takeaways || "Появится, когда отметишь кадры и попросишь меня посмотреть разбор.")),
+    h("div", {class: "row", style: "justify-content:space-between;margin-bottom:12px"},
+      h("div", {class: "legend"}, h("span", {}, h("i", {style: "background:var(--ok)"}), "нравится"), h("span", {}, h("i", {style: "background:var(--no)"}), "не моё")),
+      h("div", {class: "row"}, h("label", {class: "btn ghost small edit-only", for: "up-frames"}, "Добавить кадры"), delBox)),
+    h("input", {id: "up-frames", type: "file", accept: "image/png,image/jpeg,image/webp", multiple: true, hidden: true, onchange: async (e) => {
+      const files = [...e.target.files]; e.target.value = ""; const done = await uploadFiles(files);
+      let order = S.frames.reduce((m, f) => Math.max(m, f.order || 0), 0);
+      for (const {res} of done) { order++; await S.db.collection(`${p}/frames`).add({asset: res.id, t: "", vote: null, note: "", order}).catch(() => {}); }
+      if (!r.cover && done[0]) write(p, {cover: done[0].res.id});
+    }}),
+    h("div", {class: "frames", id: "frames"}));
+  patchFrames();
+}
+const frameEls = new Map();
+function patchFrames() {
+  const box = $("#frames"); if (!box) return;
+  const r = S.refs.find((x) => x.id === S.refId); if (!r) return;
+  if (!S.frames.length) { box.textContent = ""; frameEls.clear(); box.append(h("div", {class: "empty", style: "grid-column:1/-1"}, h("b", {}, "Кадров пока нет"), "Добавь скриншоты кнопкой «Добавить кадры».")); return; }
+  const seen = new Set();
+  for (const f of S.frames) {
+    seen.add(f.id);
+    const p = `refs/${r.id}/frames/${f.id}`;
+    let el = frameEls.get(f.id);
+    if (!el || !box.contains(el)) {
+      const ro = !S.editable;
+      el = h("div", {class: "frame"},
+        h("div", {class: "pic"}, h("img", {src: blob(f.asset), alt: "Кадр", loading: "lazy"}),
+          h("input", {class: "tc", "data-k": "t", value: f.t || "", placeholder: "0:00", "aria-label": "Таймкод", disabled: ro, oninput: saver(p, "t"), onchange: saver(p, "t")})),
+        h("div", {class: "ctl"},
+          h("div", {class: "seg"},
+            h("button", {class: "ok", "data-v": "like", disabled: ro, onclick: () => write(p, {vote: (frameById(f.id).vote === "like" ? null : "like")})}, "Нравится"),
+            h("button", {class: "no", "data-v": "nope", disabled: ro, onclick: () => write(p, {vote: (frameById(f.id).vote === "nope" ? null : "nope")})}, "Не моё")),
+          h("textarea", {class: "note", "data-k": "note", value: f.note || "", disabled: ro, placeholder: "Что именно: шрифт, переход, как стоит текст…", "aria-label": "Комментарий к кадру", oninput: saver(p, "note"), onchange: saver(p, "note")})));
+      frameEls.set(f.id, el);
+    }
+    el.className = "frame" + (f.vote === "like" ? " like" : f.vote === "nope" ? " nope" : "");
+    el.querySelectorAll(".seg button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.v === f.vote)));
+    el.querySelectorAll("[data-k]").forEach((i) => { if (document.activeElement !== i) i.value = f[i.dataset.k] || ""; });
+    box.append(el);
+  }
+  for (const [id, el] of frameEls) if (!seen.has(id)) { el.remove(); frameEls.delete(id); }
+  box.querySelectorAll(".empty").forEach((e) => e.remove());
+}
+const frameById = (id) => S.frames.find((f) => f.id === id) || {};
+
+/* ---------- раскадровки ---------- */
+function openBoard(id) {
+  S.boardId = id; S.shots = []; if (unShots) unShots(); unShots = null;
+  if (id && S.db) unShots = S.db.collection(`boards/${id}/shots`).orderBy("order").onSnapshot((s) => { S.shots = s.docs.map((d) => ({id: d.id, ...d.data()})); patchShots(); }, () => status("Кадры раскадровки не загрузились", true));
+  renderBoards(); window.scrollTo(0, 0);
+}
+function counts(list) { const c = {new: 0, ok: 0, fix: 0, no: 0}; for (const s of list) c[s.status || "new"]++; return c; }
+function bar(c, total) {
+  const b = h("div", {class: "bar", role: "img", "aria-label": `Нравится ${c.ok}, поправить ${c.fix}, не надо ${c.no}, ждёт ${c.new}`});
+  for (const [k, col] of [["ok", "var(--ok)"], ["fix", "var(--fix)"], ["no", "var(--no)"]]) if (c[k]) b.append(h("span", {style: `width:${(c[k] / total) * 100}%;background:${col}`}));
+  return b;
+}
+function renderBoards() {
+  const v = $("#board-view"); v.textContent = "";
+  if (S.boardId) return renderBoardDetail(v);
+  v.append(h("div", {class: "intro"}, h("div", {}, h("h2", {}, "Раскадровки до монтажа"),
+    h("p", {}, "Перед тем как делать анимации, я выкладываю сюда кадры и пишу, что где появится. Ты отмечаешь: нравится, поправить или не надо, и можешь заменить картинку своей. Монтирую только после этого."))));
+  if (!S.loaded.boards) { v.append(h("div", {class: "empty"}, h("b", {}, "Загружаю раскадровки…"))); return; }
+  if (!S.boards.length) { v.append(h("div", {class: "empty"}, h("b", {}, "Раскадровок пока нет"), "Когда попросишь смонтировать видео, я добавлю сюда кадры на согласование.")); return; }
+  const g = h("div", {class: "grid"});
+  for (const b of S.boards) g.append(h("button", {class: "card", onclick: () => openBoard(b.id)},
+    h("div", {class: "cover"}, b.cover ? h("img", {src: blob(b.cover), alt: "", loading: "lazy"}) : "Без обложки"),
+    h("div", {class: "body"}, h("h3", {}, b.title || "Без названия", b.example ? h("span", {class: "example"}, "пример") : null),
+      b.brief ? h("div", {class: "sub"}, b.brief) : null,
+      h("div", {class: "sub"}, b.reviewed ? "Ты всё посмотрела — можно монтировать" : `Кадров: ${b.shotsCount || "—"} · ждёт твоих отметок`))));
+  v.append(g);
+}
+function renderBoardDetail(v) {
+  const b = S.boards.find((x) => x.id === S.boardId);
+  v.append(h("button", {class: "back", onclick: () => openBoard(null)}, "← Все раскадровки"));
+  if (!b) { v.append(h("div", {class: "empty"}, h("b", {}, "Раскадровка не найдена"))); return; }
+  v.append(h("h2", {style: "font-family:var(--display);font-weight:600;font-size:20px;margin:0 0 4px"}, b.title || "", b.example ? h("span", {class: "example"}, "пример") : null),
+    b.brief ? h("p", {style: "color:var(--muted);margin:0 0 14px;max-width:70ch"}, b.brief) : null,
+    h("div", {class: "summary", id: "board-sum"}),
+    h("div", {class: "shots", id: "shots"}));
+  patchShots();
+}
+const shotEls = new Map();
+let pickTarget = null;
+function patchShots() {
+  const box = $("#shots"); if (!box) return;
+  const b = S.boards.find((x) => x.id === S.boardId); if (!b) return;
+  const c = counts(S.shots), total = S.shots.length || 1, done = c.ok + c.fix + c.no;
+  const sum = $("#board-sum"); sum.textContent = "";
+  sum.append(h("b", {}, `Отмечено ${done} из ${S.shots.length}`), bar(c, total),
+    h("div", {class: "legend"}, h("span", {}, h("i", {style: "background:var(--ok)"}), `нравится ${c.ok}`), h("span", {}, h("i", {style: "background:var(--fix)"}), `поправить ${c.fix}`), h("span", {}, h("i", {style: "background:var(--no)"}), `не надо ${c.no}`)),
+    S.editable ? h("button", {class: "btn small" + (b.reviewed ? " ghost" : ""), onclick: () => write("boards/" + b.id, {reviewed: !b.reviewed})}, b.reviewed ? "Снять отметку «всё посмотрела»" : "Всё посмотрела") : null);
+  if (!S.shots.length) { box.textContent = ""; shotEls.clear(); box.append(h("div", {class: "empty"}, h("b", {}, "Кадров пока нет"))); return; }
+  const seen = new Set();
+  S.shots.forEach((s, i) => {
+    seen.add(s.id);
+    const p = `boards/${b.id}/shots/${s.id}`, ro = !S.editable;
+    let el = shotEls.get(s.id);
+    if (!el || !box.contains(el)) {
+      el = h("article", {class: "shot"},
+        h("div", {class: "pic"}, h("img", {src: blob(s.frame), alt: `Кадр ${i + 1}`, loading: "lazy"}), h("div", {class: "tcs"}, s.t || "")),
+        h("div", {}, h("div", {class: "num"}, `Кадр ${i + 1}`), h("div", {class: "lbl", style: "margin-top:6px"}, "Что здесь будет"), h("div", {class: "plan", "data-f": "plan"}),
+          h("div", {class: "lbl", style: "margin-top:10px", "data-f": "assetsLbl"}, "Картинки"), h("div", {class: "sub", "data-f": "assets", style: "color:var(--muted)"})),
+        h("div", {class: "ctl", style: "display:flex;flex-direction:column;gap:8px"},
+          h("div", {class: "seg"}, ["ok", "fix", "no"].map((k) => h("button", {class: k, "data-v": k, disabled: ro, onclick: () => write(p, {status: (shotById(s.id).status === k ? "new" : k)})}, STAT[k]))),
+          h("textarea", {class: "note", "data-k": "comment", disabled: ro, placeholder: "Что поменять: другая анимация, позже по времени, другой текст…", "aria-label": "Комментарий", oninput: saver(p, "comment"), onchange: saver(p, "comment")}),
+          h("div", {class: "repl", "data-f": "repl"})));
+      shotEls.set(s.id, el);
+    }
+    el.className = "shot " + (s.status && s.status !== "new" ? s.status : "");
+    el.querySelectorAll(".seg button").forEach((x) => x.setAttribute("aria-pressed", String(x.dataset.v === s.status)));
+    el.querySelectorAll("[data-k]").forEach((x) => { if (document.activeElement !== x) x.value = s[x.dataset.k] || ""; });
+    el.querySelector('[data-f="plan"]').textContent = s.plan || "";
+    el.querySelector('[data-f="assets"]').textContent = s.assets || "";
+    el.querySelector('[data-f="assetsLbl"]').hidden = !s.assets;
+    const rp = el.querySelector('[data-f="repl"]'); rp.textContent = "";
+    if (s.repl) rp.append(h("img", {src: blob(s.repl), alt: "Твоя замена"}), h("div", {style: "display:flex;flex-direction:column;gap:4px"}, h("span", {class: "sub"}, "Твоя картинка вместо моей"),
+      ro ? null : h("button", {class: "btn ghost small", onclick: () => write(p, {repl: ""})}, "Убрать")));
+    else if (!ro) rp.append(h("label", {class: "btn ghost small"}, "Своя картинка", h("input", {type: "file", accept: "image/png,image/jpeg,image/webp,image/gif,image/svg+xml", hidden: true, onchange: async (e) => {
+        const f = [...e.target.files]; e.target.value = ""; const d = await uploadFiles(f); if (d[0]) {
+          write(p, {repl: d[0].res.id});
+          S.db.collection("library").add({asset: d[0].res.id, name: baseName(d[0].file.name), cat: "mine", tags: [], note: "Замена в раскадровке «" + (b.title || "") + "»", created: now()}).catch(() => {});
+        } }})),
+      h("button", {class: "btn ghost small", onclick: () => { pickTarget = p; openPicker(); }}, "Из библиотеки"));
+    box.append(el);
+  });
+  for (const [id, el] of shotEls) if (!seen.has(id)) { el.remove(); shotEls.delete(id); }
+  box.querySelectorAll(".empty").forEach((e) => e.remove());
+}
+const shotById = (id) => S.shots.find((s) => s.id === id) || {};
+function openPicker() {
+  const g = $("#pick-grid"); g.textContent = "";
+  if (!S.lib.length) g.append(h("div", {class: "empty", style: "grid-column:1/-1"}, "В библиотеке пока нет картинок."));
+  for (const x of S.lib) g.append(h("button", {title: x.name || "", onclick: () => { if (pickTarget) write(pickTarget, {repl: x.asset}); $("#dlg-pick").close(); }}, h("img", {src: blob(x.asset), alt: x.name || "", loading: "lazy"})));
+  $("#dlg-pick").showModal();
+}
+$("#pick-close").addEventListener("click", () => $("#dlg-pick").close());
+
+/* ---------- общий рендер и подключение ---------- */
+function counters() {
+  $("#n-library").textContent = S.loaded.lib ? S.lib.length : "·";
+  $("#n-refs").textContent = S.loaded.refs ? S.refs.length : "·";
+  $("#n-board").textContent = S.loaded.boards ? S.boards.length : "·";
+}
+function render() { counters(); renderLibrary(); if (S.refId) patchFrames(); renderRefsSafe(); renderBoardsSafe(); }
+// не перерисовываем открытую карточку, пока в ней что-то печатают
+function renderRefsSafe() { if (S.refId && $("#sec-refs").contains(document.activeElement) && document.activeElement !== document.body) return; renderRefs(); }
+function renderBoardsSafe() { if (S.boardId && $("#sec-board").contains(document.activeElement) && document.activeElement !== document.body) { patchShots(); return; } renderBoards(); }
+
+setTab(location.hash.slice(1) || "library", false);
+render();
+
+(async () => {
+  const cl = window.claude;
+  const [db, assets, user] = await Promise.all(["db", "assets", "user"].map((n) => (cl && cl.use ? cl.use(n).catch(() => null) : Promise.resolve(null))));
+  if (!db) { status("База недоступна в этом окне — открой страницу в Claude, войдя в аккаунт", true); S.editable = false; document.body.classList.add("ro"); return; }
+  S.db = db; S.assets = assets;
+  if (!assets) document.querySelectorAll("#sec-library .edit-only").forEach((e) => (e.hidden = true));
+  if (user && user.can) { try { const w = await user.can("data.write"); if (w === false) setReadOnly(); } catch (e) {} }
+  const timer = setTimeout(() => status("База пока не отвечает — данные могут быть неполными", true), 10000);
+  const sub = (path, key, field) => db.collection(path).orderBy("created", "desc").onSnapshot((s) => {
+    S[field] = s.docs.map((d) => ({id: d.id, ...d.data()}));
+    if (!s.metadata.fromCache) { clearTimeout(timer); if ($("#status").textContent.startsWith("Подключаю")) status(""); }
+    S.loaded[key] = true; render();
+  }, () => { clearTimeout(timer); S.loaded[key] = true; status("Не удалось загрузить раздел, обнови страницу позже", true); render(); });
+  sub("library", "lib", "lib"); sub("refs", "refs", "refs"); sub("boards", "boards", "boards");
+})();
+})();
+</script>
