@@ -25,10 +25,11 @@ const LAYS: Record<string, Box> = {
   "bottom-rect": {x: 700, y: 700, w: 520, h: 340, r: 14, rot: 0, z: 1.25, ox: 0, oy: 10},
   "square-right": {x: 1080, y: 150, w: 740, h: 740, r: 14, rot: 2, z: 1.35, ox: 0, oy: 20},
   "polaroid-right": {x: 860, y: 100, w: 980, h: 760, r: 6, rot: 2, z: 1.15, ox: 0, oy: 20},
+  "square-tall": {x: 1030, y: 80, w: 830, h: 920, r: 14, rot: 1.5, z: 1.3, ox: 0, oy: 0},
   "circle-big": {x: 1250, y: 400, w: 600, h: 600, r: 300, rot: 0, z: 1.75, ox: 0, oy: -60},
 };
 const PLAIN = new Set(["half-right", "half-left"]);
-const FRAMED = new Set(["bottom-rect", "square-right", "polaroid-right"]);
+const FRAMED = new Set(["bottom-rect", "square-right", "polaroid-right", "square-tall"]);
 const mix = (a: Box, b: Box, p: number): Box => {
   const m = (k: keyof Box) => a[k] + (b[k] - a[k]) * p;
   return {x: m("x"), y: m("y"), w: m("w"), h: m("h"), r: m("r"), rot: m("rot"), z: m("z"), ox: m("ox"), oy: m("oy")};

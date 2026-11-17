@@ -218,22 +218,24 @@ const BrainMap: React.FC<{f: number; g: G}> = ({f, g}) => { // карта моз
 
 const HeadNotif: React.FC<{f: number; g: G}> = ({f, g}) => { // голова открывается, из неё вылетают уведомления; потом телефон с пачками
   const s = fr(g.s), e = fr(g.e), t2 = fr(g.t2);
-  const W = 560, k = W / 1080, X = g.x ?? 1440, Y = g.y ?? 560; // лицо: 1080×1049 исходника
+  const W = 560, k = W / 1080, X = g.x ?? 1440, Y = g.hy ?? g.y ?? 560; // лицо: 1080×1049 исходника
   const headOut = L(f, t2 - 8, t2, 1, 0);
   if (f < s || f > e) return null;
   const lift = L(f, s + 8, s + 26, 0, 1, Easing.out(Easing.back(1.4)));
   const names = ["TikTok · новое видео", "Instagram · лайк", "Telegram · 5 сообщений", "YouTube · новое видео", "TikTok · тебе понравится", "Instagram · сторис", "VK · отметка", "Telegram · канал", "TikTok · LIVE", "WhatsApp · 12 сообщений", "Instagram · reels", "TikTok · 99+"];
   const n0 = s + 26, step = Math.max(4, Math.floor((t2 - n0) / names.length));
+  const shown = names.filter((_, i) => f >= n0 + i * step).length;
+  const raise = Math.max(0, shown - 9) * 10; // крышку подпирает растущая куча
   return <>
     {headOut > 0 && <div style={{position: "absolute", left: X - W / 2, top: Y - 1049 * k / 2 + 80, width: W, opacity: headOut}}>
-      {names.map((nm, i) => { // уведомления вылетают из головы и остаются
+      {names.map((nm, i) => { // уведомления набиваются кучей внутрь головы; лицо лежит поверх
         const at = n0 + i * step; if (f < at) return null;
         const sp = SP(f, at, 11, 200);
-        const tx = ((i * 37) % 7 - 3) * 60, ty = -60 - (i % 6) * 70 - Math.floor(i / 6) * 30;
-        return <div key={i} style={{position: "absolute", left: W / 2 - 170 + tx * sp, top: 140 + ty * sp, width: 340, background: "rgba(255,255,255,.95)", borderRadius: 16, padding: "10px 16px", fontFamily: G, fontSize: 22, color: "#111", boxShadow: "0 6px 18px rgba(0,0,0,.25)", transform: `scale(${sp}) rotate(${((i * 13) % 9 - 4)}deg)`, zIndex: 1}}>{nm}</div>;
+        const tx = ((i * 37) % 7 - 3) * 22, ty = 34 - i * 18;
+        return <div key={i} style={{position: "absolute", left: W / 2 - 165 + tx, top: 140 + (ty - 140) * sp, width: 330, background: "rgba(255,255,255,.97)", borderRadius: 16, padding: "10px 16px", fontFamily: G, fontSize: 22, color: "#111", boxShadow: "0 6px 18px rgba(0,0,0,.25)", transform: `rotate(${((i * 13) % 11 - 5) * 1.6}deg)`, opacity: Math.min(1, sp * 2), zIndex: 1}}>{nm}</div>;
       })}
-      <Img src={lib("head_top.png")} style={{position: "absolute", left: 233 * k, top: (418 - 969) * k - lift * 230, width: 733 * k, transform: `rotate(${-lift * 18}deg)`, transformOrigin: "10% 90%", filter: shadow, zIndex: 2}} />
-      <Img src={lib("head_face.png")} style={{position: "relative", width: W, display: "block", filter: shadow}} />
+      <Img src={lib("head_top.png")} style={{position: "absolute", left: 233 * k, top: (418 - 969) * k - lift * 140 - raise, width: 733 * k, transform: `rotate(${-lift * 7}deg)`, transformOrigin: "10% 90%", filter: shadow, zIndex: 3}} />
+      <Img src={lib("head_face.png")} style={{position: "relative", width: W, display: "block", filter: shadow, zIndex: 2}} />
     </div>}
     {f >= t2 - 2 && <Notif f={f} g={{...g, s: g.t2, t2: g.t3 ?? g.t2 + 1}} />}
   </>;
