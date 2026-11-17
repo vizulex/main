@@ -2,6 +2,8 @@ import React from "react";
 import {Img, interpolate, Easing} from "remotion";
 import {L, SP, fr, U, G} from "../episode/kit";
 import {Cut, Label, Ransom, Digits, Hourglass, Clicker, Tape, P, HAND, AMATIC, MONO, PF, OSW, lib, shadow, pop} from "./collage";
+import {loadFont as loadPTMono} from "@remotion/google-fonts/PTMono";
+const TYPE = loadPTMono("normal", {weights: ["400"], subsets: ["cyrillic", "latin"]}).fontFamily;
 
 /* Сцены 2-го выпуска. Сцена — набор деталей коллажа (items) и/или анимированная схема (kind).
    Времена в секундах выходного таймлайна; t у детали — когда она появляется. */
@@ -18,6 +20,11 @@ const Item: React.FC<{f: number; it: any; e: number}> = ({f, it, e}) => {
     case "digits": return <Digits f={f} s={s} e={ee} value={it.value} x={it.x} y={it.y} h={it.h ?? 220} rot={it.rot ?? -3} />;
     case "hourglass": return <Hourglass f={f} s={s} e={ee} x={it.x} y={it.y} w={it.w ?? 200} />;
     case "clicker": return <Clicker f={f} s={s} e={ee} x={it.x} y={it.y} />;
+    case "photo": { // фото в белой рамке, как полароид
+      const pp = pop(f, s, ee, it.src + it.t); if (!pp) return null;
+      return <div style={{position: "absolute", left: it.x, top: it.y + pp.dy, transform: `translate(-50%,-50%) rotate(${(it.rot ?? 0) + pp.wob * 0.5}deg) scale(${pp.sc})`, opacity: pp.o, background: "#fff", padding: "14px 14px 44px", filter: shadow}}>
+        <Img src={lib(it.src)} style={{width: it.w, height: it.h ?? it.w, objectFit: "cover", display: "block"}} /></div>;
+    }
     case "tape": return f >= s && f <= ee ? <Tape x={it.x} y={it.y} w={it.w ?? 160} rot={it.rot ?? -10} /> : null;
     case "strike": { // перечёркивание маркером
       if (f < s || f > ee) return null;
@@ -84,10 +91,14 @@ const Series: React.FC<{f: number; g: G}> = ({f, g}) => { // опыт Шульц
     const x = (g.x0 ?? 330) + i * (g.step ?? 630);
     const path = i === 0 ? "M10 120 L120 120 L160 30 L200 120 L320 120" : i === 1 ? "M10 120 L60 120 L100 30 L140 120 L320 120" : "M10 120 L60 120 L100 30 L140 120 L200 120 L230 175 L260 120 L320 120";
     const dl = L(f, at + 6, at + 26, 0, 1);
-    return <div key={i} style={{position: "absolute", left: x, top: 540, transform: `translate(-50%,-50%) rotate(${[-3, 2, -2][i]}deg) scale(${pp.sc * (g.sc ?? 1)})`, opacity: pp.o}}>
+    return <div key={i} style={{position: "absolute", left: x, top: g.y ?? 540, transform: `translate(-50%,-50%) rotate(${[-3, 2, -2][i]}deg) scale(${pp.sc * (g.sc ?? 1)})`, opacity: pp.o}}>
       <Card style={{width: 520, height: 520, display: "flex", flexDirection: "column", alignItems: "center", gap: 10}}>
         <div style={{fontFamily: MONO, fontSize: 40, color: P.red}}>{c.title}</div>
-        <Img src={lib(i === 0 ? "juice.png" : "bulb.png")} style={{height: 170}} />
+        <div style={{display: "flex", alignItems: "center", gap: 10}}>
+          {i !== 0 && <Img src={lib("bulb.png")} style={{height: 150}} />}
+          {i !== 2 && <><span style={{fontFamily: MONO, fontSize: 40, color: P.ink, display: i === 1 ? "inline" : "none"}}>+</span><Img src={lib("juice.png")} style={{height: 170}} /></>}
+          {i === 2 && <span style={{fontFamily: MONO, fontSize: 40, color: P.red}}>+ ✗</span>}
+        </div>
         <div style={{fontFamily: HAND, fontSize: 40, color: P.ink, textAlign: "center"}}>{c.line}</div>
         <svg width={330} height={190} viewBox="0 0 330 190"><line x1={0} y1={120} x2={330} y2={120} stroke="#bbb" strokeDasharray="6 6" strokeWidth={3} />
           <path d={path} fill="none" stroke={P.red} strokeWidth={8} strokeLinecap="round" strokeLinejoin="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - dl} /></svg>
@@ -102,14 +113,19 @@ const Odds: React.FC<{f: number; g: G}> = ({f, g}) => {
   return <>{cs.map((c, i) => {
     const at = fr(g.s) + i * 8; const pp = pop(f, at, e, c.v); if (!pp) return null;
     const win = c.win && f >= fr(g.t2);
-    return <div key={i} style={{position: "absolute", left: (g.x0 ?? 380) + i * (g.step ?? 580), top: 520, transform: `translate(-50%,-50%) rotate(${[-3, 2, -1][i]}deg) scale(${pp.sc * (win ? 1.08 : 1) * (g.sc ?? 1)})`, opacity: pp.o}}>
+    return <div key={i} style={{position: "absolute", left: (g.x0 ?? 380) + i * (g.step ?? 580), top: g.y ?? 520, transform: `translate(-50%,-50%) rotate(${[-3, 2, -1][i]}deg) scale(${pp.sc * (win ? 1.08 : 1) * (g.sc ?? 1)})`, opacity: pp.o}}>
       <Card bg={win ? P.yellow : P.paper} style={{width: 440, padding: "30px 24px", textAlign: "center"}}>
         <div style={{fontFamily: MONO, fontSize: 110, color: P.ink}}>{c.v}</div>
         <div style={{fontFamily: HAND, fontSize: 44, color: P.ink}}>{c.l}</div>
         {win && <div style={{fontFamily: AMATIC, fontSize: 70, color: P.red, marginTop: 6}}>максимум дофамина</div>}
       </Card>
     </div>;
-  })}<Cut f={f} s={fr(g.t2)} e={e} src="coin.png" x={g.coinX ?? 1530} y={g.coinY ?? 880} w={170} rot={12} /></>;
+  })}{f >= fr(g.t2) && f <= e && (() => { // монетка подлетает и крутится
+    const k = L(f, fr(g.t2), fr(g.t2) + 22, 0, 1, Easing.out(Easing.cubic));
+    const cx = (g.coinX ?? 1530) + (1 - k) * 700, cy = (g.coinY ?? 880) - (1 - k) * 500 - Math.sin(k * Math.PI) * 120;
+    const spin = Math.cos((f - fr(g.t2)) * 0.45);
+    return <Img src={lib("coin.png")} style={{position: "absolute", left: cx, top: cy, width: 190, transform: `translate(-50%,-50%) scaleX(${spin}) rotate(${(1 - k) * 200}deg)`, filter: shadow, opacity: L(f, e - 7, e, 1, 0)}} />;
+  })()}</>;
 };
 
 const Notif: React.FC<{f: number; g: G}> = ({f, g}) => { // уведомления: по одному vs пачкой 3 раза в день
@@ -175,13 +191,13 @@ const Checklist: React.FC<{f: number; g: G}> = ({f, g}) => { // список с 
   const s = fr(g.s), e = fr(g.e);
   const pp = pop(f, s, e, "list"); if (!pp) return null;
   return <div style={{position: "absolute", left: g.x ?? 620, top: g.y ?? 520, transform: `translate(-50%,-50%) rotate(${g.rot ?? -3}deg) scale(${pp.sc})`, opacity: pp.o}}>
-    <Img src={lib("sticky_lined.png")} style={{width: 760, filter: shadow}} />
-    <div style={{position: "absolute", left: 120, top: 150, right: 60, display: "flex", flexDirection: "column", gap: 10}}>
+    <Img src={lib(g.img ?? "sticky_lined.png")} style={{width: g.w ?? 760, filter: shadow}} />
+    <div style={{position: "absolute", left: (g.pad ?? [120, 150, 60])[0], top: (g.pad ?? [120, 150, 60])[1], right: (g.pad ?? [120, 150, 60])[2], display: "flex", flexDirection: "column", gap: 10}}>
       {g.head && <div style={{fontFamily: AMATIC, fontSize: 64, color: P.red, marginBottom: 4}}>{g.head}</div>}
       {(g.rows as any[]).map((r, i) => {
         const at = fr(r.t); if (f < at) return null;
         const ck = r.ck !== undefined && f >= fr(r.ck);
-        return <div key={i} style={{fontFamily: HAND, fontSize: 44, color: P.ink, display: "flex", alignItems: "center", gap: 14, opacity: Math.min(1, (f - at) / 4)}}>
+        return <div key={i} style={{fontFamily: HAND, fontSize: g.fs ?? 44, color: P.ink, display: "flex", alignItems: "center", gap: 14, opacity: Math.min(1, (f - at) / 4)}}>
           <span style={{width: 40, height: 40, border: `4px solid ${P.ink}`, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center", color: P.red, fontSize: 40}}>{ck ? "✓" : ""}</span>
           <span style={{textDecoration: ck && r.strike ? "line-through" : "none"}}>{r.text}</span>
         </div>;
@@ -199,6 +215,88 @@ const BrainMap: React.FC<{f: number; g: G}> = ({f, g}) => { // карта моз
   </div>;
 };
 
+
+const HeadNotif: React.FC<{f: number; g: G}> = ({f, g}) => { // голова открывается, из неё вылетают уведомления; потом телефон с пачками
+  const s = fr(g.s), e = fr(g.e), t2 = fr(g.t2);
+  const W = 560, k = W / 1080, X = g.x ?? 1440, Y = g.y ?? 560; // лицо: 1080×1049 исходника
+  const headOut = L(f, t2 - 8, t2, 1, 0);
+  if (f < s || f > e) return null;
+  const lift = L(f, s + 8, s + 26, 0, 1, Easing.out(Easing.back(1.4)));
+  const names = ["TikTok · новое видео", "Instagram · лайк", "Telegram · 5 сообщений", "YouTube · новое видео", "TikTok · тебе понравится", "Instagram · сторис", "VK · отметка", "Telegram · канал", "TikTok · LIVE", "WhatsApp · 12 сообщений", "Instagram · reels", "TikTok · 99+"];
+  const n0 = s + 26, step = Math.max(4, Math.floor((t2 - n0) / names.length));
+  return <>
+    {headOut > 0 && <div style={{position: "absolute", left: X - W / 2, top: Y - 1049 * k / 2 + 80, width: W, opacity: headOut}}>
+      {names.map((nm, i) => { // уведомления вылетают из головы и остаются
+        const at = n0 + i * step; if (f < at) return null;
+        const sp = SP(f, at, 11, 200);
+        const tx = ((i * 37) % 7 - 3) * 60, ty = -60 - (i % 6) * 70 - Math.floor(i / 6) * 30;
+        return <div key={i} style={{position: "absolute", left: W / 2 - 170 + tx * sp, top: 140 + ty * sp, width: 340, background: "rgba(255,255,255,.95)", borderRadius: 16, padding: "10px 16px", fontFamily: G, fontSize: 22, color: "#111", boxShadow: "0 6px 18px rgba(0,0,0,.25)", transform: `scale(${sp}) rotate(${((i * 13) % 9 - 4)}deg)`, zIndex: 1}}>{nm}</div>;
+      })}
+      <Img src={lib("head_top.png")} style={{position: "absolute", left: 233 * k, top: (418 - 969) * k - lift * 230, width: 733 * k, transform: `rotate(${-lift * 18}deg)`, transformOrigin: "10% 90%", filter: shadow, zIndex: 2}} />
+      <Img src={lib("head_face.png")} style={{position: "relative", width: W, display: "block", filter: shadow}} />
+    </div>}
+    {f >= t2 - 2 && <Notif f={f} g={{...g, s: g.t2, t2: g.t3 ?? g.t2 + 1}} />}
+  </>;
+};
+
+const Typewriter: React.FC<{f: number; g: G}> = ({f, g}) => { // машинка печатает дела, потом галочки
+  const s = fr(g.s), e = fr(g.e);
+  const pp = pop(f, s, e, "tw"); if (!pp) return null;
+  const H = g.h ?? 1000, W = H * 1060 / 1600, FS = g.fs ?? H * 0.034;
+  return <div style={{position: "absolute", left: (g.x ?? 480) - W / 2, top: (g.y ?? 540) - H / 2, width: W, height: H, opacity: pp.o, transform: `scale(${pp.sc})`}}>
+    <Img src={lib("typewriter.jpg")} style={{width: W, height: H, filter: shadow}} />
+    <div style={{position: "absolute", left: W * 0.2, top: H * 0.07, width: W * 0.62, display: "flex", flexDirection: "column", gap: H * 0.012}}>
+      {g.head && <div style={{fontFamily: TYPE, fontSize: H * 0.03, color: P.red, marginBottom: H * 0.01}}>{g.head}</div>}
+      {(g.rows as any[]).map((r, i) => {
+        const at = fr(r.t); if (f < at) return null;
+        const n = Math.min(r.text.length, Math.floor((f - at) * 0.8));
+        const ck = r.ck !== undefined && f >= fr(r.ck);
+        return <div key={i} style={{fontFamily: TYPE, fontSize: FS, color: P.ink, lineHeight: 1.15, display: "flex", gap: 8}}>
+          <span style={{color: P.red, width: H * 0.03, display: "inline-block", transform: `scale(${ck ? SP(f, fr(r.ck), 9, 260) : 0})`}}>✓</span>
+          <span>{r.text.slice(0, n)}{n < r.text.length && (f % 10 < 5) ? "▌" : ""}</span>
+        </div>;
+      })}
+    </div>
+  </div>;
+};
+
+const Notebook: React.FC<{f: number; g: G}> = ({f, g}) => { // блокнот: советы под красивыми цифрами
+  const s = fr(g.s), e = fr(g.e);
+  const pp = pop(f, s, e, "nb"); if (!pp) return null;
+  const W = g.w ?? 900;
+  return <div style={{position: "absolute", left: (g.x ?? 480) - W / 2, top: (g.y ?? 540) - W / 2, width: W, height: W, opacity: pp.o, transform: `scale(${pp.sc}) rotate(-2deg)`}}>
+    <Img src={lib("notebook.jpg")} style={{width: W, height: W, filter: shadow}} />
+    <div style={{position: "absolute", left: W * 0.4, top: W * 0.09, width: W * 0.5, display: "flex", flexDirection: "column", gap: W * 0.02}}>
+      {g.head && <div style={{fontFamily: AMATIC, fontSize: W * 0.075, color: P.red, lineHeight: 1}}>{g.head}</div>}
+      {(g.rows as any[]).map((r, i) => {
+        const at = fr(r.t); if (f < at) return null;
+        const d = ["00", "04", "01"][i] ?? "00";
+        const w = L(f, at + 6, at + 26, 0, 100);
+        return <div key={i} style={{display: "flex", gap: W * 0.02, alignItems: "flex-start"}}>
+          <Img src={lib(`digits_${d}.png`)} style={{height: W * 0.11, transform: `scale(${SP(f, at, 9, 240)}) rotate(-6deg)`}} />
+          <div style={{fontFamily: HAND, fontSize: W * 0.045, color: P.ink, lineHeight: 1.15, clipPath: `inset(0 ${100 - w}% 0 0)`, paddingTop: W * 0.015}}>{r.text}</div>
+        </div>;
+      })}
+    </div>
+  </div>;
+};
+
+const Boxes: React.FC<{f: number; g: G}> = ({f, g}) => { // коробки вокруг по очереди открываются и показывают героев
+  const s = fr(g.s), e = fr(g.e);
+  if (f < s || f > e) return null;
+  const out = L(f, e - 7, e, 1, 0);
+  return <>{(g.boxes as any[]).map((b, i) => {
+    const at = s + i * 4, op = fr(b.t);
+    const sp = SP(f, at, 11, 200); const opened = f >= op;
+    const hero = opened ? SP(f, op + 2, 9, 180) : 0;
+    const shake = !opened && f > op - 12 ? Math.sin(f * 1.6) * 4 : 0;
+    return <div key={i} style={{position: "absolute", left: b.x, top: b.y, transform: `translate(-50%,-50%) scale(${sp}) rotate(${shake}deg)`, opacity: out}}>
+      {opened && <Img src={lib(b.src)} style={{position: "absolute", left: "50%", bottom: 120 + hero * 70, width: b.w ?? 220, transform: `translateX(-50%) scale(${hero}) rotate(${b.rot ?? 0}deg)`, transformOrigin: "50% 100%", filter: shadow}} />}
+      <Img src={lib(opened ? "box_open.png" : "box_closed.png")} style={{width: 300, display: "block", position: "relative", filter: shadow}} />
+    </div>;
+  })}</>;
+};
+
 export const Scene: React.FC<{f: number; g: G}> = ({f, g}) => {
   const e = fr(g.e);
   const body = (() => {
@@ -213,6 +311,10 @@ export const Scene: React.FC<{f: number; g: G}> = ({f, g}) => {
       case "stamps": return <Stamps f={f} g={g} />;
       case "checklist": return <Checklist f={f} g={g} />;
       case "map": return <BrainMap f={f} g={g} />;
+      case "headnotif": return <HeadNotif f={f} g={g} />;
+      case "typewriter": return <Typewriter f={f} g={g} />;
+      case "notebook": return <Notebook f={f} g={g} />;
+      case "boxes": return <Boxes f={f} g={g} />;
       default: return null;
     }
   })();

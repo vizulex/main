@@ -128,7 +128,9 @@ export const Clicker: React.FC<{f: number; s: number; e: number; x: number; y: n
 };
 
 /** Фон-бумага: тетрадная клетка, крафт или рваные страницы. */
-export const Paper: React.FC<{kind?: "grid" | "kraft" | "pages" | "stripes"}> = ({kind = "grid"}) => {
+export const Paper: React.FC<{kind?: string}> = ({kind = "grid"}) => {
+  const IMGS: Record<string, string> = {crumpled: "bg_crumpled.jpg", crowd: "bg_crowd.jpg"};
+  if (IMGS[kind]) return <Img src={lib(IMGS[kind])} style={{position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover"}} />;
   if (kind === "pages") return <Img src={lib("torn_pages.jpg")} style={{position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "saturate(.7) brightness(1.05)"}} />;
   if (kind === "stripes") return <Img src={lib("stripes.jpg")} style={{position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover"}} />;
   const bg = kind === "kraft" ? {backgroundColor: P.kraft, backgroundImage: "radial-gradient(rgba(80,50,20,.12) 1px, transparent 1.4px)", backgroundSize: "7px 7px"} :

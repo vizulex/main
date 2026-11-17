@@ -20,7 +20,15 @@ const LAYS: Record<string, Box> = {
   circle: {x: 1380, y: 600, w: 400, h: 400, r: 200, rot: 0, z: 1.9, ox: 0, oy: -80},
   "circle-left": {x: 140, y: 600, w: 400, h: 400, r: 200, rot: 0, z: 1.9, ox: 0, oy: -80},
   hidden: {x: 760, y: 1200, w: 400, h: 400, r: 200, rot: 0, z: 1.5, ox: 0, oy: 0},
+  "half-right": {x: 960, y: 0, w: 960, h: 1080, r: 0, rot: 0, z: 1.0, ox: 0, oy: 0},
+  "half-left": {x: 0, y: 0, w: 960, h: 1080, r: 0, rot: 0, z: 1.0, ox: 0, oy: 0},
+  "bottom-rect": {x: 700, y: 700, w: 520, h: 340, r: 14, rot: 0, z: 1.25, ox: 0, oy: 10},
+  "square-right": {x: 1080, y: 150, w: 740, h: 740, r: 14, rot: 2, z: 1.35, ox: 0, oy: 20},
+  "polaroid-right": {x: 860, y: 100, w: 980, h: 760, r: 6, rot: 2, z: 1.15, ox: 0, oy: 20},
+  "circle-big": {x: 1250, y: 400, w: 600, h: 600, r: 300, rot: 0, z: 1.75, ox: 0, oy: -60},
 };
+const PLAIN = new Set(["half-right", "half-left"]);
+const FRAMED = new Set(["bottom-rect", "square-right", "polaroid-right"]);
 const mix = (a: Box, b: Box, p: number): Box => {
   const m = (k: keyof Box) => a[k] + (b[k] - a[k]) * p;
   return {x: m("x"), y: m("y"), w: m("w"), h: m("h"), r: m("r"), rot: m("rot"), z: m("z"), ox: m("ox"), oy: m("oy")};
@@ -47,13 +55,15 @@ export const Ep2: React.FC<{photo: string; aroll?: string}> = ({photo, aroll = "
   const box = mix({...FULLB, z: zFull}, target, p);
   const S = box.z * Math.max(box.w / 1920, box.h / 1080);
   const isCircle = target.r > 100;
+  const lname = lg?.lay ?? "";
+  const plain = PLAIN.has(lname), framed = FRAMED.has(lname), torn = p > 0.02 && !isCircle && !plain && !framed;
   // точка, вокруг которой кадрируем: центр кадра на полном экране (с подтяжкой к лицу при зуме) → лицо в окне/кружке
   const k = Math.min(1, (zFull - 1) * 3) * (1 - p) + p;
   const cx = 960 + (FACE.x - 960) * k, cy = 540 + (FACE.y - 540) * k;
   const video = (
     <div style={{position: "absolute", left: box.x, top: box.y, width: box.w, height: box.h, overflow: "hidden", transform: `rotate(${box.rot}deg)`,
-      borderRadius: box.r, clipPath: p > 0.02 && !isCircle ? TORN : undefined, filter: p > 0.02 ? shadow : undefined,
-      outline: isCircle && p > 0.02 ? `${10 * p}px solid #fff` : undefined}}>
+      borderRadius: box.r, clipPath: torn ? TORN : undefined, filter: p > 0.02 && !plain ? shadow : undefined,
+      outline: (isCircle || framed) && p > 0.02 ? `${(lname === "polaroid-right" ? 20 : 10) * p}px solid #fff` : undefined}}>
       <div style={{position: "absolute", left: box.w / 2 - cx * S + box.ox * p, top: box.h / 2 - cy * S + box.oy * p,
         width: 1920, height: 1080, transform: `scale(${S})`, transformOrigin: "0 0"}}>
         <Sequence durationInFrames={introF} layout="none">
@@ -70,7 +80,7 @@ export const Ep2: React.FC<{photo: string; aroll?: string}> = ({photo, aroll = "
     <AbsoluteFill style={{background: P.ink}}>
       {p > 0 && <AbsoluteFill style={{opacity: p}}><Paper kind={paper as any} /></AbsoluteFill>}
       {video}
-      {p > 0.5 && !isCircle && <><Tape x={box.x + 40} y={box.y + 10} rot={-28} w={190} /><Tape x={box.x + box.w - 40} y={box.y + box.h - 6} rot={-24} w={190} /></>}
+      {p > 0.5 && torn && <><Tape x={box.x + 40} y={box.y + 10} rot={-28} w={190} /><Tape x={box.x + box.w - 40} y={box.y + box.h - 6} rot={-24} w={190} /></>}
       {active.filter((g) => !FULLSCREEN.has(g.kind)).map((g, i) => <Scene key={g.kind + g.s + i} f={f} g={g} />)}
       {fullScene && <Scene f={f} g={fullScene} />}
       <Sequence from={introF} durationInFrames={introLen}>
