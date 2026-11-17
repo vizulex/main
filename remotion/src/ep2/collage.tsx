@@ -49,17 +49,68 @@ export const Tape: React.FC<{x: number; y: number; w?: number; rot?: number; col
     clipPath: "polygon(3% 0,97% 4%,100% 30%,96% 52%,100% 78%,97% 100%,2% 96%,0 70%,4% 46%,0 22%)", mixBlendMode: "multiply"}} />
 );
 
-/** Рваная бумажка с надписью от руки. */
-export const Label: React.FC<{f: number; s: number; e: number; text: string; x: number; y: number; size?: number; rot?: number; bg?: string; color?: string; font?: string; tape?: boolean; maxW?: number}> =
-  ({f, s, e, text, x, y, size = 56, rot = -3, bg = P.paper, color = P.ink, font = HAND, tape = true, maxW = 760}) => {
+/** Надпись. Варианты (v): tape — рваная бумажка со скотчем; torn — без скотча; marker — маркер-выделитель под текстом;
+    circle — обведено от руки; sticky — квадратный стикер; pin — бумажка на булавке; bubble — облачко; underline — волнистое
+    подчёркивание; dymo — чёрная лента этикет-принтера. Без v вариант выбирается по тексту, чтобы надписи не были одинаковыми. */
+const TORN_CLIP = "polygon(0 4%,8% 0,22% 3%,38% 0,55% 4%,71% 1%,88% 3%,100% 0,98% 30%,100% 62%,97% 100%,80% 96%,63% 100%,44% 96%,27% 100%,10% 97%,0 100%,2% 64%,0 33%)";
+const VARIANTS = ["marker", "tape", "sticky", "underline", "dymo", "pin", "torn", "circle", "bubble"];
+const hash = (t: string) => { let h = 7; for (const c of t) h = (h * 31 + c.charCodeAt(0)) >>> 0; return h; };
+export const Label: React.FC<{f: number; s: number; e: number; text: string; x: number; y: number; size?: number; rot?: number; bg?: string; color?: string; font?: string; tape?: boolean; maxW?: number; v?: string}> =
+  ({f, s, e, text, x, y, size = 56, rot = -3, bg = P.paper, color = P.ink, font = HAND, tape = true, maxW = 760, v}) => {
     const p = pop(f, s, e, text); if (!p) return null;
-    return (
-      <div style={{position: "absolute", left: x, top: y + p.dy, opacity: p.o, transform: `translate(-50%,-50%) rotate(${rot + p.wob * 0.4}deg) scale(${p.sc})`, filter: shadow}}>
-        <div style={{background: bg, color, fontFamily: font, fontSize: size, lineHeight: 1.12, padding: `${size * 0.22}px ${size * 0.45}px`, maxWidth: maxW, whiteSpace: "pre-line", textAlign: "center",
-          clipPath: "polygon(0 4%,8% 0,22% 3%,38% 0,55% 4%,71% 1%,88% 3%,100% 0,98% 30%,100% 62%,97% 100%,80% 96%,63% 100%,44% 96%,27% 100%,10% 97%,0 100%,2% 64%,0 33%)"}}>{text}</div>
-        {tape && <Tape x={size * 0.6} y={0} w={size * 2.2} rot={-14} />}
-      </div>
+    let kind = v ?? VARIANTS[hash(text) % VARIANTS.length];
+    if (!v && !tape && kind === "tape") kind = "torn";
+    if ((kind === "circle" || kind === "bubble") && text.length > 24) kind = "marker";
+    const hl = bg === P.paper ? [P.yellow, P.pink, "#9FD8FF"][hash(text) % 3] : bg;
+    const wrap = (inner: React.ReactNode) => (
+      <div style={{position: "absolute", left: x, top: y + p.dy, opacity: p.o, transform: `translate(-50%,-50%) rotate(${rot + p.wob * 0.4}deg) scale(${p.sc})`, filter: shadow}}>{inner}</div>
     );
+    const txt: React.CSSProperties = {fontFamily: font, fontSize: size, lineHeight: 1.12, color, maxWidth: maxW, whiteSpace: "pre-line", textAlign: "center"};
+    const draw = L(f, s + 3, s + 14, 0, 1);
+    switch (kind) {
+      case "marker": return wrap(
+        <div style={{position: "relative", padding: `0 ${size * 0.2}px`}}>
+          <div style={{position: "absolute", left: 0, right: `${(1 - draw) * 100}%`, top: "18%", bottom: "8%", background: hl, opacity: 0.85, borderRadius: size * 0.3, transform: "skewX(-8deg) rotate(-1deg)"}} />
+          <div style={{...txt, position: "relative"}}>{text}</div>
+        </div>);
+      case "underline": return wrap(
+        <div style={{position: "relative", paddingBottom: size * 0.35}}>
+          <div style={txt}>{text}</div>
+          <svg width="100%" height={size * 0.4} viewBox="0 0 200 20" preserveAspectRatio="none" style={{position: "absolute", left: 0, bottom: 0}}>
+            <path d="M2 12 Q 20 2 38 12 T 74 12 T 110 12 T 146 12 T 182 12 T 198 10" fill="none" stroke={P.red} strokeWidth={4} strokeLinecap="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - draw} vectorEffect="non-scaling-stroke" />
+          </svg>
+        </div>);
+      case "circle": return wrap(
+        <div style={{position: "relative", padding: `${size * 0.45}px ${size * 0.7}px`}}>
+          <svg width="100%" height="100%" viewBox="0 0 200 100" preserveAspectRatio="none" style={{position: "absolute", inset: 0, overflow: "visible"}}>
+            <path d="M100 6 C 170 4 198 30 194 52 C 190 82 140 96 96 94 C 40 92 4 74 8 46 C 12 18 60 6 112 9" fill="none" stroke={P.red} strokeWidth={4} strokeLinecap="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - draw} vectorEffect="non-scaling-stroke" />
+          </svg>
+          <div style={{...txt, position: "relative"}}>{text}</div>
+        </div>);
+      case "sticky": return wrap(
+        <div style={{background: hl, padding: `${size * 0.45}px ${size * 0.5}px`, minWidth: size * 3.2, maxWidth: Math.min(maxW, size * 7), boxShadow: "inset -10px -14px 18px rgba(0,0,0,.08)", clipPath: "polygon(0 0,100% 0,100% 82%,88% 100%,0 100%)"}}>
+          <div style={{...txt, maxWidth: undefined}}>{text}</div>
+        </div>);
+      case "pin": return wrap(
+        <div style={{position: "relative", background: "#fff", padding: `${size * 0.35}px ${size * 0.5}px`, border: "1px solid #ddd"}}>
+          <div style={txt}>{text}</div>
+          <Img src={lib("pin.png")} style={{position: "absolute", right: -size * 0.3, top: -size * 0.85, width: size * 1.3, transform: "rotate(18deg)"}} />
+        </div>);
+      case "bubble": return wrap(
+        <div style={{position: "relative", width: Math.max(size * 5, text.length * size * 0.42), padding: `${size * 0.5}px ${size * 0.6}px ${size * 0.95}px`}}>
+          <Img src={lib("bubble.png")} style={{position: "absolute", inset: 0, width: "100%", height: "100%"}} />
+          <div style={{...txt, position: "relative"}}>{text}</div>
+        </div>);
+      case "dymo": return wrap(
+        <div style={{background: P.ink, padding: `${size * 0.18}px ${size * 0.4}px`, borderRadius: 4}}>
+          <div style={{...txt, fontFamily: MONO, fontSize: size * 0.62, letterSpacing: "0.08em", color: "#fff", textTransform: "uppercase", textShadow: "0 1px 0 rgba(255,255,255,.35)"}}>{text}</div>
+        </div>);
+      case "torn": case "tape": default: return wrap(
+        <div style={{position: "relative"}}>
+          <div style={{background: kind === "torn" && bg === P.paper ? "#fff" : bg, color, fontFamily: font, fontSize: size, lineHeight: 1.12, padding: `${size * 0.22}px ${size * 0.45}px`, maxWidth: maxW, whiteSpace: "pre-line", textAlign: "center", clipPath: TORN_CLIP}}>{text}</div>
+          {kind === "tape" && <Tape x={size * 0.6} y={0} w={size * 2.2} rot={-14} />}
+        </div>);
+    }
   };
 
 /** Буквы-вырезки (как «whimsy»): каждая буква своим шрифтом на своей бумажке. */

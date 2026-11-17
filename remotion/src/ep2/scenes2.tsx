@@ -197,7 +197,7 @@ const Checklist: React.FC<{f: number; g: G}> = ({f, g}) => { // список с 
       {(g.rows as any[]).map((r, i) => {
         const at = fr(r.t); if (f < at) return null;
         const ck = r.ck !== undefined && f >= fr(r.ck);
-        return <div key={i} style={{fontFamily: HAND, fontSize: g.fs ?? 44, color: P.ink, display: "flex", alignItems: "center", gap: 14, opacity: Math.min(1, (f - at) / 4)}}>
+        return <div key={i} style={{fontFamily: g.font === "amatic" ? AMATIC : HAND, fontWeight: g.font === "amatic" ? 700 : 400, lineHeight: 1.0, fontSize: g.fs ?? 44, color: P.ink, display: "flex", alignItems: "center", gap: 14, opacity: Math.min(1, (f - at) / 4)}}>
           <span style={{width: 40, height: 40, border: `4px solid ${P.ink}`, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center", color: P.red, fontSize: 40}}>{ck ? "✓" : ""}</span>
           <span style={{textDecoration: ck && r.strike ? "line-through" : "none"}}>{r.text}</span>
         </div>;
@@ -242,16 +242,16 @@ const HeadNotif: React.FC<{f: number; g: G}> = ({f, g}) => { // голова о�
 const Typewriter: React.FC<{f: number; g: G}> = ({f, g}) => { // машинка печатает дела, потом галочки
   const s = fr(g.s), e = fr(g.e);
   const pp = pop(f, s, e, "tw"); if (!pp) return null;
-  const H = g.h ?? 1000, W = H * 1060 / 1600, FS = g.fs ?? H * 0.034;
+  const H = g.h ?? 1000, W = H * 1060 / 1600, FS = g.fs ?? H * 0.036;
   return <div style={{position: "absolute", left: (g.x ?? 480) - W / 2, top: (g.y ?? 540) - H / 2, width: W, height: H, opacity: pp.o, transform: `scale(${pp.sc})`}}>
     <Img src={lib("typewriter.jpg")} style={{width: W, height: H, filter: shadow}} />
-    <div style={{position: "absolute", left: W * 0.2, top: H * 0.07, width: W * 0.62, display: "flex", flexDirection: "column", gap: H * 0.012}}>
+    <div style={{position: "absolute", left: W * 0.27, top: H * 0.085, width: W * 0.46, display: "flex", flexDirection: "column", gap: H * 0.012}}>
       {g.head && <div style={{fontFamily: TYPE, fontSize: H * 0.03, color: P.red, marginBottom: H * 0.01}}>{g.head}</div>}
       {(g.rows as any[]).map((r, i) => {
         const at = fr(r.t); if (f < at) return null;
         const n = Math.min(r.text.length, Math.floor((f - at) * 0.8));
         const ck = r.ck !== undefined && f >= fr(r.ck);
-        return <div key={i} style={{fontFamily: TYPE, fontSize: FS, color: P.ink, lineHeight: 1.15, display: "flex", gap: 8}}>
+        return <div key={i} style={{fontFamily: TYPE, fontSize: FS, letterSpacing: "-0.06em", color: P.ink, lineHeight: 1.08, display: "flex", gap: 6}}>
           <span style={{color: P.red, width: H * 0.03, display: "inline-block", transform: `scale(${ck ? SP(f, fr(r.ck), 9, 260) : 0})`}}>✓</span>
           <span>{r.text.slice(0, n)}{n < r.text.length && (f % 10 < 5) ? "▌" : ""}</span>
         </div>;
