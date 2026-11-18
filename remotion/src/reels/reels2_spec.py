@@ -65,16 +65,24 @@ def cutc(src, t, x, y, w, rot=0): return dict(k="cut", src=src, t=t, x=x, y=y, w
 def dig(value, t, x, y, h=170, rot=-3): return dict(k="digits", value=value, t=t, x=x, y=y, h=h, rot=rot)
 def ran2(text, t, x, y, size=64): return dict(k="ransom", text=text, t=t, x=x, y=y, size=size)
 def strk(t, x, y, w, rot=-3): return dict(k="strike", t=t, x=x, y=y, w=w, rot=rot)
-def mosaic(imgs, he):
-    """мозаика в начале: 8 маленьких картинок сверху и 8 снизу, плотно, появляются по очереди"""
-    T = [(24, 40, 250, 250, -2), (284, 24, 240, 270, 2), (534, 50, 250, 240, -1), (794, 30, 262, 262, 3),
-         (10, 300, 270, 290, 1), (290, 310, 250, 270, -3), (548, 300, 240, 290, 2), (796, 302, 270, 280, -2)]
-    B = [(20, 1320, 260, 270, 2), (290, 1335, 250, 250, -2), (550, 1318, 240, 280, 1), (800, 1330, 260, 260, -3),
-         (30, 1600, 250, 290, -1), (290, 1595, 270, 280, 3), (566, 1610, 240, 270, -2), (812, 1600, 250, 290, 2)]
+def mosaic(imgs, he, deco="a"):
+    """первый экран: пара разных картинок сверху и пара снизу (без повторов), разного размера, внахлёст, + декор"""
+    T = [(60, 80, 330, 400, -4), (350, 230, 280, 280, 4), (690, 60, 300, 370, 5)]
+    B = [(130, 1370, 400, 300, 3), (480, 1460, 300, 340, -5), (760, 1380, 280, 320, 4)]
+    top, bot = imgs[:3], imgs[3:6]
     out = []
-    for k, (x, y, w, h, rot) in enumerate(T + B):
-        src, kw = imgs[k % len(imgs)]
-        out.append(pic(src, 0.05 + (k % 8) * 0.12 + (k // 8) * 0.06, x, y, w, h, rot, **kw))
+    for k, ((src, kw), (x, y, w, h, rot)) in enumerate(list(zip(top, T)) + list(zip(bot, B))):
+        out.append(pic(src, 0.1 + k * 0.22, x, y, w, h, rot, frame=True, **kw))
+    t9 = 0.1 + len(out) * 0.22
+    D = {"a": [("tape", 225, 85, 170, -8), ("pin.png", 840, 75, 90, 10), ("elements_00.png", 150, 545, 170, 0), ("elements_11.png", 980, 520, 150, 12),
+               ("elements_05.png", 970, 1810, 170, -10), ("elements_10.png", 300, 1850, 300, 0), ("burst_marks.png", 820, 1450, 120, -10)],
+         "b": [("tape", 840, 70, 160, 8), ("elements_01.png", 520, 120, 180, 0), ("elements_00.png", 960, 520, 160, 10), ("star_paper.png", 110, 540, 150, -8),
+               ("pin.png", 630, 1465, 80, -10), ("elements_06.png", 920, 1600, 150, 0), ("elements_08.png", 160, 1820, 220, 0)],
+         "c": [("tape", 220, 82, 170, -6), ("elements_05.png", 560, 110, 150, 14), ("elements_11.png", 120, 540, 140, -10), ("elements_00.png", 960, 540, 150, 0),
+               ("burst_marks.png", 820, 1450, 120, 8), ("elements_10.png", 880, 1800, 200, 0), ("elements_03.png", 140, 1800, 150, 0)]}[deco]
+    for k, (src, x, y, w, rot) in enumerate(D):
+        tt = t9 + k * 0.12
+        out.append(dict(k="tape", t=tt, x=x, y=y, w=w, rot=rot) if src == "tape" else cutc(src, tt, x, y, w, rot))
     return {"kind": "pics", "s": 0, "e": he + 0.2, "items": out}
 def scene(s, e, *items): return {"kind": "pics", "s": s, "e": e, "items": list(items)}
 
@@ -87,8 +95,7 @@ R3 = dict(id="r3", title="", hook_end="всех", layout="stack",
           ("raw", "и третье самое", "нравится", 2590), ("ep", "психиатр", "привычки", 525), ("ep", "сбить ее можно", "процесса", 535)],
   fix=[("Джатсон", "Джадсон"), ("Браузер", "Брюэр")],
   gfx=lambda at: [
-    mosaic([(I("7115.jpg"), {}), (I("7113.jpg"), {}), (I("7114.jpg"), {}), (I("7112.jpg"), {}), (I("7116.jpg"), {}),
-            (LB("neurons_color.jpg"), {}), (LB("brain_blue.jpg"), {}), (LB("stripes.jpg"), {})], at("всех", end=True)),
+    mosaic([(I("7115.jpg"), {}), (I("7113.jpg"), {}), (I("7114.jpg"), {}), (I("7112.jpg"), {}), (I("7116.jpg"), {})], at("всех", end=True), "a"),
     {"kind": "blurlist", "s": at("первое") - 0.3, "e": 999, "head": "3 вещи, которые я сделала со своим телефоном", "items": [
       {"t": at("первое"), "text": "Уведомления — пачкой 3 раза в день"}, {"t": at("второе"), "text": "Соцсети убраны с главного экрана"},
       {"t": at("и третье"), "text": "После 10 минут ленты — оценка кайфа"}]},
@@ -132,7 +139,7 @@ R4 = dict(id="r4", title="", hook_end="жизнь", layout="stack",
   fix=[("туда 5% чаще,", "туда на 51% чаще."), ("тоже", "Вторые тоже")],
   gfx=lambda at: [
     mosaic([(I("hook_books.jpg"), {}), (I("hook_galaxy.jpg"), {}), (I("hook_light.jpg"), {}), (I("hook_passport.jpg"), {}),
-            (I("hook_gym.jpg"), {}), (I("clean_closet.jpg"), {}), (I("motiv_table.jpg"), {}), (I("clean_broom.jpg"), {})], at("жизнь", end=True)),
+            (I("hook_gym.jpg"), {})], at("жизнь", end=True), "b"),
     {"kind": "blurlist", "s": at("первое") - 0.3, "e": 999, "head": "3 привычки от нейробиологии", "items": [
       {"t": at("первое"), "text": "Любимый подкаст — только во время уборки"}, {"t": at("второе"), "text": "Не жду мотивации — делаю первый шаг"},
       {"t": at("третье"), "text": "Ставлю себе фальшивые галочки"}]},
@@ -178,7 +185,7 @@ R5 = dict(id="r5", title="", hook_end="пор", timer=30, fit_to=30.0, layout="s
   fix=[("Уильямса", "Уильяма"), ("Сеппа,", "Сепа,"), ("дофаминовый", "Дофаминовый"), ("триггеры", "триггеры.")],
   gfx=lambda at: [
     mosaic([(I("dopamine_eye.jpg"), {}), (I("books_pile.jpg"), {}), (I("neurons.jpg"), {}), (I("brain_scan2.jpg"), {}),
-            (I("glow.mp4"), {"video": True}), (LB("brain_litho.jpg"), {}), (LB("lobes_head.jpg"), {}), (LB("brain_blue.jpg"), {})], at("пор", end=True)),
+            (I("glow.mp4"), {"video": True})], at("пор", end=True), "c"),
     {"kind": "blurlist", "s": at("а вот этот миф") - 0.2, "e": 999, "head": "3 мифа о мозге за 30 секунд", "top": 30, "items": [
       {"t": at("а вот этот миф"), "text": "Мы используем 10% мозга"}, {"t": at("дофаминовый детокс"), "text": "Детокс перезагружает мозг"},
       {"t": at("нам обещают"), "text": "Эйфория после бега — эндорфины"}],
