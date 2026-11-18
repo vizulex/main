@@ -270,7 +270,7 @@ const Cta: React.FC<{r: R; f: number; split?: boolean}> = ({r, f, split}) => {
 export const Reel2: React.FC<{id: string; noMatte?: boolean}> = ({id, noMatte}) => {
   const f = useCurrentFrame();
   const r = reels.find((x) => x.id === id)!;
-  if ((r as any).layout === "stack") return <Stack2 r={r} f={f} />;
+  if ((r as any).layout === "stack") return <Stack2 r={r} f={f} noMatte={noMatte} />;
   const t = f / 30;
   const gfx = r.gfx as Gx[];
   const sc = sceneAt(r, f);
