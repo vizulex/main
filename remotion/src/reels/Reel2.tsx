@@ -1,7 +1,7 @@
 import React from "react";
-import {AbsoluteFill, OffthreadVideo, Sequence, Freeze, staticFile, useCurrentFrame, Easing, interpolate} from "remotion";
+import {AbsoluteFill, OffthreadVideo, Sequence, Freeze, Img, staticFile, useCurrentFrame, Easing, interpolate} from "remotion";
 import {loadFont as loadPlayfair} from "@remotion/google-fonts/PlayfairDisplay";
-import {C, U, G, L, fr, Appear, gridPaper} from "../episode/kit";
+import {C, U, G, L, SP, fr, Appear, gridPaper} from "../episode/kit";
 import {Gx} from "./scenes";
 import {Paper} from "../ep2/collage";
 import {Item, Scene} from "../ep2/scenes2";
@@ -79,6 +79,17 @@ const Matte: React.FC<{r: R}> = ({r}) => (
       </Sequence>
     ))}
   </>
+);
+
+/* ---------- маленький коллажный декор в начале (стикеры Влады, вырезаны с белого фона) ---------- */
+const Decos: React.FC<{g: Gx; f: number}> = ({g, f}) => (
+  <>{g.items.map((it: any, i: number) => {
+    const s = fr(it.t), e = fr(g.e);
+    if (f < s || f > e) return null;
+    const sp = SP(f, s, 9, 220), out = L(f, e - 6, e, 1, 0);
+    return <Img key={i} src={staticFile(it.src)} style={{position: "absolute", left: it.x, top: it.y, width: it.w, opacity: Math.min(1, sp * 1.6) * out,
+      transform: `translate(-50%,-50%) rotate(${(it.rot ?? 0) + (1 - sp) * 25}deg) scale(${0.5 + 0.5 * sp})`, filter: "drop-shadow(2px 4px 3px rgba(0,0,0,.3))"}} />;
+  })}</>
 );
 
 /* ---------- крупное слово за мной ---------- */
@@ -302,6 +313,7 @@ export const Reel2: React.FC<{id: string; noMatte?: boolean}> = ({id, noMatte}) 
       {full && !noMatte && <Frame b={box} z={box.z}><Matte r={r} /></Frame>}
       {full && bts.map((b, i) => <SmallLine key={i} b={b} f={f} />)}
       {active.map((g) => <Overlay key={g.kind + g.s} g={g} f={f} />)}
+      {gfx.filter((g) => g.kind === "decos").map((g, i) => <Decos key={"d" + i} g={g} f={f} />)}
       {!(full && btOn) && <Title r={r} f={f} left={leftTitle} />}
       <Timer r={r} f={f} />
       <Captions r={r} f={f} dark={sc?.g.mode === "circle" && p > 0.5} y={capY} />
