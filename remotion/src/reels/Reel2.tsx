@@ -100,7 +100,7 @@ const BehindWord: React.FC<{b: BT; f: number}> = ({b, f}) => {
   const pin = L(f, s, s + 9, 0, 1, Easing.out(Easing.cubic)), pout = L(f, e - 7, e, 1, 0);
   const lines = b.big.split("\n");
   const size = fit(b.big, 270, 1000, 0.82);
-  const top = 405 - (lines.length * size * 0.95) / 2;
+  const top = 300 - (lines.length * size * 0.95) / 2;
   return (
     <div style={{position: "absolute", left: 0, right: 0, top, textAlign: "center", opacity: pin * pout, filter: `blur(${(1 - pin) * 14}px)`, transform: `scale(${1.06 - 0.06 * pin})`}}>
       {lines.map((ln, i) => (
@@ -115,7 +115,7 @@ const SmallLine: React.FC<{b: BT; f: number}> = ({b, f}) => {
   if (f < s || f > e) return null;
   const lines = b.big.split("\n");
   const size = fit(b.big, 270, 1000, 0.82);
-  const top = 405 - (lines.length * size * 0.95) / 2 - 92;
+  const top = 300 - (lines.length * size * 0.95) / 2 - 92;
   const p = L(f, s, s + 9, 0, 1, Easing.out(Easing.cubic)) * L(f, e - 7, e, 1, 0);
   return (
     <div style={{position: "absolute", left: 60, right: 60, top, textAlign: "center", opacity: p, transform: `translateY(${(1 - p) * 14}px)`,

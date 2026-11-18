@@ -6,7 +6,7 @@ python3 remotion/src/reels/build_reels2.py <ep2_scratch_dir> [--media]
 import json, os, re, subprocess, sys
 import numpy as np, soundfile as sf
 
-D = sys.argv[1]; MEDIA = "--media" in sys.argv
+D = sys.argv[1]; MEDIA = "--media" in sys.argv or "--audio" in sys.argv; AUDIO_ONLY = "--audio" in sys.argv
 OUTV = "public/ep2r"; OUTA = os.path.join(D, "reels"); os.makedirs(OUTV, exist_ok=True); os.makedirs(OUTA, exist_ok=True)
 RAW = json.load(open(os.path.join(D, "words_flat.json")))
 EP = [json.loads(l) for l in open(os.path.join(D, "qa_words.jsonl"))]
@@ -109,6 +109,13 @@ def build(cfg):
     segs, words, at = [], [], LEAD
     for p in cfg["pieces"]:
         EPW.clear(); rr = piece(p); seg0 = len(segs); used = set()
+        for ca, cb in cfg.get("cut_raw", []):  # запинки/повторы: вырезаем по сырому времени
+            nr = []
+            for a, b in rr:
+                if cb <= a or ca >= b: nr.append([a, b]); continue
+                if ca - a > 0.1: nr.append([a, ca])
+                if b - cb > 0.1: nr.append([cb, b])
+            rr = nr
         for a, b in rr:
             n = int(round((b - a) * 30)); b = a + n / 30
             if n < 2: continue
@@ -164,7 +171,7 @@ def build(cfg):
     he = cfg["hook_end"]; hook_end = round(at_(he, end=True) + 0.15, 3) if isinstance(he, str) else he
     gfx = cfg["gfx"](at_)
     zoom = [[sg["at"], 1.22 if i % 2 == 0 else 1.4] for i, sg in enumerate(segs)]
-    matte = [[0.0, hook_end + 0.1]] if cfg.get("layout") == "stack" else [[0.0, hook_end + 0.1]] + [[max(0, g["s"] - 0.15), g["e"] + 0.15] for g in gfx if g["kind"] == "bt"]
+    matte = []  # хуки и крупные слова теперь на переднем плане (за головой не читались)
     if MEDIA: media(cfg["id"], segs)
     return {"id": cfg["id"], "dur": round(dur, 3), "lead": LEAD, "layout": cfg.get("layout", "full"), "hookText": cfg.get("hook_text"), "speed": round(dur / cfg["fit_to"], 4) if cfg.get("fit_to") else 1.0, "src": f"ep2r/{cfg['id']}.mp4",
             "segs": [{"s": round(sg["at"] - LEAD, 4), "e": round(sg["at"] - LEAD + sg["n"] / 30, 4), "at": sg["at"]} for sg in segs],
@@ -174,7 +181,7 @@ def build(cfg):
 def media(rid, segs):
     """Видео: куски сырого MOV (тонмаппинг HLG→SDR) подряд; голос: те же куски из audio48k + обработка как в эпизоде."""
     tmp = os.path.join(OUTA, rid); os.makedirs(tmp, exist_ok=True); lst = []
-    for k, sg in enumerate(segs):
+    for k, sg in enumerate([] if AUDIO_ONLY else segs):
         a = sg["rs"]; src, loc = ("IMG_7034.MOV", a - OFF7034) if a >= OFF7034 else ("IMG_7033.MOV", a)
         out = os.path.join(tmp, f"p{k:02d}.mp4"); lst.append(out)
         if sg.get("ar") is not None:  # кусок эпизода — из готового aroll (быстро и тот же цвет)
@@ -184,7 +191,7 @@ def media(rid, segs):
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{loc:.4f}", "-i", os.path.join(D, "raw", src), "-frames:v", str(sg["n"]),
                         "-vf", "fps=30," + TM, "-an", "-c:v", "libx264", "-crf", "15", "-preset", "fast", "-pix_fmt", "yuv420p", out], check=True)
     with open(os.path.join(tmp, "list.txt"), "w") as fh: fh.writelines(f"file '{p}'\n" for p in lst)
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", os.path.join(tmp, "list.txt"), "-c", "copy", "-movflags", "+faststart",
+    if not AUDIO_ONLY: subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", os.path.join(tmp, "list.txt"), "-c", "copy", "-movflags", "+faststart",
                     os.path.join(OUTV, f"{rid}.mp4")], check=True)
     fade = int(0.008 * SR); parts = []
     for sg in segs:
