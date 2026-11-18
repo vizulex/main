@@ -74,12 +74,9 @@ def mosaic(imgs, he, deco="a"):
     for k, ((src, kw), (x, y, w, h, rot)) in enumerate(list(zip(top, T)) + list(zip(bot, B))):
         out.append(pic(src, 0.1 + k * 0.22, x, y, w, h, rot, frame=True, **kw))
     t9 = 0.1 + len(out) * 0.22
-    D = {"a": [("tape", 225, 85, 170, -8), ("pin.png", 840, 75, 90, 10), ("elements_00.png", 150, 545, 170, 0), ("elements_11.png", 980, 520, 150, 12),
-               ("elements_05.png", 970, 1810, 170, -10), ("elements_10.png", 300, 1850, 300, 0), ("burst_marks.png", 820, 1450, 120, -10)],
-         "b": [("tape", 840, 70, 160, 8), ("elements_01.png", 520, 120, 180, 0), ("elements_00.png", 960, 520, 160, 10), ("star_paper.png", 110, 540, 150, -8),
-               ("pin.png", 630, 1465, 80, -10), ("elements_06.png", 920, 1600, 150, 0), ("elements_08.png", 160, 1820, 220, 0)],
-         "c": [("tape", 220, 82, 170, -6), ("elements_05.png", 560, 110, 150, 14), ("elements_11.png", 120, 540, 140, -10), ("elements_00.png", 960, 540, 150, 0),
-               ("burst_marks.png", 820, 1450, 120, 8), ("elements_10.png", 880, 1800, 200, 0), ("elements_03.png", 140, 1800, 150, 0)]}[deco]
+    D = {"a": [("tape", 225, 85, 120, -8), ("elements_00.png", 960, 545, 70, 0)],
+         "b": [("tape", 840, 70, 110, 8), ("elements_05.png", 110, 1340, 70, -10)],
+         "c": [("tape", 220, 82, 120, -6), ("elements_11.png", 980, 1340, 75, 12)]}[deco]
     for k, (src, x, y, w, rot) in enumerate(D):
         tt = t9 + k * 0.12
         out.append(dict(k="tape", t=tt, x=x, y=y, w=w, rot=rot) if src == "tape" else cutc(src, tt, x, y, w, rot))
