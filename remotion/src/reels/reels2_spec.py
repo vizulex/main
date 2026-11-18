@@ -11,7 +11,7 @@ DCO = lambda n, t, x, y, w, rot=0: dict(k="deco", src=f"ep2r/deco/{n}.png", t=t,
 
 R1 = dict(id="r1", title="Дофамин — не про удовольствие", hook_end="удовольствие",
   hook={"small": "НЕ гормон удовольствия", "big": "дофамин"}, cta=["Откуда настоящий кайф —", "в подкасте"],
-  cut_raw=[[826.92, 827.66]],  # «в лабораториях» сказано дважды — убираю первый раз
+  cut_raw=[[827.6, 828.85]],  # «в лабораториях» сказано дважды — убираю первый раз
   pieces=[("raw", "ты не шаришь", "удовольствие", 2440), ("ep", "сейчас я докажу", "про мышей", 430), ("ep", "в лабораториях", "сил хотеть", 440),
           ("ep", "почему можно два часа", "из этого", 400), ("ep", "кент", "эндоконбинеоиды", 470), ("ep", "дофамин это не кайф", "и иду", 494),
           ("ep", "лента нас затягивает", "листаем", 508), ("ep", "потому что хочу у нас", "нуле", 520)],
@@ -102,9 +102,9 @@ def mosaic(imgs, he, deco="a", ht=None):
     if ht:  # стикеры — к хуку на кадре: у углов слова и в конце подстрочника, чуть залезая на текст
         BY = 620; txt, size, hy, sub = ht["text"], ht.get("size", 150), ht.get("y", 300), ht.get("sub", "")
         Wt = len(txt) * size * 0.56; Ws = len(sub) * 40 * 0.5
-        spots = [(540 - Wt / 2 + 6, BY + hy + 14), (540 + Wt / 2 - 6, BY + hy + size * 0.88), (540 + Ws / 2 + 10, BY + hy + size + 36)]
+        spots = [(540 - Wt / 2 - 14, BY + hy + 24), (540 + Wt / 2 + 14, BY + hy + size * 0.35), (540 - Ws / 2 - 26, BY + hy + size + 40)]
         decos = [d for d in D if d[0] != "tape"][:3]
-        D = [d for d in D if d[0] == "tape"] + [(src, sx, sy, min(150, round(w * 1.4)), rot) for (src, _, _, w, rot), (sx, sy) in zip(decos, spots)]
+        D = [d for d in D if d[0] == "tape"] + [(src, sx, sy, min(130, round(w * 1.2)), rot) for (src, _, _, w, rot), (sx, sy) in zip(decos, spots)]
     for k, (src, x, y, w, rot) in enumerate(D):
         tt = t9 + k * 0.12
         out.append(dict(k="tape", t=tt, x=x, y=y, w=w, rot=rot) if src == "tape" else dict(k="deco", src=src, t=tt, x=x, y=y, w=w, rot=rot))
@@ -128,7 +128,7 @@ def scene(s, e, *items):
         d["t"] = max(d["t"], a["t"] + 0.25)
     return {"kind": "pics", "s": s, "e": e, "items": items}
 
-HT3 = {"text": "3 вещи", "size": 140, "y": 14, "sub": "[ что я сделала с телефоном ]"}
+HT3 = {"text": "3 вещи", "size": 140, "y": -190, "sub": "[ что я сделала с телефоном ]"}
 R3 = dict(id="r3", title="", hook_end="всех", layout="stack",
   hook={"small": "", "big": ""}, hook_text={**HT3, "color": "#7FF0DD", "stroke": "ink"},
   cta=["Какой попробуешь первым?", "Пиши номер"],
@@ -182,7 +182,7 @@ R3 = dict(id="r3", title="", hook_end="всех", layout="stack",
       ran2("КАЙФА НЕТ", at("я поняла"), 540, 1830, 58), DCO("d_eye_bolt", at("я поняла"), 900, 1700, 110, 6)),
   ])
 
-HT4 = {"text": "3 привычки", "size": 120, "y": 18, "sub": "[ нейробиология: мотивация и дофамин ]"}
+HT4 = {"text": "3 привычки", "size": 120, "y": -170, "sub": "[ нейробиология: мотивация и дофамин ]"}
 R4 = dict(id="r4", title="", hook_end="жизнь", layout="stack",
   hook={"small": "", "big": ""}, hook_text={**HT4, "color": "#FFB3D9", "stroke": "ink"},
   cta=["Сохрани и выбери", "одну на неделю"],
@@ -244,7 +244,7 @@ R4 = dict(id="r4", title="", hook_end="жизнь", layout="stack",
       lab2("вторые — быстрее!", at("вторые"), 540, 1780, 52, -2, bg="yellow", v="marker"), DCO("d_coffee", at("фактически"), 540, 1640, 110, 0)),
   ])
 
-HT5 = {"text": "3 мифа", "size": 140, "y": 14, "sub": "[ о мозге, в которые ты веришь ]"}
+HT5 = {"text": "3 мифа", "size": 140, "y": -190, "sub": "[ о мозге, в которые ты веришь ]"}
 R5 = dict(id="r5", title="", hook_end="пор", layout="stack",
   hook={"small": "", "big": ""}, hook_text={**HT5, "color": "#FFE14D", "stroke": "ink"},
   cta=["Теперь ты знаешь больше,", "чем пол-интернета"],

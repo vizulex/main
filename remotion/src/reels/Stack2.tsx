@@ -25,7 +25,7 @@ const HookText: React.FC<{r: R; f: number}> = ({r, f}) => {
   return <div style={{position: "absolute", left: 0, right: 0, top: h.y ?? 300, textAlign: "center", opacity: Math.min(1, p * 1.4), transform: `scale(${0.85 + 0.15 * p})`}}>
     <div style={{fontFamily: h.font === "mono" ? MONO : h.font === "pf" ? PF : G, fontWeight: 800, fontStyle: h.font === "pf" ? "italic" : "normal", fontSize: h.size ?? 150, lineHeight: 0.95,
       color: col(h.color), letterSpacing: "-0.02em", textShadow: "0 6px 24px rgba(30,26,46,.25)", WebkitTextStroke: h.stroke ? `3px ${col(h.stroke)}` : undefined, paintOrder: "stroke fill", whiteSpace: "pre-line"}}>{h.text}</div>
-    {h.sub && <div style={{marginTop: 14, fontFamily: G, fontWeight: 600, fontSize: 40, color: col(h.subColor ?? "#fff"), textShadow: "0 2px 10px rgba(0,0,0,.35)"}}>{h.sub}</div>}
+    {h.sub && <div style={{marginTop: 10}}><span style={{display: "inline-block", fontFamily: G, fontWeight: 600, fontSize: 38, color: P.ink, background: "#fff", padding: "4px 18px", borderRadius: 10, boxShadow: "0 4px 14px rgba(30,26,46,.15)"}}>{h.sub}</span></div>}
   </div>;
 };
 
@@ -43,7 +43,6 @@ const Band: React.FC<{r: R; f: number; noMatte?: boolean}> = ({r, f, noMatte}) =
           <Sequence key={i} from={fr(sg.at)} durationInFrames={Math.max(1, fr(sg.e - sg.s))} layout="none">{vid(fr(sg.s))}</Sequence>
         ))}
       </div>
-      <HookText r={r} f={f} />
       {!noMatte && <div style={{position: "absolute", left: W / 2 - FACE.x * S, top: BH / 2 - FACE.y * S + (z - 1) * 120, width: 1920, height: 1080, transform: `scale(${S})`, transformOrigin: "0 0"}}>
         {(r.matte as number[][]).map(([a, b], k) => (
           <Sequence key={k} from={fr(a)} durationInFrames={Math.max(1, fr(b) - fr(a))} layout="none">
@@ -169,6 +168,7 @@ export const Stack2: React.FC<{r: R; f: number; noMatte?: boolean}> = ({r, f, no
       {gfx.filter((g) => g.kind === "pics" && !g.under && t >= g.s - 0.2 && t <= g.e + 0.3).map((g, i) => <React.Fragment key={"p" + i}>{g.items.map((it: any, j: number) =>
         <Item key={j} f={f} it={it} e={it.k === "label" || it.k === "text" ? Math.min(fr(g.e), fr(r.dur - 2.7)) : fr(g.e)} />)}</React.Fragment>)}
       {gfx.filter((g) => g.kind === "blurlist" && t >= g.s - 0.2).map((g, i) => <List key={"l" + i} f={f} g={{...g, timer: !!r.timer}} />)}
+      <div style={{position: "absolute", left: 0, right: 0, top: BY}}><HookText r={r} f={f} /></div>
       <Timer r={r} f={f} />
       <Captions r={r} f={f} />
       <Cta r={r} f={f} />
