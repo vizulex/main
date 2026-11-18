@@ -54,13 +54,24 @@ def sfx_track(r, N):
             P(SFX.scribble(0.5), g["tg"], 0.07)
         if k == "loops": P(SFX.shimmer(), s, 0.05)
         if k == "plan": P(SFX.scribble(0.3), g["t1"], 0.07); P(SFX.pop(), g["t2"], 0.07); P(SFX.ding(), g["t3"], 0.05)
+        if g.get("mode") and k not in ("planreal", "dablin", "tradeoff", "attn", "hellyes", "checklist", "loops", "plan"):  # коллаж рилсов 2-го выпуска
+            P(SFX.whoosh(0.4), s - 0.12, 0.1); P(SFX.whoosh(0.3), e - 0.25, 0.05)
+            for it in g.get("items", []):
+                if it.get("k") == "strike": P(SFX.scribble(0.3), it["t"], 0.06)
+                elif it.get("k") == "ransom":
+                    for j in range(min(6, len(it["text"]))): P(SFX.click(), it["t"] + j * 2 * F, 0.04)
+                else: P(SFX.pop(), it["t"], 0.07)
+            for row in g.get("rows", []):
+                P(SFX.typing(1.2) if g.get("scene") == "typewriter" else SFX.scribble(0.4), row["t"], 0.06)
+                if row.get("ck") is not None: P(SFX.pop(), row["ck"], 0.07)
     P(SFX.pop(), r["dur"] - 2.6, 0.07)
     return o
 
 def main(voice_p, data_p, out_dir):
-    v, sr = sf.read(voice_p, dtype="float64"); assert sr == SR
     meter = pyln.Meter(SR)
     for r in json.load(open(data_p)):
+        v, sr = sf.read(voice_p.replace("{id}", r["id"]), dtype="float64"); assert sr == SR  # {id} — у каждого рилса свой голос
+        if v.ndim > 1: v = v.mean(1)
         N = int(np.ceil(r["dur"] * 30) / 30 * SR)
         vo = voice_track(v, r, N); vo *= 10 ** ((-17 - meter.integrated_loudness(vo)) / 20)
         mix = vo + sfx_track(r, N)  # без фоновой музыки: только голос и эффекты

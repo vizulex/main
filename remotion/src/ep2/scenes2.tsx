@@ -10,12 +10,12 @@ const TYPE = loadPTMono("normal", {weights: ["400"], subsets: ["cyrillic", "lati
 type G = {kind: string; s: number; e: number; items?: any[]; [k: string]: any};
 export const FULLSCREEN = new Set<string>();
 
-const Item: React.FC<{f: number; it: any; e: number}> = ({f, it, e}) => {
+export const Item: React.FC<{f: number; it: any; e: number}> = ({f, it, e}) => {
   const s = fr(it.t), ee = fr(it.e ?? e);
   switch (it.k) {
     case "cut": return <Cut f={f} s={s} e={ee} src={it.src} x={it.x} y={it.y} w={it.w} rot={it.rot ?? 0} />;
     case "label": return <Label f={f} s={s} e={ee} text={it.text} x={it.x} y={it.y} size={it.size ?? 54} rot={it.rot ?? -3} bg={it.bg ? (P as any)[it.bg] ?? it.bg : P.paper}
-      color={it.color ? (P as any)[it.color] ?? it.color : P.ink} font={({hand: HAND, amatic: AMATIC, mono: MONO, pf: PF, osw: OSW} as any)[it.font ?? "hand"]} tape={it.tape ?? true} maxW={it.maxW ?? 760} />;
+      color={it.color ? (P as any)[it.color] ?? it.color : P.ink} font={({hand: HAND, amatic: AMATIC, mono: MONO, pf: PF, osw: OSW} as any)[it.font ?? "hand"]} tape={it.tape ?? true} maxW={it.maxW ?? 760} v={it.v} />;
     case "ransom": return <Ransom f={f} s={s} e={ee} text={it.text} x={it.x} y={it.y} size={it.size ?? 110} rot={it.rot ?? -2} />;
     case "digits": return <Digits f={f} s={s} e={ee} value={it.value} x={it.x} y={it.y} h={it.h ?? 220} rot={it.rot ?? -3} />;
     case "hourglass": return <Hourglass f={f} s={s} e={ee} x={it.x} y={it.y} w={it.w ?? 200} />;
@@ -36,6 +36,16 @@ const Item: React.FC<{f: number; it: any; e: number}> = ({f, it, e}) => {
       return <div style={{position: "absolute", left: it.x, top: it.y, transform: `translate(-50%,-50%) rotate(${it.rot ?? -2}deg) scale(${pp.sc})`, opacity: pp.o, fontFamily: ({u: U, pf: PF, osw: OSW, mono: MONO, amatic: AMATIC, hand: HAND} as any)[it.font ?? "u"],
         fontWeight: 800, fontSize: it.size ?? 120, lineHeight: 1, color: it.color ? (P as any)[it.color] ?? it.color : P.ink, textAlign: "center", whiteSpace: "pre-line", fontStyle: it.font === "pf" ? "italic" : "normal",
         textShadow: it.shadow === false ? "none" : "4px 6px 0 rgba(30,26,46,.18)"}}>{it.text}</div>;
+    }
+    case "bar": { // полоска-шкала с подписью (для рилсов: «хочу» / «нравится»)
+      const pp = pop(f, s, ee, it.text); if (!pp) return null;
+      const w = L(f, s + 4, s + 22, 0, it.val ?? 100, Easing.out(Easing.cubic));
+      return <div style={{position: "absolute", left: it.x, top: it.y, opacity: pp.o, transform: `rotate(${it.rot ?? -1.5}deg) scale(${pp.sc})`, transformOrigin: "0 50%"}}>
+        <div style={{fontFamily: HAND, fontSize: it.size ?? 56, color: P.ink, marginBottom: 6}}>{it.text}</div>
+        <div style={{width: it.w ?? 700, height: 62, background: "#fff", border: `5px solid ${P.ink}`, borderRadius: 12, overflow: "hidden", filter: shadow}}>
+          <div style={{width: `${w}%`, height: "100%", background: it.color ? (P as any)[it.color] ?? it.color : P.red}} />
+        </div>
+      </div>;
     }
     default: return null;
   }

@@ -8,7 +8,7 @@ from PIL import Image, ImageFilter
 from rembg import remove, new_session
 
 CROP = (660, 0, 600, 1080)
-INTRO_LEN = 15
+INTRO_LEN = float(os.environ.get("REELS_INTRO", 15))  # для рилсов 2-го выпуска: 0 (у каждого свой исходник r.src)
 fr = lambda t: int(round(t * 30))
 
 def src_index(r, f):
@@ -50,7 +50,7 @@ def main(aroll, data_p, out_dir, tmp, only=""):
             idx = [src_index(r, f) for f in range(f0, f1)]
             need = sorted(set(i for i in idx if i not in cache))
             if need:
-                for i, im in extract(aroll, need, tmp).items():
+                for i, im in extract(os.path.join("public", r["src"]) if r.get("src") else aroll, need, tmp).items():
                     m = remove(im, session=sess, only_mask=True).convert("L")
                     m = m.filter(ImageFilter.MinFilter(3)).filter(ImageFilter.GaussianBlur(1.6))
                     rgba = im.copy(); rgba.putalpha(m); cache[i] = rgba

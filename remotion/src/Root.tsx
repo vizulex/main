@@ -5,6 +5,8 @@ import { Episode } from "./episode/Episode";
 import ep1 from "./episode/data/ep1.json";
 import {Reel} from "./reels/Reel";
 import reels from "./reels/data/reels.json";
+import {Reel2} from "./reels/Reel2";
+import reels2 from "./reels/data/reels2.json";
 import {Ep2} from "./ep2/Ep2";
 import ep2 from "./ep2/data/ep2.json";
 
@@ -23,6 +25,10 @@ export const Root = () => (
     {/* Рилсы из эпизода 1: 1080×1920, таймлайн и графика в reels/data/reels.json */}
     {reels.map((r) => (
       <Composition key={r.id} id={`Reel-${r.id}`} component={Reel} durationInFrames={Math.ceil(r.dur * 30)} fps={30} width={1080} height={1920} defaultProps={{id: r.id}} />
+    ))}
+    {/* Рилсы 2-го выпуска: исходники public/ep2r (не в git) */}
+    {reels2.map((r) => (
+      <Composition key={r.id} id={`Reel2-${r.id}`} component={Reel2} durationInFrames={Math.ceil(r.dur * 30)} fps={30} width={1080} height={1920} defaultProps={{id: r.id}} />
     ))}
   </>
 );
