@@ -128,7 +128,7 @@ def scene(s, e, *items):
         d["t"] = max(d["t"], a["t"] + 0.25)
     return {"kind": "pics", "s": s, "e": e, "items": items}
 
-HT3 = {"text": "3 вещи", "size": 140, "y": -190, "sub": "[ что я сделала с телефоном ]"}
+HT3 = {"text": "3 вещи", "size": 140, "y": 14, "sub": "[ что я сделала с телефоном ]"}
 R3 = dict(id="r3", title="", hook_end="всех", layout="stack",
   hook={"small": "", "big": ""}, hook_text={**HT3, "color": "#7FF0DD", "stroke": "ink"},
   cta=["Какой попробуешь первым?", "Пиши номер"],
@@ -182,7 +182,7 @@ R3 = dict(id="r3", title="", hook_end="всех", layout="stack",
       ran2("КАЙФА НЕТ", at("я поняла"), 540, 1830, 58), DCO("d_eye_bolt", at("я поняла"), 900, 1700, 110, 6)),
   ])
 
-HT4 = {"text": "3 привычки", "size": 120, "y": -170, "sub": "[ нейробиология: мотивация и дофамин ]"}
+HT4 = {"text": "3 привычки", "size": 120, "y": 18, "sub": "[ нейробиология: мотивация и дофамин ]"}
 R4 = dict(id="r4", title="", hook_end="жизнь", layout="stack",
   hook={"small": "", "big": ""}, hook_text={**HT4, "color": "#FFB3D9", "stroke": "ink"},
   cta=["Сохрани и выбери", "одну на неделю"],
@@ -244,7 +244,7 @@ R4 = dict(id="r4", title="", hook_end="жизнь", layout="stack",
       lab2("вторые — быстрее!", at("вторые"), 540, 1780, 52, -2, bg="yellow", v="marker"), DCO("d_coffee", at("фактически"), 540, 1640, 110, 0)),
   ])
 
-HT5 = {"text": "3 мифа", "size": 140, "y": -190, "sub": "[ о мозге, в которые ты веришь ]"}
+HT5 = {"text": "3 мифа", "size": 140, "y": 14, "sub": "[ о мозге, в которые ты веришь ]"}
 R5 = dict(id="r5", title="", hook_end="пор", layout="stack",
   hook={"small": "", "big": ""}, hook_text={**HT5, "color": "#FFE14D", "stroke": "ink"},
   cta=["Теперь ты знаешь больше,", "чем пол-интернета"],

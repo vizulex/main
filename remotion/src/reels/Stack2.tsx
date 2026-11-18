@@ -25,7 +25,7 @@ const HookText: React.FC<{r: R; f: number}> = ({r, f}) => {
   return <div style={{position: "absolute", left: 0, right: 0, top: h.y ?? 300, textAlign: "center", opacity: Math.min(1, p * 1.4), transform: `scale(${0.85 + 0.15 * p})`}}>
     <div style={{fontFamily: h.font === "mono" ? MONO : h.font === "pf" ? PF : G, fontWeight: 800, fontStyle: h.font === "pf" ? "italic" : "normal", fontSize: h.size ?? 150, lineHeight: 0.95,
       color: col(h.color), letterSpacing: "-0.02em", textShadow: "0 6px 24px rgba(30,26,46,.25)", WebkitTextStroke: h.stroke ? `3px ${col(h.stroke)}` : undefined, paintOrder: "stroke fill", whiteSpace: "pre-line"}}>{h.text}</div>
-    {h.sub && <div style={{marginTop: 10}}><span style={{display: "inline-block", fontFamily: G, fontWeight: 600, fontSize: 38, color: P.ink, background: "#fff", padding: "4px 18px", borderRadius: 10, boxShadow: "0 4px 14px rgba(30,26,46,.15)"}}>{h.sub}</span></div>}
+    {h.sub && <div style={{marginTop: 10, fontFamily: G, fontWeight: 600, fontSize: 40, color: "#fff", textShadow: "0 2px 10px rgba(0,0,0,.45)"}}>{h.sub}</div>}
   </div>;
 };
 
