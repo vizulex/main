@@ -26,6 +26,10 @@ def sfx_track(r, N):
         k, s, e = g["kind"], g["s"], g["e"]
         if k in ("planreal", "dablin", "tradeoff", "attn", "hellyes", "checklist", "loops", "plan"):
             P(SFX.whoosh(0.4), s - 0.12, 0.12); P(SFX.whoosh(0.3), e - 0.25, 0.06)
+        if k == "pics":  # коллаж из картинок (рилсы-списки 2-го выпуска)
+            for it in g["items"]:
+                if it.get("k") == "text": P(SFX.whoosh(0.4), it["t"] - 0.1, 0.07)
+                else: P(SFX.pop(), it["t"], 0.05)
         if k == "blurlist":
             for it in g["items"]: P(SFX.whoosh(0.3), it["t"] - 0.08, 0.06); P(SFX.pop(), it["t"] + 0.1, 0.07)
             for st in g.get("stamps", []): P(SFX.stamp(), st + 0.05, 0.18)

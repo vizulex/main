@@ -164,9 +164,9 @@ def build(cfg):
     he = cfg["hook_end"]; hook_end = round(at_(he, end=True) + 0.15, 3) if isinstance(he, str) else he
     gfx = cfg["gfx"](at_)
     zoom = [[sg["at"], 1.22 if i % 2 == 0 else 1.4] for i, sg in enumerate(segs)]
-    matte = [[0.0, hook_end + 0.1]] + [[max(0, g["s"] - 0.15), g["e"] + 0.15] for g in gfx if g["kind"] == "bt"]
+    matte = [] if cfg.get("layout") == "stack" else [[0.0, hook_end + 0.1]] + [[max(0, g["s"] - 0.15), g["e"] + 0.15] for g in gfx if g["kind"] == "bt"]
     if MEDIA: media(cfg["id"], segs)
-    return {"id": cfg["id"], "dur": round(dur, 3), "lead": LEAD, "speed": round(dur / cfg["fit_to"], 4) if cfg.get("fit_to") else 1.0, "src": f"ep2r/{cfg['id']}.mp4",
+    return {"id": cfg["id"], "dur": round(dur, 3), "lead": LEAD, "layout": cfg.get("layout", "full"), "speed": round(dur / cfg["fit_to"], 4) if cfg.get("fit_to") else 1.0, "src": f"ep2r/{cfg['id']}.mp4",
             "segs": [{"s": round(sg["at"] - LEAD, 4), "e": round(sg["at"] - LEAD + sg["n"] / 30, 4), "at": sg["at"]} for sg in segs],
             "matte": [[round(a, 2), round(min(b, dur), 2)] for a, b in matte], "hook_end": hook_end, "title": cfg["title"], "hook": cfg["hook"],
             "cta": cfg["cta"], "timer": cfg.get("timer", False), "caps": caps, "gfx": gfx, "zoom": zoom, "punch": [], "words": words}

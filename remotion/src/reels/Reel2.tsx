@@ -6,6 +6,7 @@ import {Gx} from "./scenes";
 import {Paper} from "../ep2/collage";
 import {Item, Scene} from "../ep2/scenes2";
 import reels from "./data/reels2.json";
+import {Stack2} from "./Stack2";
 
 /* Рилсы 2-го выпуска (копия Reel.tsx: исходник у каждого рилса свой, графика — коллаж из ep2).
    Вертикальный рилс 1080×1920. Стиль по примерам: спокойные мелкие субтитры, крупные слова ЗА мной
@@ -269,6 +270,7 @@ const Cta: React.FC<{r: R; f: number; split?: boolean}> = ({r, f, split}) => {
 export const Reel2: React.FC<{id: string; noMatte?: boolean}> = ({id, noMatte}) => {
   const f = useCurrentFrame();
   const r = reels.find((x) => x.id === id)!;
+  if ((r as any).layout === "stack") return <Stack2 r={r} f={f} />;
   const t = f / 30;
   const gfx = r.gfx as Gx[];
   const sc = sceneAt(r, f);
