@@ -119,8 +119,31 @@ const Chip: React.FC<{children: React.ReactNode; style?: React.CSSProperties}> =
 const Overlay: React.FC<{g: Gx; f: number}> = ({g, f}) => {
   const s = fr(g.s), e = fr(g.e);
   switch (g.kind) {
+    case "blurlist": { // список: все пункты видны сразу, но размыты; открываются, когда я про них говорю (+ штамп «МИФ»)
+      const pin = L(f, s, s + 8, 0, 1, Easing.out(Easing.cubic));
+      return (
+        <div style={{position: "absolute", top: g.top ?? 250, left: g.stamps ? 40 : 50, right: 40, opacity: pin, transform: `translateY(${(1 - pin) * -20}px)`}}>
+          <div style={{display: "inline-block", background: C.ink, color: "#fff", fontFamily: G, fontWeight: 800, fontSize: 40, lineHeight: 1.15, padding: "12px 24px", borderRadius: 14, marginBottom: 16, maxWidth: 940}}>{g.head}</div>
+          {g.items.map((it: any, i: number) => {
+            const at = fr(it.t), open = L(f, at, at + 8, 0, 1, Easing.out(Easing.cubic));
+            const st = g.stamps ? fr(g.stamps[i]) : null;
+            const sp = st !== null && f >= st ? Math.min(1, (f - st) / 5) : 0;
+            return (
+              <div key={i} style={{position: "relative", marginBottom: 14, paddingLeft: g.stamps ? 150 : 0}}>
+                <div style={{display: "inline-block", background: "rgba(255,255,255,.94)", color: C.ink, fontFamily: G, fontWeight: 700, fontSize: 38, lineHeight: 1.2,
+                  padding: "10px 22px", borderRadius: 14, boxShadow: "0 8px 26px rgba(20,16,40,.22)", maxWidth: 940,
+                  filter: `blur(${(1 - open) * 11}px)`, transform: `scale(${1 + 0.05 * Math.sin(open * Math.PI)})`, transformOrigin: "0 50%"}}>{it.text}</div>
+                {sp > 0 && <div style={{position: "absolute", left: 0, top: 2, transform: `rotate(-12deg) scale(${2.2 - 1.2 * sp})`, opacity: sp,
+                  border: `5px solid ${C.mandarin}`, color: C.mandarin, fontFamily: U, fontWeight: 900, fontSize: 38, padding: "0 12px", borderRadius: 10, background: "rgba(255,255,255,.85)", letterSpacing: "0.06em"}}>МИФ</div>}
+                {sp > 0 && <div style={{position: "absolute", left: 160, right: 0, top: "52%", height: 5, background: C.mandarin, borderRadius: 3, transformOrigin: "0 50%", transform: `scaleX(${sp * 0.9})`, opacity: 0.85}} />}
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
     case "chips": return (
-      <div style={{position: "absolute", top: 420, left: 40, right: 40, display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 18}}>
+      <div style={{position: "absolute", top: g.y ?? 420, left: 40, right: 40, display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 18}}>
         {g.items.map((it: any, i: number) => <Appear key={i} f={f} s={fr(it.t)} e={e} mode="up"><Chip>{it.text}</Chip></Appear>)}
       </div>
     );
@@ -173,7 +196,7 @@ const Overlay: React.FC<{g: Gx; f: number}> = ({g, f}) => {
 
 const Title: React.FC<{r: R; f: number; left: boolean}> = ({r, f, left}) => {
   const s = fr(r.hook_end);
-  if (f < s) return null;
+  if (f < s || !r.title) return null;
   const p = L(f, s, s + 10, 0, 1, Easing.out(Easing.cubic));
   return (
     <div style={{position: "absolute", top: 170, left: left ? 50 : 0, width: left ? 620 : 1080, display: "flex", justifyContent: left ? "flex-start" : "center", opacity: p, transform: `translateY(${(1 - p) * -16}px)`}}>
@@ -186,14 +209,15 @@ const Title: React.FC<{r: R; f: number; left: boolean}> = ({r, f, left}) => {
 
 const Timer: React.FC<{r: R; f: number}> = ({r, f}) => {
   if (!r.timer) return null;
-  const t = f / 30 / r.speed, sec = Math.min(47, Math.floor(t)), p = Math.min(1, t / 47);
+  const T = typeof r.timer === "number" ? r.timer : 47;  // число — обратный отсчёт от T до 0
+  const t = f / 30 / r.speed, sec = typeof r.timer === "number" ? Math.max(0, Math.ceil(T - t)) : Math.min(47, Math.floor(t)), p = Math.min(1, t / T);
   const R0 = 62, circ = 2 * Math.PI * R0;
   return (
     <div style={{position: "absolute", right: 50, top: 150, width: 150, height: 150}}>
       <svg width={150} height={150} style={{position: "absolute"}}>
         <circle cx={75} cy={75} r={72} fill="rgba(20,16,40,.5)" />
         <circle cx={75} cy={75} r={R0} fill="none" stroke="rgba(255,255,255,.2)" strokeWidth={6} />
-        <circle cx={75} cy={75} r={R0} fill="none" stroke={sec >= 40 ? C.mandarin : "#fff"} strokeWidth={6} strokeLinecap="round" strokeDasharray={circ} strokeDashoffset={circ * (1 - p)} transform="rotate(-90 75 75)" />
+        <circle cx={75} cy={75} r={R0} fill="none" stroke={(typeof r.timer === "number" ? sec <= 5 : sec >= 40) ? C.mandarin : "#fff"} strokeWidth={6} strokeLinecap="round" strokeDasharray={circ} strokeDashoffset={circ * (1 - p)} transform="rotate(-90 75 75)" />
       </svg>
       <div style={{position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: G, fontWeight: 700, fontSize: 50, color: "#fff"}}>{sec}<span style={{fontSize: 24, marginLeft: 3, marginTop: 14}}>с</span></div>
     </div>

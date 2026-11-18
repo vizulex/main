@@ -21,11 +21,14 @@ def sfx_track(r, N):
     o = np.zeros(N); P = lambda x, t, g: place(o, x, t, g)
     P(SFX.whoosh(0.5), 0.0, 0.035)
     if r["timer"]:
-        for s in range(1, 48): P(SFX.click(), s * r["speed"], 0.035)
+        for s in range(1, 48 if r["timer"] is True else int(r["timer"]) + 1): P(SFX.click(), s * r["speed"], 0.03)
     for g in r["gfx"]:
         k, s, e = g["kind"], g["s"], g["e"]
         if k in ("planreal", "dablin", "tradeoff", "attn", "hellyes", "checklist", "loops", "plan"):
             P(SFX.whoosh(0.4), s - 0.12, 0.12); P(SFX.whoosh(0.3), e - 0.25, 0.06)
+        if k == "blurlist":
+            for it in g["items"]: P(SFX.whoosh(0.3), it["t"] - 0.08, 0.06); P(SFX.pop(), it["t"] + 0.1, 0.07)
+            for st in g.get("stamps", []): P(SFX.stamp(), st + 0.05, 0.18)
         if k == "chips":
             for it in g["items"]: P(SFX.pop(), it["t"], 0.08)
         if k == "kinetic":

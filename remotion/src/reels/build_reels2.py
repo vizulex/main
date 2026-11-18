@@ -121,7 +121,7 @@ def build(cfg):
             at += n / 30
         for w in (EPW[0] if p[0] == "ep" else []):
             rs, re_ = f2r(w["s"] + 0.01), f2r(max(w["s"] + 0.02, w["e"] - 0.01))
-            sg = next((x for x in segs[seg0:] if rs is not None and x["rs"] - (1.2 if x is segs[seg0] else 0.05) <= rs < x["re"] + (0.3 if x is segs[-1] else 0)), None)
+            sg = next((x for x in segs[seg0:] if rs is not None and x["rs"] - (2.5 if x is segs[seg0] else 0.05) <= rs < x["re"] + (0.3 if x is segs[-1] else 0)), None)
             if not sg: continue
             st = sg["at"] + max(0, rs - sg["rs"]); en = sg["at"] + min(sg["n"] / 30, (re_ or rs) - sg["rs"]) if re_ and sg["rs"] <= re_ <= sg["re"] else st + (w["e"] - w["s"])
             words.append({"w": w["w"].strip(), "s": round(st, 3), "e": round(max(en, st + 0.05), 3)})
@@ -166,10 +166,10 @@ def build(cfg):
     zoom = [[sg["at"], 1.22 if i % 2 == 0 else 1.4] for i, sg in enumerate(segs)]
     matte = [[0.0, hook_end + 0.1]] + [[max(0, g["s"] - 0.15), g["e"] + 0.15] for g in gfx if g["kind"] == "bt"]
     if MEDIA: media(cfg["id"], segs)
-    return {"id": cfg["id"], "dur": round(dur, 3), "lead": LEAD, "speed": 1.0, "src": f"ep2r/{cfg['id']}.mp4",
+    return {"id": cfg["id"], "dur": round(dur, 3), "lead": LEAD, "speed": round(dur / cfg["fit_to"], 4) if cfg.get("fit_to") else 1.0, "src": f"ep2r/{cfg['id']}.mp4",
             "segs": [{"s": round(sg["at"] - LEAD, 4), "e": round(sg["at"] - LEAD + sg["n"] / 30, 4), "at": sg["at"]} for sg in segs],
             "matte": [[round(a, 2), round(min(b, dur), 2)] for a, b in matte], "hook_end": hook_end, "title": cfg["title"], "hook": cfg["hook"],
-            "cta": cfg["cta"], "timer": False, "caps": caps, "gfx": gfx, "zoom": zoom, "punch": [], "words": words}
+            "cta": cfg["cta"], "timer": cfg.get("timer", False), "caps": caps, "gfx": gfx, "zoom": zoom, "punch": [], "words": words}
 
 def media(rid, segs):
     """Видео: куски сырого MOV (тонмаппинг HLG→SDR) подряд; голос: те же куски из audio48k + обработка как в эпизоде."""
