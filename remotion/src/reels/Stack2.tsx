@@ -85,6 +85,13 @@ const Item: React.FC<{f: number; it: any; e: number}> = ({f, it, e}) => {
       color: col(it.color ?? "pink"), WebkitTextStroke: it.stroke === false ? undefined : `${it.sw ?? 3}px ${col(it.strokeColor ?? "ink")}`, paintOrder: "stroke fill", whiteSpace: "pre-line"}}>
       {it.bg ? <span style={{background: col(it.bg), padding: "2px 22px 8px", borderRadius: 10, boxShadow: "0 6px 18px rgba(30,26,46,.18)"}}>{it.text}</span> : it.text}</div>;
   }
+  if (it.k === "deco") { // маленький коллажный стикер (вырезан с белого фона)
+    const s0 = fr(it.t), ee = fr(it.e ?? e);
+    if (f < s0 || f > ee) return null;
+    const sp = SP(f, s0, 9, 220), out = L(f, ee - 6, ee, 1, 0);
+    return <Img src={staticFile(it.src)} style={{position: "absolute", left: it.x, top: it.y, width: it.w, opacity: Math.min(1, sp * 1.6) * out,
+      transform: `translate(-50%,-50%) rotate(${(it.rot ?? 0) + (1 - sp) * 25}deg) scale(${0.5 + 0.5 * sp})`, filter: "drop-shadow(2px 4px 3px rgba(30,26,46,.25))"}} />;
+  }
   if (["cut", "ransom", "digits", "strike", "hourglass", "clicker", "bar", "tape"].includes(it.k)) return <EpItem f={f} it={it} e={e} />;
   return <Pic f={f} it={it} e={e} />;
 };

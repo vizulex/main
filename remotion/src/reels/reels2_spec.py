@@ -74,12 +74,16 @@ def mosaic(imgs, he, deco="a"):
     for k, ((src, kw), (x, y, w, h, rot)) in enumerate(list(zip(top, T)) + list(zip(bot, B))):
         out.append(pic(src, 0.1 + k * 0.22, x, y, w, h, rot, frame=True, **kw))
     t9 = 0.1 + len(out) * 0.22
-    D = {"a": [("tape", 225, 85, 120, -8), ("elements_00.png", 960, 545, 70, 0)],
-         "b": [("tape", 840, 70, 110, 8), ("elements_05.png", 110, 1340, 70, -10)],
-         "c": [("tape", 220, 82, 120, -6), ("elements_11.png", 980, 1340, 75, 12)]}[deco]
+    DC = lambda n: f"ep2r/deco/{n}.png"
+    D = {"a": [("tape", 225, 85, 120, -8), (DC("d_star_glitter"), 40, 520, 95, -12), (DC("d_camera"), 655, 130, 110, 8),
+               (DC("d_eye_bolt"), 905, 1520, 130, -6), (DC("d_pin_wood"), 300, 1372, 60, 10)],
+         "b": [("tape", 840, 70, 110, 8), (DC("d_star_blue"), 40, 510, 100, 10), (DC("d_coffee"), 1025, 470, 105, 0),
+               (DC("d_sudoku"), 900, 1560, 140, -8), (DC("d_star_yellow"), 85, 1720, 95, 14)],
+         "c": [("tape", 220, 82, 120, -6), (DC("d_burst_pink"), 655, 120, 100, -8), (DC("d_star_black"), 40, 520, 100, 6),
+               (DC("d_lips"), 85, 1720, 115, -10), (DC("d_head_birds"), 900, 1560, 140, 4)]}[deco]
     for k, (src, x, y, w, rot) in enumerate(D):
         tt = t9 + k * 0.12
-        out.append(dict(k="tape", t=tt, x=x, y=y, w=w, rot=rot) if src == "tape" else cutc(src, tt, x, y, w, rot))
+        out.append(dict(k="tape", t=tt, x=x, y=y, w=w, rot=rot) if src == "tape" else dict(k="deco", src=src, t=tt, x=x, y=y, w=w, rot=rot))
     return {"kind": "pics", "s": 0, "e": he + 0.2, "items": out}
 def scene(s, e, *items): return {"kind": "pics", "s": s, "e": e, "items": list(items)}
 
