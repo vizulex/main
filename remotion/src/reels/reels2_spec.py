@@ -15,8 +15,8 @@ R1 = dict(id="r1", title="Дофамин — не про удовольстви�
           ("ep", "дофамин это не кайф", "и иду", 494), ("ep", "потому что хочу у нас", "нуле", 520)],
   fix=[("То Вкус", "Вкус"), ("Пилминтера,", "Палмитера,")],
   gfx=lambda at: [
-    {"kind": "decos", "s": 0, "e": at("удовольствие", end=True) + 0.2, "items": [DCO("d_star_black", 0.3, 110, 700, 100, -8),
-      DCO("d_eye_bolt", 0.5, 960, 660, 130, 6), DCO("d_burst_pink", 0.7, 950, 1260, 90, 10)]},
+    {"kind": "decos", "s": 0, "e": at("удовольствие", end=True) + 0.2, "items": [DCO("d_star_black", 0.5, 120, 320, 140, -8),
+      DCO("d_eye_bolt", 0.7, 970, 490, 160, 6), DCO("d_burst_pink", 0.9, 880, 228, 110, 10)]},
     {"kind": "chips", "s": at("сейчас я докажу"), "e": at("в лабораториях"), "items": [chip(at("про мышей"), "эксперимент на мышах")]},
     {"kind": "mice", "mode": "split", "bg": "grid", "s": at("в лабораториях"), "e": at("сил хотеть", end=True) + 0.4, "items": [
       lab("мыши без дофамина", at("вывели мышей"), 540, 40, 50, -2, bg="yellow"),
@@ -39,8 +39,8 @@ R2 = dict(id="r2", title="Самый быстрый глоуап", hook_end="з�
           ("ep", "психологии есть принцип", "сладкое", 1090), ("ep", "что делаешь охотно", "с трудом", 1100),
           ("ep", "первые 25 минут", "твою работу", 1125), ("ep", "и также ставь", "10 минут", 1135)],
   gfx=lambda at: [
-    {"kind": "decos", "s": 0, "e": at("заранее", end=True) + 0.2, "items": [DCO("d_star_yellow", 0.3, 110, 690, 100, 10),
-      DCO("d_coffee", 0.5, 960, 650, 120, 0), DCO("d_sudoku", 0.7, 940, 1260, 140, -8)]},
+    {"kind": "decos", "s": 0, "e": at("заранее", end=True) + 0.2, "items": [DCO("d_star_yellow", 0.5, 120, 330, 130, 10),
+      DCO("d_coffee", 0.7, 975, 490, 150, 0), DCO("d_sudoku", 0.9, 940, 175, 140, -8)]},
     {"kind": "before", "mode": "split", "bg": "grid", "s": at("представьте"), "e": at("вашей задачей", end=True) + 0.3, "items": [
       cut("hands_laptop.png", at("садитесь за"), 280, 180, 400, -3), lab("сажусь учиться", at("садитесь за") + 0.3, 280, 400, 44, 3),
       cut("phone_hand.png", at("открываете рилсы"), 790, 190, 290, 6), lab("«5 минуточек»", at("пять минут"), 790, 410, 46, -3, bg="pink"),
@@ -70,7 +70,7 @@ def cutc(src, t, x, y, w, rot=0): return dict(k="cut", src=src, t=t, x=x, y=y, w
 def dig(value, t, x, y, h=170, rot=-3): return dict(k="digits", value=value, t=t, x=x, y=y, h=h, rot=rot)
 def ran2(text, t, x, y, size=64): return dict(k="ransom", text=text, t=t, x=x, y=y, size=size)
 def strk(t, x, y, w, rot=-3): return dict(k="strike", t=t, x=x, y=y, w=w, rot=rot)
-def mosaic(imgs, he, deco="a"):
+def mosaic(imgs, he, deco="a", ht=None):
     """первый экран: пара разных картинок сверху и пара снизу (без повторов), разного размера, внахлёст, + декор"""
     T = [(60, 80, 330, 400, -4), (350, 230, 280, 280, 4), (690, 60, 300, 370, 5)]
     B = [(130, 1370, 400, 300, 3), (480, 1460, 300, 340, -5), (760, 1380, 280, 320, 4)]
@@ -86,11 +86,34 @@ def mosaic(imgs, he, deco="a"):
                (DC("d_sudoku"), 900, 1560, 140, -8), (DC("d_star_yellow"), 85, 1720, 95, 14)],
          "c": [("tape", 220, 82, 120, -6), (DC("d_burst_pink"), 655, 120, 100, -8), (DC("d_star_black"), 40, 520, 100, 6),
                (DC("d_lips"), 85, 1720, 115, -10), (DC("d_head_birds"), 900, 1560, 140, 4)]}[deco]
+    if ht:  # стикеры — к хуку на кадре: у углов слова и в конце подстрочника, чуть залезая на текст
+        BY = 620; txt, size, hy, sub = ht["text"], ht.get("size", 150), ht.get("y", 300), ht.get("sub", "")
+        Wt = len(txt) * size * 0.56; Ws = len(sub) * 40 * 0.5
+        spots = [(540 - Wt / 2 + 6, BY + hy + 14), (540 + Wt / 2 - 6, BY + hy + size * 0.88), (540 + Ws / 2 + 10, BY + hy + size + 36)]
+        decos = [d for d in D if d[0] != "tape"][:3]
+        D = [d for d in D if d[0] == "tape"] + [(src, sx, sy, min(150, round(w * 1.4)), rot) for (src, _, _, w, rot), (sx, sy) in zip(decos, spots)]
     for k, (src, x, y, w, rot) in enumerate(D):
         tt = t9 + k * 0.12
         out.append(dict(k="tape", t=tt, x=x, y=y, w=w, rot=rot) if src == "tape" else dict(k="deco", src=src, t=tt, x=x, y=y, w=w, rot=rot))
     return {"kind": "pics", "s": 0, "e": he + 0.2, "items": out}
-def scene(s, e, *items): return {"kind": "pics", "s": s, "e": e, "items": list(items)}
+def _lab_box(it):
+    """примерные границы надписи (центр x,y; ширина/высота) — чтобы приклеить к ней стикер"""
+    size = it.get("size", 46); n = len(it.get("text", ""))
+    w = min(n * size * 0.5 + 60, 900); lines = max(1, round(n * size * 0.5 / 860 + 0.49))
+    return it["x"], it["y"], w, lines * size * 1.15 + 30
+def scene(s, e, *items):
+    """сцена коллажа; стикеры (deco) приклеиваются к углу надписи, чуть на неё залезая, и чуть крупнее"""
+    items = list(items)
+    labs = [it for it in items if it.get("k") in ("label", "ransom")]
+    for d in [it for it in items if it.get("k") == "deco"]:
+        if not labs: continue
+        a = labs[-1]; x, y, w, h = _lab_box(a) if a["k"] == "label" else (a["x"], a["y"], len(a["text"]) * a.get("size", 64) * 0.8, a.get("size", 64) * 1.2)
+        d["w"] = min(170, round(d["w"] * 1.45))
+        right = x + w / 2 - 12
+        d["x"] = right if right + d["w"] * 0.35 < 1060 else x - w / 2 + 12
+        d["y"] = y - h / 2 + 4
+        d["t"] = max(d["t"], a["t"] + 0.25)
+    return {"kind": "pics", "s": s, "e": e, "items": items}
 
 R3 = dict(id="r3", title="", hook_end="всех", layout="stack",
   hook={"small": "", "big": ""}, hook_text={"text": "3 вещи", "sub": "[ что я сделала с телефоном ]", "color": "#7FF0DD", "y": 330, "size": 170},
@@ -101,7 +124,7 @@ R3 = dict(id="r3", title="", hook_end="всех", layout="stack",
           ("raw", "и третье самое", "нравится", 2590), ("ep", "психиатр", "привычки", 525), ("ep", "сбить ее можно", "процесса", 535)],
   fix=[("Джатсон", "Джадсон"), ("Браузер", "Брюэр")],
   gfx=lambda at: [
-    mosaic([(I("7115.jpg"), {}), (I("7113.jpg"), {}), (I("7114.jpg"), {}), (I("7112.jpg"), {}), (I("7116.jpg"), {})], at("всех", end=True), "a"),
+    mosaic([(I("7115.jpg"), {}), (I("7113.jpg"), {}), (I("7114.jpg"), {}), (I("7112.jpg"), {}), (I("7116.jpg"), {})], at("всех", end=True), "a", {"text": "3 вещи", "size": 170, "y": 330, "sub": "[ что я сделала с телефоном ]"}),
     {"kind": "blurlist", "s": at("первое") - 0.3, "e": 999, "head": "3 вещи, которые я сделала со своим телефоном", "items": [
       {"t": at("первое"), "text": "Уведомления — пачкой 3 раза в день"}, {"t": at("второе"), "text": "Соцсети убраны с главного экрана"},
       {"t": at("и третье"), "text": "После 10 минут ленты — оценка кайфа"}]},
@@ -145,7 +168,7 @@ R4 = dict(id="r4", title="", hook_end="жизнь", layout="stack",
   fix=[("туда 5% чаще,", "туда на 51% чаще."), ("тоже", "Вторые тоже")],
   gfx=lambda at: [
     mosaic([(I("hook_books.jpg"), {}), (I("hook_galaxy.jpg"), {}), (I("hook_light.jpg"), {}), (I("hook_passport.jpg"), {}),
-            (I("hook_gym.jpg"), {})], at("жизнь", end=True), "b"),
+            (I("hook_gym.jpg"), {})], at("жизнь", end=True), "b", {"text": "3 привычки", "size": 150, "y": 340, "sub": "[ нейробиология: мотивация и дофамин ]"}),
     {"kind": "blurlist", "s": at("первое") - 0.3, "e": 999, "head": "3 привычки от нейробиологии", "items": [
       {"t": at("первое"), "text": "Любимый подкаст — только во время уборки"}, {"t": at("второе"), "text": "Не жду мотивации — делаю первый шаг"},
       {"t": at("третье"), "text": "Ставлю себе фальшивые галочки"}]},
@@ -191,7 +214,7 @@ R5 = dict(id="r5", title="", hook_end="пор", timer=30, fit_to=30.0, layout="s
   fix=[("Уильямса", "Уильяма"), ("Сеппа,", "Сепа,"), ("дофаминовый", "Дофаминовый"), ("триггеры", "триггеры.")],
   gfx=lambda at: [
     mosaic([(I("dopamine_eye.jpg"), {}), (I("books_pile.jpg"), {}), (I("neurons.jpg"), {}), (I("brain_scan2.jpg"), {}),
-            (I("glow.mp4"), {"video": True})], at("пор", end=True), "c"),
+            (I("glow.mp4"), {"video": True})], at("пор", end=True), "c", {"text": "3 мифа", "size": 170, "y": 330, "sub": "[ о мозге — за 30 секунд ]"}),
     {"kind": "blurlist", "s": at("а вот этот миф") - 0.2, "e": 999, "head": "3 мифа о мозге за 30 секунд", "top": 30, "items": [
       {"t": at("а вот этот миф"), "text": "Мы используем 10% мозга"}, {"t": at("дофаминовый детокс"), "text": "Детокс перезагружает мозг"},
       {"t": at("нам обещают"), "text": "Эйфория после бега — эндорфины"}],
