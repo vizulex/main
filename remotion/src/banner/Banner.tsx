@@ -25,29 +25,30 @@ export const Banner: React.FC<{guides?: boolean}> = ({guides}) => (
   <AbsoluteFill style={{background: "#FBFAF5"}}>
     <Paper kind="grid" />
 
-    {/* левая сторона: брейнрот (всё в полосе y 508–931, левее безопасной зоны) */}
-    <Pol src="7114.jpg" x={275} y={640} w={240} h={165} rot={-6} tape={-10} />
-    <Pol src="7112.jpg" x={135} y={815} w={165} h={150} rot={-4} />
-    <Pol src="dopamine_eye.jpg" x={385} y={812} w={185} h={145} rot={5} />
-    <D n="d_eye_bolt" x={455} y={585} w={90} rot={8} />
-    <D n="d_star_black" x={95} y={590} w={78} rot={-14} />
+    {/* левая сторона: брейнрот. Внутренние фото и стикеры заходят в безопасную зону (x 507–2053), чтобы были видны на телефоне */}
+    <Pol src="7115.jpg" x={115} y={660} w={190} h={160} rot={-4} />
+    <Pol src="7112.jpg" x={260} y={830} w={170} h={140} rot={-5} />
+    <Pol src="7114.jpg" x={395} y={635} w={240} h={165} rot={-6} tape={-10} />
+    <Pol src="dopamine_eye.jpg" x={560} y={815} w={185} h={145} rot={5} />
+    <D n="d_eye_bolt" x={665} y={600} w={92} rot={8} />
+    <D n="d_star_black" x={735} y={880} w={70} rot={-14} />
 
     {/* правая сторона: анти */}
-    <Pol src="hook_books.jpg" x={2295} y={645} w={240} h={170} rot={6} tape={8} />
-    <Pol src="hook_light.jpg" x={2175} y={825} w={200} h={140} rot={-5} />
-    <Pol src="hook_galaxy.jpg" x={2430} y={820} w={165} h={150} rot={4} />
-    <D n="d_star_yellow" x={2110} y={590} w={88} rot={12} />
-    <D n="d_coffee" x={2475} y={560} w={86} rot={-8} />
+    <Pol src="books_pile.jpg" x={2445} y={665} w={190} h={160} rot={4} />
+    <Pol src="hook_galaxy.jpg" x={2300} y={830} w={170} h={145} rot={4} />
+    <Pol src="hook_books.jpg" x={2160} y={640} w={240} h={170} rot={6} tape={8} />
+    <Pol src="hook_light.jpg" x={2000} y={820} w={200} h={140} rot={-5} />
+    <D n="d_star_yellow" x={1885} y={605} w={90} rot={12} />
+    <D n="d_coffee" x={1835} y={880} w={80} rot={-8} />
 
     {/* центр: надпись */}
-    <Ransom f={BIG} s={0} e={BIG * 10} text="БРЕЙНРОТ" x={1280} y={705} size={165} stagger={0} rot={-1} />
-    <div style={{position: "absolute", left: 790, top: 585, transform: "translate(-50%,-50%) rotate(-7deg)", fontFamily: PF, fontStyle: "italic", fontWeight: 800,
-      fontSize: 70, color: P.ink, background: P.yellow, padding: "0 28px 10px", boxShadow: "0 6px 0 rgba(30,26,46,.18)"}}>анти</div>
-    <div style={{position: "absolute", left: 1290, top: 862, transform: "translate(-50%,-50%) rotate(1.5deg)", fontFamily: U, fontWeight: 800, fontSize: 74,
-      letterSpacing: "0.04em", color: "#fff", background: P.ink, padding: "8px 36px 12px", textTransform: "uppercase"}}>подкаст</div>
-    <Tape x={1290} y={818} w={120} rot={-4} />
-    <D n="d_lips" x={1880} y={790} w={86} rot={10} />
-    <D n="d_star_pinkblue" x={1640} y={880} w={62} rot={-12} />
+    <Ransom f={BIG} s={0} e={BIG * 10} text="БРЕЙНРОТ" x={1280} y={712} size={112} stagger={0} rot={-1} />
+    <div style={{position: "absolute", left: 950, top: 628, transform: "translate(-50%,-50%) rotate(-7deg)", fontFamily: PF, fontStyle: "italic", fontWeight: 800,
+      fontSize: 50, color: P.ink, background: P.yellow, padding: "0 22px 8px", boxShadow: "0 5px 0 rgba(30,26,46,.18)"}}>анти</div>
+    <div style={{position: "absolute", left: 1290, top: 820, transform: "translate(-50%,-50%) rotate(1.5deg)", fontFamily: U, fontWeight: 800, fontSize: 52,
+      letterSpacing: "0.04em", color: "#fff", background: P.ink, padding: "6px 28px 10px", textTransform: "uppercase"}}>подкаст</div>
+    <D n="d_lips" x={1640} y={775} w={70} rot={10} />
+    <D n="d_star_pinkblue" x={1085} y={830} w={50} rot={-12} />
 
     {guides && (
       <>
