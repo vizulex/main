@@ -36,5 +36,6 @@ export const Root = () => (
     <Still id="YTBanner" component={Banner} width={2560} height={1440} defaultProps={{guides: false}} />
     {/* Рилс «Мона Лиза» (субтитры в чашке кофе), исходники public/ep2r/coffee */}
     <Composition id="CoffeeReel" component={Coffee} durationInFrames={1113} fps={30} width={1080} height={1920} />
+    <Composition id="CoffeeReelPlain" component={Coffee} durationInFrames={1113} fps={30} width={1080} height={1920} defaultProps={{plain: true}} />
   </>
 );

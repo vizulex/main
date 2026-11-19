@@ -68,14 +68,14 @@ const HookText: React.FC<{f: number}> = ({f}) => {
 
 /* Чашка: ширина 360, центр кофе ≈ (166, 145) от левого верхнего угла, радиус ≈ 105 */
 const CUP = {x: 700, y: 290, w: 360, cx: 166, cy: 145};
-const CoffeeCaps: React.FC<{f: number}> = ({f}) => {
+const CoffeeCaps: React.FC<{f: number; still?: boolean}> = ({f, still}) => {
   const t = f / 30;
   const i = (caps as any[]).findIndex((c) => t >= c.s && t < c.e);
   const cur = i >= 0 ? (caps as any[])[i] : null;
   const ls = cur ? fr(cur.s) : 0;
-  const land = cur ? interpolate(f - ls, [0, 4], [0, 1], {extrapolateRight: "clamp", easing: Easing.in(Easing.quad)}) : 1;
-  const hit = cur ? interpolate(f - ls, [3, 5, 10], [0, 1, 0], {extrapolateLeft: "clamp", extrapolateRight: "clamp"}) : 0;  // удар о кофе
-  const ripple = cur ? interpolate(f - ls, [4, 16], [0, 1], {extrapolateLeft: "clamp", extrapolateRight: "clamp"}) : 1;
+  const land = still ? 1 : cur ? interpolate(f - ls, [0, 4], [0, 1], {extrapolateRight: "clamp", easing: Easing.in(Easing.quad)}) : 1;
+  const hit = still ? 0 : cur ? interpolate(f - ls, [3, 5, 10], [0, 1, 0], {extrapolateLeft: "clamp", extrapolateRight: "clamp"}) : 0;  // удар о кофе
+  const ripple = still ? 1 : cur ? interpolate(f - ls, [4, 16], [0, 1], {extrapolateLeft: "clamp", extrapolateRight: "clamp"}) : 1;
   const len = cur ? cur.w.length : 1;
   const size = Math.min(44, 200 / (len * 0.56));
   const X = CUP.x + CUP.cx, Y = CUP.y + CUP.cy;
@@ -89,21 +89,22 @@ const CoffeeCaps: React.FC<{f: number}> = ({f}) => {
       )}
       {cur && (
         <div style={{position: "absolute", left: X - 110, width: 220, top: Y - size * 0.62 - (1 - land) * 150, textAlign: "center", fontFamily: G, fontWeight: 700, fontSize: size,
-          color: "#fff", whiteSpace: "nowrap", opacity: Math.min(1, land * 2), transform: `scale(${1.35 - 0.35 * land - 0.06 * hit}) rotate(${(1 - land) * -8}deg)`,
+          color: "#fff", whiteSpace: "nowrap", opacity: Math.min(1, land * 2), transform: still ? undefined : `scale(${1.35 - 0.35 * land - 0.06 * hit}) rotate(${(1 - land) * -8}deg)`,
           textShadow: "0 2px 6px rgba(0,0,0,.85), 0 0 14px rgba(0,0,0,.6)"}}>{cur.w}</div>
       )}
     </>
   );
 };
 
-export const Coffee: React.FC = () => {
+/* plain: только видео + чашка с субтитрами без анимации */
+export const Coffee: React.FC<{plain?: boolean}> = ({plain}) => {
   const f = useCurrentFrame();
   return (
     <AbsoluteFill style={{background: "#000"}}>
       <OffthreadVideo src={src("vid.mp4")} muted style={{width: 1080, height: 1920}} />
-      {PICS.map((p, i) => <Pic key={i} p={p} f={f} />)}
-      <HookText f={f} />
-      <CoffeeCaps f={f} />
+      {!plain && PICS.map((p, i) => <Pic key={i} p={p} f={f} />)}
+      {!plain && <HookText f={f} />}
+      <CoffeeCaps f={f} still={plain} />
     </AbsoluteFill>
   );
 };
