@@ -82,44 +82,46 @@ const Matte: React.FC<{r: R}> = ({r}) => (
 );
 
 /* ---------- маленький коллажный декор в начале (стикеры Влады, вырезаны с белого фона) ---------- */
-const Decos: React.FC<{g: Gx; f: number}> = ({g, f}) => (
+const Decos: React.FC<{g: Gx; f: number; dy?: number}> = ({g, f, dy = 0}) => (
   <>{g.items.map((it: any, i: number) => {
     const s = fr(it.t), e = fr(g.e);
     if (f < s || f > e) return null;
     const sp = SP(f, s, 9, 220), out = L(f, e - 6, e, 1, 0);
-    return <Img key={i} src={staticFile(it.src)} style={{position: "absolute", left: it.x, top: it.y, width: it.w, opacity: Math.min(1, sp * 1.6) * out,
+    return <Img key={i} src={staticFile(it.src)} style={{position: "absolute", left: it.x, top: it.y + dy, width: it.w, opacity: Math.min(1, sp * 1.6) * out,
       transform: `translate(-50%,-50%) rotate(${(it.rot ?? 0) + (1 - sp) * 25}deg) scale(${0.5 + 0.5 * sp})`, filter: "drop-shadow(2px 4px 3px rgba(0,0,0,.3))"}} />;
   })}</>
 );
 
 /* ---------- крупное слово за мной ---------- */
 type BT = {s: number; e: number; big: string; small?: string; color?: string};
-const BehindWord: React.FC<{b: BT; f: number}> = ({b, f}) => {
+const BehindWord: React.FC<{b: BT; f: number; cy?: number; paper?: boolean}> = ({b, f, cy = 300, paper}) => {
   const s = fr(b.s), e = fr(b.e);
   if (f < s - 1 || f > e) return null;
   const pin = L(f, s, s + 9, 0, 1, Easing.out(Easing.cubic)), pout = L(f, e - 7, e, 1, 0);
   const lines = b.big.split("\n");
   const size = fit(b.big, 250, 940, 1.0);
-  const top = 300 - (lines.length * size * 0.95) / 2;
+  const top = cy - (lines.length * size * 0.95) / 2;
+  const colr = paper ? (b.color ? col(b.color) : C.ink) : col(b.color);
+  const stroke = paper && b.color ? {WebkitTextStroke: `4px ${C.ink}`, paintOrder: "stroke fill"} : {};
   return (
     <div style={{position: "absolute", left: 0, right: 0, top, textAlign: "center", opacity: pin * pout, filter: `blur(${(1 - pin) * 14}px)`, transform: `scale(${1.06 - 0.06 * pin})`}}>
       {lines.map((ln, i) => (
-        <div key={i} style={{fontFamily: U, fontWeight: 800, fontSize: size, lineHeight: 0.95, letterSpacing: "-0.03em", color: col(b.color), whiteSpace: "nowrap", textShadow: "0 12px 40px rgba(20,16,40,.35)"}}>{ln}</div>
+        <div key={i} style={{fontFamily: U, fontWeight: 800, fontSize: size, lineHeight: 0.95, letterSpacing: "-0.03em", color: colr, whiteSpace: "nowrap", textShadow: paper ? "0 8px 24px rgba(30,26,46,.18)" : "0 12px 40px rgba(20,16,40,.35)", ...(stroke as any)}}>{ln}</div>
       ))}
     </div>
   );
 };
-const SmallLine: React.FC<{b: BT; f: number}> = ({b, f}) => {
+const SmallLine: React.FC<{b: BT; f: number; cy?: number; paper?: boolean}> = ({b, f, cy = 300, paper}) => {
   if (!b.small) return null;
   const s = fr(b.s) + 3, e = fr(b.e);
   if (f < s || f > e) return null;
   const lines = b.big.split("\n");
   const size = fit(b.big, 250, 940, 1.0);
-  const top = 300 - (lines.length * size * 0.95) / 2 - (b.small.length > 26 ? 140 : 92);
+  const top = cy - (lines.length * size * 0.95) / 2 - (b.small.length > 26 ? 140 : 92);
   const p = L(f, s, s + 9, 0, 1, Easing.out(Easing.cubic)) * L(f, e - 7, e, 1, 0);
   return (
     <div style={{position: "absolute", left: 60, right: 60, top, textAlign: "center", opacity: p, transform: `translateY(${(1 - p) * 14}px)`,
-      fontFamily: PF, fontStyle: "italic", fontWeight: 600, fontSize: b.small.length > 26 ? 50 : 62, color: "#fff", textShadow: soft}}>{b.small}</div>
+      fontFamily: PF, fontStyle: "italic", fontWeight: 600, fontSize: b.small.length > 26 ? 50 : 62, color: paper ? C.ink : "#fff", textShadow: paper ? "none" : soft}}>{b.small}</div>
   );
 };
 
@@ -247,12 +249,12 @@ const Captions: React.FC<{r: R; f: number; dark: boolean; y: number}> = ({r, f, 
   );
 };
 
-const NamePlate: React.FC<{r: R; f: number}> = ({r, f}) => {
+const NamePlate: React.FC<{r: R; f: number; top?: number}> = ({r, f, top = 1520}) => {
   const s = fr(r.hook_end) + 6, e = s + 90;
   if (f < s || f > e) return null;
   const p = L(f, s, s + 10, 0, 1, Easing.out(Easing.cubic)) * L(f, e - 8, e, 1, 0);
   return (
-    <div style={{position: "absolute", left: 70, top: 1520, display: "flex", gap: 18, alignItems: "stretch", opacity: p, transform: `translateX(${(1 - p) * -30}px)`}}>
+    <div style={{position: "absolute", left: 70, top, display: "flex", gap: 18, alignItems: "stretch", opacity: p, transform: `translateX(${(1 - p) * -30}px)`}}>
       <div style={{width: 6, borderRadius: 3, background: C.lemon}} />
       <div>
         <div style={{fontFamily: G, fontWeight: 700, fontSize: 40, color: "#fff", textShadow: soft}}>Влада</div>
@@ -262,12 +264,12 @@ const NamePlate: React.FC<{r: R; f: number}> = ({r, f}) => {
   );
 };
 
-const Cta: React.FC<{r: R; f: number; split?: boolean}> = ({r, f, split}) => {
+const Cta: React.FC<{r: R; f: number; split?: boolean; top?: number}> = ({r, f, split, top}) => {
   const s = fr(r.dur - 2.6);
   if (f < s) return null;
   const p = L(f, s, s + 10, 0, 1, Easing.out(Easing.cubic));
   return (
-    <div style={{position: "absolute", top: split ? 925 : 1500, width: "100%", display: "flex", justifyContent: "center", opacity: p, transform: `translateY(${(1 - p) * 20}px)`}}>
+    <div style={{position: "absolute", top: top ?? (split ? 925 : 1500), width: "100%", display: "flex", justifyContent: "center", opacity: p, transform: `translateY(${(1 - p) * 20}px)`}}>
       <div style={{display: "flex", alignItems: "center", gap: 18, background: "rgba(255,255,255,.94)", borderRadius: 999, padding: "12px 30px 12px 14px", boxShadow: "0 10px 30px rgba(20,16,40,.25)"}}>
         <div style={{width: 56, height: 56, borderRadius: 28, background: C.mandarin, display: "flex", alignItems: "center", justifyContent: "center"}}>
           <div style={{width: 0, height: 0, borderTop: "11px solid transparent", borderBottom: "11px solid transparent", borderLeft: "18px solid #fff", marginLeft: 5}} />
@@ -282,43 +284,64 @@ export const Reel2: React.FC<{id: string; noMatte?: boolean}> = ({id, noMatte}) 
   const f = useCurrentFrame();
   const r = reels.find((x) => x.id === id)!;
   if ((r as any).layout === "stack") return <Stack2 r={r} f={f} noMatte={noMatte} />;
+  return <Half r={r} f={f} />;
+};
+
+/* Тема рилса крупно — когда наверху ещё ничего нет (плавно: считаем, сколько кадров подряд пусто) */
+const TopicFill: React.FC<{r: R; f: number; on: boolean}> = ({r, on}) => {
+  if (!on || !r.title) return null;
+  return (
+    <div style={{position: "absolute", left: 90, right: 90, top: 330, height: 360, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center"}}>
+      <div style={{fontFamily: PF, fontStyle: "italic", fontWeight: 600, fontSize: 84, lineHeight: 1.12, color: C.ink}}>
+        <span style={{background: "linear-gradient(transparent 58%, rgba(255,224,74,.85) 58%, rgba(255,224,74,.85) 92%, transparent 92%)", padding: "0 8px"}}>{r.title}</span>
+      </div>
+    </div>
+  );
+};
+
+/* ---------- раскладка «половина»: я внизу (y 960–1920), визуализация сверху на бумаге.
+   Весь текст — в рамке Instagram: x 52–1028, y 130–1435 (ниже — подпись и кнопки), справа с y 1090 — иконки. ---------- */
+const VY = 960;
+const HOOK_Y = 520;
+const Half: React.FC<{r: R; f: number}> = ({r, f}) => {
   const t = f / 30;
   const gfx = r.gfx as Gx[];
   const sc = sceneAt(r, f);
   const p = sc ? Easing.inOut(Easing.cubic)(sc.p) : 0;
-  const target = sc?.g.mode === "circle" ? CIRCLE : SPLIT;
-  const z = zoomAt(r, t) * (1 + (t < r.hook_end ? 0.05 * L(f, 0, fr(r.hook_end), 0, 1) : 0));
-  const box = mix({...FULLB, z}, target, p);
+  const z = 0.5625 * zoomAt(r, t) / 1.22;
+  const box: Box = {x: 0, y: VY, w: 1080, h: 1920 - VY, r: 0, ax: 540, ay: 1480, z};
   const bts: BT[] = [{s: 0, e: r.hook_end, big: r.hook.big, small: r.hook.small}, ...gfx.filter((g) => g.kind === "bt") as any];
-  const full = p < 0.01;
   const active = gfx.filter((g) => !g.mode && g.kind !== "bt" && t >= Math.max(g.s - 0.4, r.hook_end) && t <= g.e + 0.4);
   const btOn = bts.some((b) => t >= b.s - 0.1 && t <= b.e + 0.1);
-  const leftTitle = r.timer || (sc?.g.mode === "circle" && p > 0.5);
-  const capY = 1330 + (sc?.g.mode === "split" ? 400 * p : 0);  // на половине экрана — ниже лица
+  const bg = (sc && p > 0.5 ? sc.g.bg ?? "grid" : "grid") as any;
+  // пусто ли наверху: тогда показываем тему рилса крупно, чтобы верх не висел пустым
+  const seen = (items: any[] | undefined) => (items ?? []).some((it) => it.t === undefined || it.t <= t + 0.1);
+  const filled = t < r.hook_end || btOn || (sc && (sc.g.scene || seen(sc.g.items))) || active.some((g) => g.kind !== "decos" && (!(g as any).items || seen((g as any).items)));
   return (
     <AbsoluteFill style={{background: C.ink, overflow: "hidden"}}>
-      {/* фон под графикой */}
-      {p > 0 && <AbsoluteFill style={{opacity: p}}><Paper kind={(sc?.g.bg ?? "grid") as any} /></AbsoluteFill>}
-      {sc && p > 0 && (
-        <div style={{position: "absolute", left: 0, top: 270, width: 1080, height: 740, opacity: p, transform: `translateY(${(1 - p) * 40}px)`}}>
-          {(sc.g.items ?? []).map((it: any, i: number) => <Item key={i} f={f} it={it} e={fr(sc.g.e)} />)}
-          {sc.g.scene && <Scene f={f} g={{...sc.g, kind: sc.g.scene}} />}
-        </div>
-      )}
-      {/* я: полный кадр или карточка/кружок */}
-      <Frame b={box} z={box.z} border={p}><ARoll r={r} /></Frame>
-      {full && <AbsoluteFill style={{background: "linear-gradient(180deg, rgba(20,16,40,.38) 0%, rgba(20,16,40,0) 30%, rgba(20,16,40,0) 62%, rgba(20,16,40,.45) 100%)"}} />}
-      {/* слова за мной, затем я поверх (маска) */}
-      {full && bts.map((b, i) => <BehindWord key={i} b={b} f={f} />)}
-      {full && !noMatte && <Frame b={box} z={box.z}><Matte r={r} /></Frame>}
-      {full && bts.map((b, i) => <SmallLine key={i} b={b} f={f} />)}
-      {active.map((g) => <Overlay key={g.kind + g.s} g={g} f={f} />)}
-      {gfx.filter((g) => g.kind === "decos").map((g, i) => <Decos key={"d" + i} g={g} f={f} />)}
-      {!(full && btOn) && <Title r={r} f={f} left={leftTitle} />}
-      <Timer r={r} f={f} />
-      <Captions r={r} f={f} dark={sc?.g.mode === "circle" && p > 0.5} y={capY} />
-      {full && <NamePlate r={r} f={f} />}
-      <Cta r={r} f={f} split={sc?.g.mode === "split" && p > 0.5} />
+      {/* верх: бумага и графика */}
+      <div style={{position: "absolute", left: 0, top: 0, width: 1080, height: VY, overflow: "hidden"}}>
+        <Paper kind={bg} />
+        {sc && p > 0 && (
+          <div style={{position: "absolute", left: 0, top: 200, width: 1080, height: 740, opacity: p, transform: `translateY(${(1 - p) * 30}px)`}}>
+            {(sc.g.items ?? []).map((it: any, i: number) => <Item key={i} f={f} it={it} e={fr(sc.g.e)} />)}
+            {sc.g.scene && <Scene f={f} g={{...sc.g, kind: sc.g.scene}} />}
+          </div>
+        )}
+        {p < 0.5 && bts.map((b, i) => <BehindWord key={i} b={b} f={f} cy={i === 0 ? HOOK_Y : 500} paper />)}
+        {p < 0.5 && bts.map((b, i) => <SmallLine key={"s" + i} b={b} f={f} cy={i === 0 ? HOOK_Y : 500} paper />)}
+        {active.map((g) => <Overlay key={g.kind + g.s} g={g} f={f} />)}
+        {gfx.filter((g) => g.kind === "decos").map((g, i) => <Decos key={"d" + i} g={g} f={f} dy={HOOK_Y - 300} />)}
+        {!btOn && filled && <Title r={r} f={f} left={false} />}
+        <TopicFill r={r} f={f} on={!filled} />
+      </div>
+      {/* низ: я */}
+      <Frame b={box} z={box.z}><ARoll r={r} /></Frame>
+      <div style={{position: "absolute", left: 0, top: VY, width: 1080, height: 240, background: "linear-gradient(180deg, rgba(20,16,40,.42), rgba(20,16,40,0))"}} />
+      <div style={{position: "absolute", left: 0, top: VY - 3, width: 1080, height: 6, background: "rgba(255,255,255,.9)"}} />
+      <Captions r={r} f={f} dark={false} y={VY + 36} />
+      <NamePlate r={r} f={f} top={1335} />
+      <Cta r={r} f={f} top={VY - 100} />
     </AbsoluteFill>
   );
 };
