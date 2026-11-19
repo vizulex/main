@@ -1,5 +1,6 @@
 import { Composition, Still } from "remotion";
 import {Banner} from "./banner/Banner";
+import {Coffee} from "./coffee/Coffee";
 import { Hello } from "./Hello";
 import { Intro } from "./intro/Intro";
 import { Episode } from "./episode/Episode";
@@ -33,5 +34,7 @@ export const Root = () => (
     ))}
     {/* Баннер YouTube-канала */}
     <Still id="YTBanner" component={Banner} width={2560} height={1440} defaultProps={{guides: false}} />
+    {/* Рилс «Мона Лиза» (субтитры в чашке кофе), исходники public/ep2r/coffee */}
+    <Composition id="CoffeeReel" component={Coffee} durationInFrames={1113} fps={30} width={1080} height={1920} />
   </>
 );
