@@ -1,4 +1,5 @@
-import { Composition } from "remotion";
+import { Composition, Still } from "remotion";
+import {Banner} from "./banner/Banner";
 import { Hello } from "./Hello";
 import { Intro } from "./intro/Intro";
 import { Episode } from "./episode/Episode";
@@ -30,5 +31,7 @@ export const Root = () => (
     {reels2.map((r) => (
       <Composition key={r.id} id={`Reel2-${r.id}`} component={Reel2} durationInFrames={Math.ceil(r.dur * 30)} fps={30} width={1080} height={1920} defaultProps={{id: r.id}} />
     ))}
+    {/* Баннер YouTube-канала */}
+    <Still id="YTBanner" component={Banner} width={2560} height={1440} defaultProps={{guides: false}} />
   </>
 );
