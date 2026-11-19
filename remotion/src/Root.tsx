@@ -1,6 +1,7 @@
 import { Composition, Still } from "remotion";
 import {Banner} from "./banner/Banner";
 import {Coffee} from "./coffee/Coffee";
+import {Notebook} from "./notebook/Notebook";
 import { Hello } from "./Hello";
 import { Intro } from "./intro/Intro";
 import { Episode } from "./episode/Episode";
@@ -37,5 +38,7 @@ export const Root = () => (
     {/* Рилс «Мона Лиза» (субтитры в чашке кофе), исходники public/ep2r/coffee */}
     <Composition id="CoffeeReel" component={Coffee} durationInFrames={1113} fps={30} width={1080} height={1920} />
     <Composition id="CoffeeReelPlain" component={Coffee} durationInFrames={1113} fps={30} width={1080} height={1920} defaultProps={{plain: true}} />
+    {/* Рилс «5 нишевых хобби» (субтитры на блокноте), исходники public/ep2r/notebook */}
+    <Composition id="NotebookReel" component={Notebook} durationInFrames={2980} fps={30} width={1080} height={1920} />
   </>
 );
